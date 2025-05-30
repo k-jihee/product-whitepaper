@@ -112,9 +112,6 @@ if query:
     <h2>{row.get('제품명', '-')}</h2>
     <p><b>용도:</b> {row.get('용도', '-')}</p>
 
-    <h3>📷 한도견본</h3>
-    {image_html}
-
     <h3>1. 제품 정보</h3>
     <table>
         <tr><th>식품유형</th><th>제품구분</th><th>제품코드</th><th>소비기한</th></tr>
@@ -156,6 +153,9 @@ if query:
 
     <h3>8. 기타사항</h3>
     <p>{row.get('기타사항', '-')}</p>
+    
+    <h3>📷 한도견본</h3>
+    {image_html}
 </div>
 
 <br>
