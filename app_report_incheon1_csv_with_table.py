@@ -149,15 +149,16 @@ if query:
 
             # ✅ 한도견본 여러 개 처리 가능하도록 수정
             img_src = row.get("한도견본", "")
-            if pd.notna(img_src):
-                for link in str(img_src).split(","):
-                    link = link.strip()
-                    if link.startswith("http"):
-                        st.image(link, width=300)
-                    elif os.path.exists(link):
-                        st.image(link, width=300)
-                    else:
-                        st.warning(f"⚠️ 이미지 경로를 찾을 수 없습니다: {link}")
+            if "한도견본" in img_src: 
+                with st.expander("🖼️ 한도견본 이미지 보기"):
+                    for link in str(img_src).split(","):
+                        link = link.strip()
+                        if link.startswith("http"):
+                            st.image(link, width=300)
+                        elif os.path.exists(link):
+                            st.image(link, width=300)
+                        else:
+                            st.warning(f"⚠️ 이미지 경로를 찾을 수 없습니다: {link}")
 
     else:
         st.warning("🔍 검색 결과가 없습니다.")
