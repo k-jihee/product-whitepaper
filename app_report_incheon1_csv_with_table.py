@@ -149,7 +149,7 @@ if query:
 
             # ✅ 지대그림 여러 개 처리 가능하도록 수정
     
-img_src = row.get("지대그림", "")
+img_src = row.get("한도견본", "")
 if pd.notna(img_src):
     st.markdown("### 📷 한도견본 이미지")
     for i, link in enumerate(str(img_src).split(","), start=1):
