@@ -161,8 +161,7 @@ if query:
                 elif os.path.exists(img_src):
                     st.image(img_src, width=300)
                 else:
-                    st.warning(f"⚠️ 이미지 경로를 찾을 수 없습니다:
-{img_src}")
+                    st.warning(f"⚠️ 이미지 경로를 찾을 수 없습니다: {img_src}")
 
     else:
         st.warning("🔍 검색 결과가 없습니다.")
