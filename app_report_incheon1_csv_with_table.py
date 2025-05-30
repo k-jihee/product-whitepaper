@@ -147,8 +147,8 @@ if query:
 '''
             st.components.v1.html(html_template, height=1100, scrolling=True)
 
-            # ✅ 지대그림 여러 개 처리 가능하도록 수정
-            img_src = row.get("지대그림", "")
+            # ✅ 한도견본 여러 개 처리 가능하도록 수정
+            img_src = row.get("한도견본", "")
             if pd.notna(img_src):
                 for link in str(img_src).split(","):
                     link = link.strip()
