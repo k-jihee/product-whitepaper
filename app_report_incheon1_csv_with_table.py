@@ -78,14 +78,14 @@ if query:
 
             # 🔽 이미지 처리 HTML 코드로 변환
             image_html = ""
-            img_src = row.get("지대그림", "")
+            img_src = row.get("한도견본", "")
             if pd.notna(img_src):
                 for idx, link in enumerate(str(img_src).split(","), start=1):
                     link = link.strip()
                     if link.startswith("http"):
-                        image_html += f'<div style="margin:10px 0;"><b>지대그림 {idx}</b><br><img src="{link}" width="300"/></div>'
+                        image_html += f'<div style="margin:10px 0;"><b>한도견본 {idx}</b><br><img src="{link}" width="300"/></div>'
                     elif os.path.exists(link):
-                        image_html += f'<div style="margin:10px 0;"><b>지대그림 {idx}</b><br><img src="file://{os.path.abspath(link)}" width="300"/></div>'
+                        image_html += f'<div style="margin:10px 0;"><b>한도견본 {idx}</b><br><img src="file://{os.path.abspath(link)}" width="300"/></div>'
                     else:
                         image_html += f'<p>⚠️ 이미지 경로를 찾을 수 없습니다: {link}</p>'
 
@@ -154,7 +154,7 @@ if query:
     <h3>8. 기타사항</h3>
     <p>{row.get('기타사항', '-')}</p>
 
-    <h3>📷 지대그림</h3>
+    <h3>📷 한도견본</h3>
     {image_html}
     
 </div>
