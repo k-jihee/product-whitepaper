@@ -144,7 +144,7 @@ if query:
 
 
     <h3>9. 한도견본</h3>
-    {''.join(f'<img src="{link.strip()}" width="300">' for link in str(row.get("한도견본", "")).split(",") if link.strip())}
+    {''.join(f'<img src="{link.strip()}" width="700">' for link in str(row.get("한도견본", "")).split(",") if link.strip())}
 <br>
 <button onclick="window.print()">🖨️ 이 제품백서 프린트하기</button>
 '''
