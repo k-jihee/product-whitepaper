@@ -143,7 +143,7 @@ if query:
     ...
 
     <h3>5. 제품 특징</h3>
-    <p>{row.get('제품특징', '-')}</p>
+    <p>{format_features(row.get('제품특징', '-'))}</p>
 
     <h3>6. 제품 규격</h3>
     <table>
