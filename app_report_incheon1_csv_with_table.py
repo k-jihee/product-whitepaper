@@ -88,6 +88,11 @@ if query:
         padding: 8px;
         text-align: center;
     }}
+
+    th {{
+         background-color: #f2f2f2;  /* 연한 회색 */
+    }}
+    
     @media print {{
         button {{
             display: none;
@@ -124,21 +129,19 @@ if query:
     <p>{row.get('주요거래처', '-')}</p>
     <h3>3. 제조방법</h3>
     <p>{row.get('제조방법', '-')}</p>
-    <h3>4. 원재료명 및 함량</h3>
-    <p>{row.get('원재료명 및 함량', '-')}</p>
-    <h3>5. 원산지</h3>
-    <p>{row.get('원산지', '-')}</p>
-    <h3>6. 제품 특징</h3>
+    <h3>4. 원재료명 및 함량 / 원산지</h3>
+    <p>{row.get('원재료명 및 함량', '-')} / {row.get('원산지', '-')}</p>
+    <h3>5. 제품 특징</h3>
     <p>{row.get('제품특징', '-')}</p>
 
-    <h3>7. 제품 규격</h3>
+    <h3>6. 제품 규격</h3>
     <table>
         <tr><th>항목</th><th>법적규격</th><th>사내규격</th></tr>
         {성상_row}
         {spec_rows}
     </table>
 
-    <h3>8. 기타사항</h3>
+    <h3>7. 기타사항</h3>
     <p>{row.get('기타사항', '-')}</p>
 </div>
 
