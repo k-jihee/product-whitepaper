@@ -180,10 +180,10 @@ if query:
     </div>
 
     <script>
-    function showModal(src) {
-        document.getElementById("modal-img").src = "{{src}}";
+    function showModal(src) {{
+        document.getElementById("modal-img").src = src;
         document.getElementById("modal").style.display = "flex";
-    }
+    }}
     </script>
         
 <br>
