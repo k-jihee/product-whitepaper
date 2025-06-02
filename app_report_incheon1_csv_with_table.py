@@ -3,6 +3,9 @@ import pandas as pd
 import re
 import os
 
+# ✅ 화면 폭을 넓게 설정
+st.set_page_config(layout="wide")
+
 PASSWORD = "samyang!11"
 
 if "authenticated" not in st.session_state:
