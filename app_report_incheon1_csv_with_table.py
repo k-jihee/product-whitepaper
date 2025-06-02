@@ -140,6 +140,9 @@ if query:
 
     <h3>8. 기타사항</h3>
     <p>{row.get('기타사항', '-')}</p>
+
+    <h3>9. 한도견본</h3>
+    {''.join(f'<img src="{link.strip()}" width="300">' for link in str(row.get("한도견본", "")).split(",") if link.strip())}
 </div>
 
 <br>
