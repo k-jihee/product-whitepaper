@@ -163,16 +163,17 @@ if query:
     #modal {{
         display: none;
         position: fixed;
-        z-index: 9999;
-        left: 0; top: 0;
+        inset: 0;
+        left: 100vw; top: 100vh;
         width: 100%; height: 100%;
         background-color: rgba(0,0,0,0.8);
+        z-index: 9999;
         justify-content: center; align-items: center;
     }}
     #modal img {{
-        max-width: 90%;
-        max-height: 90%;
-        box-shadow: 0 0 20px white;
+        max-width: 100vw;
+        max-height: 100vh;
+        object-fit: contain;
     }}
     </style>
     
