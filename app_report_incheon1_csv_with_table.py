@@ -147,21 +147,6 @@ if query:
 
 <br>
 <button onclick="window.print()">🖨️ 이 제품백서 프린트하기</button>
-'''
-            st.components.v1.html(html_template, height=1100, scrolling=True)
-
-            # ✅ 한도견본 여러 개 처리 가능하도록 수정
-            img_src = row.get("한도견본", "")
-            if pd.notna(img_src):
-                st.markdown("### 9. 한도견본")
-                for link in str(img_src).split(","):
-                    link = link.strip()
-                    if link.startswith("http"):
-                        st.image(link, width=300)
-                    elif os.path.exists(link):
-                        st.image(link, width=300)
-                    else:
-                        st.warning(f"⚠️ 이미지 경로를 찾을 수 없습니다: {link}")
 
     else:
         st.warning("🔍 검색 결과가 없습니다.")
