@@ -48,19 +48,12 @@ def parse_spec_text(spec_text):
             spec_dict[key.strip()] = value.strip()
     return spec_dict
 
-# 중앙 정렬된 큰 제목
-st.markdown("<h1 style='text-align:center;'>🏭 인천 1공장 제품백서</h1>", unsafe_allow_html=True)
+st.title("🏭 인천 1공장 제품백서")
+st.markdown("### 📋 인천 1공장 전제품 목록")
+st.dataframe(df[["제품코드", "제품명"]].dropna().reset_index(drop=True))
 st.markdown("---")
-
-# 가운데 정렬된 카드형 콘텐츠
-with st.container():
-    col1, col2, col3 = st.columns([1, 5, 1])  # 중앙 col2에 콘텐츠 넣기
-    with col2:
-        st.markdown("### 📋 인천 1공장 전제품 목록")
-        st.dataframe(df[["제품코드", "제품명"]].dropna().reset_index(drop=True))
-        
-        st.markdown('<h4>🔍 <b>제품코드 또는 제품명을 입력하세요</b></h4>', unsafe_allow_html=True)
-        query = st.text_input("예: GIB1010 또는 글루텐피드", key="query_input")
+st.markdown('<h4>🔍 <b>제품코드 또는 제품명을 입력하세요</b></h4>', unsafe_allow_html=True)
+query = st.text_input("예: GIB1010 또는 글루텐피드", key="query_input")
 
 if query:
     results = df[df["제품코드"].astype(str).str.contains(query, case=False, na=False) |
