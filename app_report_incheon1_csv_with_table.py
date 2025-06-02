@@ -142,13 +142,26 @@ if query:
     <p>{row.get('기타사항', '-')}</p>
 </div>
 
-
+    <div id="sample-area">
     <h3>9. 한도견본</h3>
     {''.join(f'<img src="{link.strip()}" width="700">' for link in str(row.get("한도견본", "")).split(",") if link.strip())}
+    <button onclick="printSample()">🖨️ 한도견본만 PDF로 저장</button>
+
+    <script>
+    function printSample() {
+        const original = document.body.innerHTML;
+        const printSection = document.getElementById("sample-area").innerHTML;
+        document.body.innerHTML = printSection;
+        window.print();
+        document.body.innerHTML = original;
+    }
+    </script>
+    </div>
+        
 <br>
 <button onclick="window.print()">🖨️ 이 제품백서 프린트하기</button>
 '''
-            st.components.v1.html(html_template, height=1100, scrolling=True)
+            st.components.v1.html(html_template, height=2100, scrolling=True)
 
             
 
