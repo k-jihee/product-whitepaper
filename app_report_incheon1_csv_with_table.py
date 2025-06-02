@@ -153,6 +153,7 @@ if query:
             # ✅ 한도견본 여러 개 처리 가능하도록 수정
             img_src = row.get("한도견본", "")
             if pd.notna(img_src):
+                st.markdown("### 9. 한도견본")
                 for link in str(img_src).split(","):
                     link = link.strip()
                     if link.startswith("http"):
