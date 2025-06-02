@@ -184,9 +184,39 @@ if query:
     </div>
 
     <script>
-    function showModal(src) {{
-        document.getElementById("modal-img").src = src;
-        document.getElementById("modal").style.display = "flex";
+    function openFullscreen(img) {{
+        const modalImg = document.createElement("img");
+        modalImg.src = img.src;
+        modalImg.style = `
+          width: 100%;
+          height: 100%;
+          object-fit: contain;
+          background-color: black;
+          ;
+
+        const container = document.createElement("div");
+        container.style = `
+          background-color: black;
+          width: 100vw;
+          height: 100vh;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+        `;
+        container.appendChild(modalImg);
+        document.body.appendChild(container);
+
+        if (container.requestFullscreen) {{
+            container.requestFullscreen();
+        }} else if (container.webkitRequestFullscreen) {{
+           container.webkitRequestFullscreen();
+        }}
+
+        document.addEventListener("fullscreenchange", () => {{
+          if (!document.fullscreenElement) {{
+            container.remove();
+          }}
+        }});
     }}
     </script>
         
