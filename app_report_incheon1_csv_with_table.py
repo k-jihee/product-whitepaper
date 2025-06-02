@@ -154,7 +154,7 @@ if query:
         document.body.innerHTML = printSection;
         window.print();
         document.body.innerHTML = original;
-    }
+    }}
     </script>
     </div>
         
