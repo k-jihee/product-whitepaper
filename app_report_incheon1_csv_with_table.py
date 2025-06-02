@@ -87,6 +87,11 @@ if query:
         padding: 8px;
         text-align: center;
     }}
+
+    th {{
+    background-color: #f2f2f2;  /* 연한 회색 */
+    }}
+
     @media print {{
         button {{
             display: none;
