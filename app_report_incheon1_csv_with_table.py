@@ -148,7 +148,7 @@ if query:
     <button onclick="printSample()">🖨️ 한도견본만 PDF로 저장</button>
 
     <script>
-    function printSample() {
+    function printSample() {{
         const original = document.body.innerHTML;
         const printSection = document.getElementById("sample-area").innerHTML;
         document.body.innerHTML = printSection;
