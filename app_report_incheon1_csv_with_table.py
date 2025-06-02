@@ -45,6 +45,14 @@ def parse_spec_text(spec_text):
             spec_dict[key.strip()] = value.strip()
     return spec_dict
 
+def format_features(text):
+    if pd.isna(text):
+       return "-"
+    items = re.split(r"\s*-\s*", text.strip())
+    # 첫 항목이 빈 항목일 수 있어 제거
+    items = [item for item in items if item]
+    return "<br>".join(f"• {item.strip()}" for item in items)
+
 st.title("🏭 인천 1공장 제품백서")
 st.markdown("### 📋 인천 1공장 전제품 목록")
 st.dataframe(df[["제품코드", "제품명"]].dropna().reset_index(drop=True))
@@ -131,17 +139,6 @@ if query:
     <p>{row.get('제조방법', '-')}</p>
     <h3>4. 원재료명 및 함량 / 원산지</h3>
     <p>{row.get('원재료명 및 함량', '-')} / {row.get('원산지', '-')}</p>
-
-def format_features(text):
-    if pd.isna(text):
-       return "-"
-    items = re.split(r"\s*-\s*", text.strip())
-    # 첫 항목이 빈 항목일 수 있어 제거
-    items = [item for item in items if item]
-    return "<br>".join(f"• {item.strip()}" for item in items)
-    
-...
-
     <h3>5. 제품 특징</h3>
     <p>{format_features(row.get('제품특징', '-'))}</p>
 
