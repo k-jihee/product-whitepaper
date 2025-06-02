@@ -144,7 +144,7 @@ if query:
 
     <div id="sample-area">
     <h3>9. 한도견본</h3>
-    {''.join(f'<img src="{link.strip()}" width="700">' for link in str(row.get("한도견본", "")).split(",") if link.strip())}
+    {''.join(f'<img src="{link.strip()}" width="700" onclick="showMoal(this.src)" style="cursor:pointer; margin:10px;">' for link in str(row.get("한도견본", "")).split(",") if link.strip())}
     <button onclick="printSample()">🖨️ 한도견본만 PDF로 저장</button>
 
     <script>
@@ -157,6 +157,34 @@ if query:
     }}
     </script>
     </div>
+
+    <style>
+    #modal {
+        display: none;
+        position: fixed;
+        z-index: 9999;
+        left: 0; top: 0;
+        width: 100%; height: 100%;
+        background-color: rgba(0,0,0,0.8);
+        justify-content: center; align-items: center;
+    }
+    #modal img {
+        max-width: 90%;
+        max-height: 90%;
+        box-shadow: 0 0 20px white;
+    }
+    </style>
+    
+    <div id="modal" onclick="this.style.display='none'">
+        <img id="modal-img">
+    </div>
+
+    <script>
+    function showModal(src) {
+        document.getElementById("modal-img").src = src;
+        document.getElementById("modal").style.display = "flex";
+    }
+    </script>
         
 <br>
 <button onclick="window.print()">🖨️ 이 제품백서 프린트하기</button>
