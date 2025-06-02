@@ -168,11 +168,11 @@ if query:
         background-color: rgba(0,0,0,0.8);
         justify-content: center; align-items: center;
     }}
-    #modal img {
+    #modal img {{
         max-width: 90%;
         max-height: 90%;
         box-shadow: 0 0 20px white;
-    }
+    }}
     </style>
     
     <div id="modal" onclick="this.style.display='none'">
