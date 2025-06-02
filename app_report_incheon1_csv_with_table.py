@@ -167,15 +167,14 @@ if query:
         display: none;
         position: fixed;
         inset: 0;
-        left: 100vw; top: 100vh;
         width: 100%; height: 100%;
         background-color: rgba(0,0,0,0.8);
         z-index: 9999;
         justify-content: center; align-items: center;
     }}
     #modal img {{
-        max-width: 100vw;
-        max-height: 100vh;
+        max-width: 90%;
+        max-height: 90%;
         object-fit: contain;
     }}
     </style>
