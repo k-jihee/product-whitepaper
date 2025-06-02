@@ -159,7 +159,7 @@ if query:
     </div>
 
     <style>
-    #modal {
+    #modal {{
         display: none;
         position: fixed;
         z-index: 9999;
@@ -167,7 +167,7 @@ if query:
         width: 100%; height: 100%;
         background-color: rgba(0,0,0,0.8);
         justify-content: center; align-items: center;
-    }
+    }}
     #modal img {
         max-width: 90%;
         max-height: 90%;
