@@ -200,16 +200,16 @@ if query:
 else:
     st.info("제품코드 또는 제품명을 입력해주세요.")
 <script>
-function showModal(img) {
+function showModal(img) {{
   const modal = document.getElementById("modal");
   const modalImg = document.getElementById("modal-img");
   modalImg.src = img.src;
   modal.style.display = "flex";
-}
+}}
 </script>
 
 <style>
-#modal {
+#modal {{
   display: none;
   position: fixed;
   inset: 0;
@@ -219,13 +219,13 @@ function showModal(img) {
   z-index: 9999;
   justify-content: center;
   align-items: center;
-}
-#modal img {
+}}
+#modal img {{
   max-width: 95vw;
   max-height: 95vh;
   object-fit: contain;
   cursor: pointer;
-}
+}}
 </style>
 
 <div id="modal" onclick="this.style.display='none'">
