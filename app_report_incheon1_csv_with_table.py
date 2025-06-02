@@ -146,7 +146,7 @@ if query:
 
     <div id="sample-area">
     <h3>8. 한도견본</h3>
-    {''.join(f'<img src="{link.strip()}" style="width:100%; max-width:1000px; cursor:pointer; margin:10px;" onclick="showModal(this.src)">' for link in str(row.get("한도견본", "")).split(",") if link.strip())}
+    {''.join(f'<img src="{link.strip()}" style="width:100%; max-width:1000px; cursor:pointer; margin:10px;" onclick="openFullscreen(this)">' for link in str(row.get("한도견본", "")).split(",") if link.strip())}
 
 <br>
 <button onclick="printSample()">🖨️ 한도견본만 PDF로 저장</button>
