@@ -131,6 +131,17 @@ if query:
     <p>{row.get('제조방법', '-')}</p>
     <h3>4. 원재료명 및 함량 / 원산지</h3>
     <p>{row.get('원재료명 및 함량', '-')} / {row.get('원산지', '-')}</p>
+
+    def format_features(text):
+        if pd.isna(text):
+           return "-"
+        items = re.split(r"\s*-\s*", text.strip())
+        # 첫 항목이 빈 항목일 수 있어 제거
+        items = [item for item in items if item]
+        return "<br>".join(f"• {item.strip()}" for item in items)
+        
+    ...
+
     <h3>5. 제품 특징</h3>
     <p>{row.get('제품특징', '-')}</p>
 
