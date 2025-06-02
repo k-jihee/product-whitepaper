@@ -147,7 +147,8 @@ if query:
 
 <br>
 <button onclick="window.print()">🖨️ 이 제품백서 프린트하기</button>
-
+'''
+            
     else:
         st.warning("🔍 검색 결과가 없습니다.")
 else:
