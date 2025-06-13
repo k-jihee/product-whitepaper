@@ -81,10 +81,9 @@ if queries:
                 prod_2022 = clean_int(row.get('생산실적(2022)'))
                 prod_2023 = clean_int(row.get('생산실적(2023)'))
                 prod_2024 = clean_int(row.get('생산실적(2024)'))
-
-            internal_spec = parse_spec_text(row.get("사내규격(COA)", ""))
-            legal_spec = parse_spec_text(row.get("법적규격", ""))
-            all_keys = set(internal_spec.keys()) | set(legal_spec.keys()) | {"성상"}
+                internal_spec = parse_spec_text(row.get("사내규격(COA)", ""))
+                legal_spec = parse_spec_text(row.get("법적규격", ""))
+                all_keys = set(internal_spec.keys()) | set(legal_spec.keys()) | {"성상"}
 
             성상_row = '<tr><td>성상</td><td colspan="2">{}</td></tr>'.format(row.get("성상", "-"))
             spec_rows = ""
