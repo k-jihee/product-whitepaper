@@ -57,15 +57,15 @@ def format_features(text):
 
 st.title("🏭 인천 1공장 제품백서")
 st.markdown("### 📋 인천 1공장 전제품 목록")
-st.dataframe(df[["제품코드", "제품명"]].dropna().reset_index(drop=True))
+st.dataframe(df[["제품코드", "제품명"]].dropna().reset_index(drop=True), use_container_width=False)
 st.markdown("---")
 st.markdown('<h4>🔍 <b>제품코드 또는 제품명을 입력하세요</b></h4>', unsafe_allow_html=True)
 
 col1, col2 = st.columns(2)
 with col1:
-    query1 = st.text_input("🔎 제품 1 (예: GIB1010 또는 글루텐피드)", key="query_input1")
+    query1 = st.text_input("🔎 제품 1 (예: GIB1010 또는 글루텐피드)", key="query_input1"), use_container_width=False)
 with col2:
-    query2 = st.text_input("🔎 제품 2 (선택)", key="query_input2")
+    query2 = st.text_input("🔎 제품 2 (선택)", key="query_input2", use_container_width=False)
 
 queries = [q for q in [query1, query2] if q]
 
