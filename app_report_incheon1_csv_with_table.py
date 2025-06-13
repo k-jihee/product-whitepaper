@@ -145,7 +145,8 @@ if queries:
             </script>
             <br><button onclick="window.print()">🖨️ 이 제품백서 프린트하기</button>"""
 
-            col.components.v1.html(html_template, height=2200, scrolling=True)
+            with col:
+                st.components.v1.html(html_template, height=2200, scrolling=True)
     else:
         st.warning("🔍 검색 결과가 없습니다.")
 else:
