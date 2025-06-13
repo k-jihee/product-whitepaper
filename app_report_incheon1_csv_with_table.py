@@ -155,7 +155,7 @@ if query:
     <div id="sample-area">
     <h3>8. 한도견본</h3>
     {(
-    "해당사항 없음" if str(row.get("한도견본", "")).strip() in ["", "없음"] 
+    "해당사항 없음" if str(row.get("한도견본", "")).strip() in ["", "한도견본 없음"] 
     else ''.join(f'<img src="{link.strip()}" width="500" onclick="showModal(this.src)" style="cursor:pointer; margin:10px;">' 
                  for link in str(row.get("한도견본", "")).split(",") if link.strip())
 )}
