@@ -118,8 +118,15 @@ if queries:
                 print_button = ""
             else:
                 imgs = "".join(f'<img src="{link.strip()}" width="500" onclick="showModal(this.src)" style="cursor:pointer; margin:10px;">' for link in img_links.split(",") if link.strip())
-                sample_html = imgs
-                print_button = '<button onclick="printSample()">🖨️ 한도견본만 PDF로 저장</button>'
+                sample_html = f"""
+                <div style="text-align:center;">
+                    {imgs}
+                    <div style="margin-top: 10px;">
+                        <button onclick="printSample()">🖨️ 한도견본만 PDF로 저장</button>
+                    </div>
+                </div>
+                """
+                print_button = ""  # 따로 빼지 않음
 
             html_template = f"""<style>
             table {{ table-layout: fixed; width: 100%; border-collapse: collapse; }}
