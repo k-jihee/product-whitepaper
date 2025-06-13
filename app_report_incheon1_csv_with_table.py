@@ -63,7 +63,7 @@ with st.container():
         """
         <style>
         .custom-df-container {
-           max-width:700px;
+           max-width:500px;
         }
         </style>
         """,
