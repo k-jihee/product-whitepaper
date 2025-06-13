@@ -119,7 +119,7 @@ if queries:
             else:
                 imgs = "".join(f'<img src="{link.strip()}" width="500" onclick="showModal(this.src)" style="cursor:pointer; margin:10px;">' for link in img_links.split(",") if link.strip())
                 sample_html = f"""
-                <div style="text-align:center;">
+                <div style="text-align:left;">
                     {imgs}
                     <div style="margin-top: 10px;">
                         <button onclick="printSample()">🖨️ 한도견본만 PDF로 저장</button>
