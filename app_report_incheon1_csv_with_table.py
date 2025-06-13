@@ -86,13 +86,14 @@ if query:
 
             
     # 한도견본 HTML 생성
-    sample_html = (
-        '<p>해당사항 없음</p>' if not str(row.get("한도견본", "")).strip() else
-        "".join(
-            f'<img src="{link.strip()}" width="500" onclick="showModal(this.src)" style="cursor:pointer; margin:10px;">'
-            for link in str(row.get("한도견본", "")).split(",") if link.strip()
-        )
-    )
+            sample_html = (
+                '<p>해당사항 없음</p>' if not str(row.get("한도견본", "")).strip() else
+                "".join(
+                    f'<img src="{link.strip()}" width="500" onclick="showModal(this.src)" style="cursor:pointer; margin:10px;">'
+                    for link in str(row.get("한도견본", "")).split(",") if link.strip()
+                )
+            )
+
 
 html_template = f'''
 <style>
@@ -163,8 +164,8 @@ html_template = f'''
 </div>
 
     <div id="sample-area">
-    <h3>8. 한도견본</h3>
-    {sample_html}
+            <h3>8. 한도견본</h3>
+            {sample_html}
     
     <button onclick="printSample()">
     🖨️ 한도견본만 PDF로 저장</button>
