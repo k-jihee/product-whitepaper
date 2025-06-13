@@ -76,9 +76,8 @@ if queries:
 
 
     if not results.empty:
-        
-html_blocks = []
-for _, row in results.iterrows():
+        html_blocks = []
+        for _, row in results.iterrows():
                 prod_2022 = clean_int(row.get('생산실적(2022)'))
                 prod_2023 = clean_int(row.get('생산실적(2023)'))
                 prod_2024 = clean_int(row.get('생산실적(2024)'))
