@@ -209,7 +209,7 @@ if not compare_rows.empty and len(compare_inputs) >= 2:
         html_table += "</tr>"
 
     html_table += "</tbody></table>"
-    html_table += "<br><button onclick="window.print()">🖨️ 비교결과 PDF로 저장</button>"
+    html_table += '<br><button onclick="window.print()">🖨️ 비교결과 PDF로 저장</button>'
 
     st.components.v1.html(html_table, height=1600, scrolling=True)
 else:
