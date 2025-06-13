@@ -56,8 +56,11 @@ def format_features(text):
     return "<br>".join(f"• {item.strip()}" for item in items)
 
 st.title("🏭 인천 1공장 제품백서")
-st.markdown("### 📋 인천 1공장 전제품 목록")
-st.dataframe(df[["제품코드", "제품명"]].dropna().reset_index(drop=True))
+
+with st.container():
+    st.markdown("### 📋 인천 1공장 전제품 목록")
+    st.dataframe(df[["제품코드", "제품명"]].dropna().reset_index(drop=True), use_container_width=False)
+
 st.markdown("---")
 st.markdown('<h4>🔍 <b>제품코드 또는 제품명을 입력하세요</b></h4>', unsafe_allow_html=True)
 
