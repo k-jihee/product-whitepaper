@@ -85,9 +85,9 @@ if queries:
                 legal_spec = parse_spec_text(row.get("법적규격", ""))
                 all_keys = set(internal_spec.keys()) | set(legal_spec.keys()) | {"성상"}
 
-            성상_row = '<tr><td>성상</td><td colspan="2">{}</td></tr>'.format(row.get("성상", "-"))
-            spec_rows = ""
-            for key in sorted(all_keys):
+                성상_row = '<tr><td>성상</td><td colspan="2">{}</td></tr>'.format(row.get("성상", "-"))
+                spec_rows = ""
+                for key in sorted(all_keys):
                 if key == "성상":
                     continue
                 legal = legal_spec.get(key, "-")
