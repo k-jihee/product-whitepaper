@@ -14,9 +14,9 @@ if "authenticated" not in st.session_state:
         if password == PASSWORD:
             st.session_state.authenticated = True
             st.rerun()
-            elif password:
-                st.error("❌ 비밀번호가 틀렸습니다.")
-                st.stop()
+        elif password:
+            st.error("❌ 비밀번호가 틀렸습니다.")
+            st.stop()
 
                 try:
                     df = pd.read_csv("product_data.csv", encoding="utf-8")
