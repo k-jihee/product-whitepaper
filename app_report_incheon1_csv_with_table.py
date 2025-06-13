@@ -141,7 +141,7 @@ else:
 st.markdown("---")
 st.markdown("### 🆚 제품 비교 (표 형식, PDF 출력 가능)")
 
-col1, col2, col3 = 
+col1, col2, col3 = st.columns(3)
 st.markdown("### 🔍 비교할 제품코드 또는 제품명을 입력하세요 (최대 3개)")
 
 col1, col2, col3 = st.columns(3)
