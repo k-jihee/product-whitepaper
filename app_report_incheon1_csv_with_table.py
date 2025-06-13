@@ -59,7 +59,20 @@ st.title("🏭 인천 1공장 제품백서")
 
 with st.container():
     st.markdown("### 📋 인천 1공장 전제품 목록")
-    st.dataframe(df[["제품코드", "제품명"]].dropna().reset_index(drop=True), use_container_width=False)
+    st.markdown(
+        """
+        <style>
+        .custom-df-container {
+           max-width: 900px;
+        }
+        </style>
+        """,
+        unsafe_allow_html=True,
+    )
+    with st.container():
+        st.markdown('<div class="custom-df-container">', unsafe_allow_html=True)
+        st.dataframe(df[["제품코드", "제품명"]].dropna().reset_index(drop=True), use_container_width=True)
+        st.markdown("</div>", unsafe_allow_html=True)
 
 st.markdown("---")
 st.markdown('<h4>🔍 <b>제품코드 또는 제품명을 입력하세요</b></h4>', unsafe_allow_html=True)
