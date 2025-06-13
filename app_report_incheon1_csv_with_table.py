@@ -154,7 +154,7 @@ if query:
 
     <div id="sample-area">
     <h3>8. 한도견본</h3>
-    ("<p>없음</p>" if not str(row.get("한도견본", "")).strip() else  "".join(f'<img src="{link.strip()}" width="500" onclick="showModal(this.src)" style="cursor:pointer; margin:10px;">' for link in str(row.get("한도견본", "")).split(",") if link.strip()))
+    ('<p>해당사항 없음</p>' if not str(row.get("한도견본", "")).strip() else  "".join(f'<img src="{link.strip()}" width="500" onclick="showModal(this.src)" style="cursor:pointer; margin:10px;">' for link in str(row.get("한도견본", "")).split(",") if link.strip()))
     
     <button onclick="printSample()">
     🖨️ 한도견본만 PDF로 저장</button>
