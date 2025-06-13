@@ -79,9 +79,9 @@ if queries:
         cols = st.columns(len(results))
         for (i, (_, row)) in enumerate(results.iterrows()):
             with cols[i]:
-            prod_2022 = clean_int(row.get('생산실적(2022)'))
-            prod_2023 = clean_int(row.get('생산실적(2023)'))
-            prod_2024 = clean_int(row.get('생산실적(2024)'))
+                prod_2022 = clean_int(row.get('생산실적(2022)'))
+                prod_2023 = clean_int(row.get('생산실적(2023)'))
+                prod_2024 = clean_int(row.get('생산실적(2024)'))
 
             internal_spec = parse_spec_text(row.get("사내규격(COA)", ""))
             legal_spec = parse_spec_text(row.get("법적규격", ""))
