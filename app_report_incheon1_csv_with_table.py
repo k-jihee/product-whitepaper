@@ -65,7 +65,7 @@ col1, col2 = st.columns(2)
 with col1:
     query1 = st.text_input("🔎 제품 1 (예: GIB1010 또는 글루텐피드)")
 with col2:
-    query2 = st.text_input("🔎 제품 2 (선택)", key="query_input2")
+    query2 = st.text_input("🔎 제품 2 (예: GIS7030 또는 물엿)", key="query_input2")
 
 queries = [q for q in [query1, query2] if q]
 
