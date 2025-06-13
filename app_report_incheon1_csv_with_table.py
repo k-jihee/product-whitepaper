@@ -157,8 +157,9 @@ if query:
     {(
     "해당사항 없음" if str(row.get("한도견본", "")).strip() in ["", "한도견본 없음"] 
     else ''.join(f'<img src="{link.strip()}" width="500" onclick="showModal(this.src)" style="cursor:pointer; margin:10px;">' 
-                 for link in str(row.get("한도견본", "")).split(",") if link.strip())
-)}
+                 for link in str(row.get("한도견본", "")).split(",") if link.strip()) + 
+                 '<br><button onclick="printSample()">🖨️ 한도견본만 PDF로 저장</button>'
+    )}
     
     <button onclick="printSample()">
     🖨️ 한도견본만 PDF로 저장</button>
