@@ -88,13 +88,13 @@ if queries:
                 성상_row = '<tr><td>성상</td><td colspan="2">{}</td></tr>'.format(row.get("성상", "-"))
                 spec_rows = ""
                 for key in sorted(all_keys):
-                if key == "성상":
-                    continue
-                legal = legal_spec.get(key, "-")
-                internal = internal_spec.get(key, "-")
-                spec_rows += "<tr><td>{}</td><td>{}</td><td>{}</td></tr>".format(key, legal, internal)
+                    if key == "성상":
+                        continue
+                    legal = legal_spec.get(key, "-")
+                    internal = internal_spec.get(key, "-")
+                    spec_rows += "<tr><td>{}</td><td>{}</td><td>{}</td></tr>".format(key, legal, internal)
 
-            html_template = f'''
+                html_template = f'''
 <style>
     table {{
         table-layout: fixed;
