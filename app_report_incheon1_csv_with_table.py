@@ -63,7 +63,7 @@ st.markdown('<h4>🔍 <b>제품코드 또는 제품명을 입력하세요</b></h
 
 col1, col2 = st.columns(2)
 with col1:
-    query1 = st.text_input("🔎 제품 1 (예: GIB1010 또는 글루텐피드)", key="query_input1"), use_container_width=False)
+    query1 = st.text_input("🔎 제품 1 (예: GIB1010 또는 글루텐피드)", key="query_input1", use_container_width=False)
 with col2:
     query2 = st.text_input("🔎 제품 2 (선택)", key="query_input2", use_container_width=False)
 
