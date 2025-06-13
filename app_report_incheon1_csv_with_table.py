@@ -4,6 +4,8 @@ import pandas as pd
 import re
 import os
 
+st.set_page_config(layout="wide")  # ✅ 이 줄 추가
+
 PASSWORD = "samyang!11"
 
 if "authenticated" not in st.session_state:
