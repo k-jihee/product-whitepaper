@@ -23,6 +23,8 @@ if not st.session_state.authenticated:
 
 try:
     df = pd.read_csv("product_data.csv", encoding="utf-8")
+    df["용도"] = df["용도"].astype(str).str.replace(r"\s*-\s*", " / ", regex=True)
+    
 except Exception as e:
     st.error(f"❌ CSV 파일을 불러오는 중 오류 발생: {e}")
     st.stop()
