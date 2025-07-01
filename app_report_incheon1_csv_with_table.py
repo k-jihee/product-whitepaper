@@ -27,33 +27,44 @@ except Exception as e:
     st.error(f"❌ CSV 파일을 불러오는 중 오류 발생: {e}")
     st.stop()
 
-def clean_int(value):
-    try:
-        cleaned = re.sub(r"[^\d.]", "", str(value))
-        if cleaned == "":
-            return "-"
-        return f"{int(float(cleaned)):,} KG"
-    except (ValueError, TypeError):
-        return "-"
+# 제품 계층구조 컬럼이 없을 경우 자동 추가
+if "계층구조_2레벨" not in df.columns or "계층구조_3레벨" not in df.columns:
+    def get_hierarchy(code):
+        if code.startswith("GIB"):
+            return "FG0009 : 부산물", "부산물"
+        elif code.startswith("GIC002"):
+            return "FG0004 : 전분", "일반전분"
+        elif code.startswith("GIC"):
+            return "FG0004 : 전분", "변성전분"
+        elif code.startswith("GIS601") or code.startswith("GIS631"):
+            return "FG0002 : 물엿", "고감미82"
+        elif code.startswith("GIS701") or code.startswith("GIS703"):
+            return "FG0002 : 물엿", "일반75"
+        elif code.startswith("GIS401"):
+            return "FG0002 : 물엿", "일반82"
+        elif code.startswith("GIS201"):
+            return "FG0002 : 물엿", "저당물엿"
+        elif code.startswith("GIF501") or code.startswith("GIF502"):
+            return "FG0003 : 과당", "55%과당"
+        elif code.startswith("GIN113"):
+            return "FG0007 : 올리고당", "프락토올리고당 액상"
+        elif code.startswith("GIN121") or code.startswith("GIN122"):
+            return "FG0007 : 올리고당", "이소말토올리고 액상"
+        elif code.startswith("GIN131"):
+            return "FG0007 : 올리고당", "갈락토"
+        elif code.startswith("GIN151"):
+            return "FG0007 : 올리고당", "말토올리고"
+        elif code.startswith("GIP202") or code.startswith("GIP204"):
+            return "FG0008 : 식이섬유", "폴리덱스트로스"
+        elif code.startswith("GIS242") or code.startswith("GIS240"):
+            return "FG0008 : 식이섬유", "NMD 액상/분말"
+        elif code.startswith("GISQ190"):
+            return "FG0006 : 알룰로스", "알룰로스 액상"
+        else:
+            return "기타", "기타"
 
-def parse_spec_text(spec_text):
-    if pd.isna(spec_text):
-        return {}
-    lines = str(spec_text).splitlines()
-    spec_dict = {}
-    for line in lines:
-        match = re.match(r"\s*\d+\.\s*(.+?)\s*:\s*(.+)", line)
-        if match:
-            key, value = match.groups()
-            spec_dict[key.strip()] = value.strip()
-    return spec_dict
+    df[["계층구조_2레벨", "계층구조_3레벨"]] = df["제품코드"].apply(lambda x: pd.Series(get_hierarchy(x)))
 
-def format_features(text):
-    if pd.isna(text):
-        return "-"
-    items = re.split(r"\s*-\s*", text.strip())
-    items = [item for item in items if item]
-    return "<br>".join(f"• {item.strip()}" for item in items)
 
 st.title("🏭 인천 1공장 제품백서")
 
