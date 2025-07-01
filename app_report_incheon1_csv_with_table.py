@@ -55,6 +55,60 @@ def format_features(text):
     items = [item for item in items if item]
     return "<br>".join(f"• {item.strip()}" for item in items)  
 
+#제품 계층구조 컬럼이 없을 경우 자동 추가
+if "계층구조_2레벨" not in df.columns or "계층구조_3레벨" not in df.columns:
+    def get_hierarchy(code):
+        if code.startswith("GIB"):
+            return "FG0009 : 부산물", "부산물"
+        elif code.startswith("GID1") or code.startswith("GID2") or code.startswith("GID3"):
+            return "FG0001 : 포도당", "포도당분말"
+        elif code.startswith("GID6") or code.startswith("GID7"):
+            return "FG0001 : 포도당", "포도당액상"
+        elif code.startswith("GIS62"):
+            return "FG0002 : 물엿", "고감미75"
+        elif code.startswith("GIS601") or code.startswith("GIS631"):
+            return "FG0002 : 물엿", "고감미82"
+        elif code.startswith("GIS701") or code.startswith("GIS703"):
+            return "FG0002 : 물엿", "일반75"
+        elif code.startswith("GIS401"):
+            return "FG0002 : 물엿", "일반82"
+        elif code.startswith("GIS201"):
+            return "FG0002 : 물엿", "저당물엿"
+        elif code.startswith("GIS22"):
+            return "FG0002 : 물엿", "제네덱스"
+        elif code.startswith("GIS23"):
+            return "FG0002 : 물엿", "가루엿"
+        elif code.startswith("GIS90"):
+            return "FG0002 : 물엿", "맥아82"
+        elif code.startswith("GIS92"):
+            return "FG0002 : 물엿", "맥아75"
+        elif code.startswith("GIS93"):
+            return "FG0002 : 물엿", "하이말토스"    
+        elif code.startswith("GIF501") or code.startswith("GIF502"):
+            return "FG0003 : 과당", "55%과당"
+        elif code.startswith("GIC002"):
+            return "FG0004 : 전분", "일반전분"
+        elif code.startswith("GIC") or code.startswith("GIT"):
+            return "FG0004 : 전분", "변성전분"            
+        elif code.startswith("GISQ190"):
+            return "FG0006 : 알룰로스", "알룰로스 액상"
+        elif code.startswith("GIN121") or code.startswith("GIN1221"):
+            return "FG0007 : 올리고당", "이소말토올리고 액상"
+        elif code.startswith("GIN1230") or code.startswith("GIN1220"):
+            return "FG0007 : 올리고당", "이소말토올리고 분말"
+        elif code.startswith("GIN131"):
+            return "FG0007 : 올리고당", "갈락토"
+        elif code.startswith("GIN151"):
+            return "FG0007 : 올리고당", "말토올리고"
+        elif code.startswith("GIP202") or code.startswith("GIP204"):
+            return "FG0008 : 식이섬유", "폴리덱스트로스"
+        elif code.startswith("GIS242") or code.startswith("GIS240"):
+            return "FG0008 : 식이섬유", "NMD 액상/분말"
+        else:
+            return "기타", "기타"
+
+    df[["계층구조_2레벨", "계층구조_3레벨"]] = df["제품코드"].apply(lambda x: pd.Series(get_hierarchy(x)))
+
 st.title("🏭 인천 1공장 제품백서")
 
 with st.container():
