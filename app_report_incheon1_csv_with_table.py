@@ -126,7 +126,7 @@ with st.container():
     )
     with st.container():
         st.markdown('<div class="custom-df-container">', unsafe_allow_html=True)
-        st.dataframe(df[["제품코드", "제품명"]].dropna().reset_index(drop=True), use_container_width=True)
+        st.dataframe(df[["제품코드", "제품명", "계층구조_2레벨", "계층구조_3레벨"]].dropna().reset_index(drop=True), use_container_width=True)
         st.markdown("</div>", unsafe_allow_html=True)
 
 st.markdown("---")
