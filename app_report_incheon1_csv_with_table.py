@@ -54,18 +54,20 @@ if "계층구조_2레벨" not in df.columns or "계층구조_3레벨" not in df.
             return "FG0002 : 물엿", "맥아82"
         elif code.startswith("GIS92"):
             return "FG0002 : 물엿", "맥아75"
+        elif code.startswith("GIS93"):
+            return "FG0002 : 물엿", "하이말토스"    
         elif code.startswith("GIF501") or code.startswith("GIF502"):
             return "FG0003 : 과당", "55%과당"
         elif code.startswith("GIC002"):
             return "FG0004 : 전분", "일반전분"
-        elif code.startswith("GIC"):
+        elif code.startswith("GIC") or code.startswith("GIT"):
             return "FG0004 : 전분", "변성전분"            
         elif code.startswith("GISQ190"):
             return "FG0006 : 알룰로스", "알룰로스 액상"
-        elif code.startswith("GIN113"):
-            return "FG0007 : 올리고당", "프락토올리고당 액상"
-        elif code.startswith("GIN121") or code.startswith("GIN122"):
+        elif code.startswith("GIN121") or code.startswith("GIN1221"):
             return "FG0007 : 올리고당", "이소말토올리고 액상"
+        elif code.startswith("GIN1230") or code.startswith("GIN1220"):
+            return "FG0007 : 올리고당", "이소말토올리고 분말"
         elif code.startswith("GIN131"):
             return "FG0007 : 올리고당", "갈락토"
         elif code.startswith("GIN151"):
