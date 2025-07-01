@@ -125,42 +125,18 @@ with st.container():
     )
     with st.container():
         st.markdown('<div class="custom-df-container">', unsafe_allow_html=True)
-        st.dataframe(df[["계층구조_2레벨", "계층구조_3레벨", "제품코드", "제품명", ]].dropna().reset_index(drop=True), use_container_width=True)
-# 정렬
-df_sorted = df.sort_values(["계층구조_2레벨", "계층구조_3레벨"]).reset_index(drop=True)
+        # ✅ 병합처럼 보이는 표로 교체된 부분
+        df_display = df.sort_values(["계층구조_2레벨", "계층구조_3레벨"]).reset_index(drop=True)
+        for col in ["계층구조_2레벨", "계층구조_3레벨"]:
+            prev = None
+            for i in df_display.index:
+                if df_display.at[i, col] == prev:
+                    df_display.at[i, col] = ""
+                else:
+                    prev = df_display.at[i, col]
+        st.dataframe(df_display[["계층구조_2레벨", "계층구조_3레벨", "제품코드", "제품명"]], use_container_width=True)
 
-# 병합 테이블 생성
-html = """
-<table border="1" style="border-collapse: collapse; text-align: center; width:100%;">
-<tr><th>계층구조_2레벨</th><th>계층구조_3레벨</th><th>제품코드</th><th>제품명</th></tr>
-"""
-i = 0
-while i < len(df_sorted):
-    lvl2 = df_sorted.loc[i, "계층구조_2레벨"]
-    lvl2_group = df_sorted[df_sorted["계층구조_2레벨"] == lvl2]
-    lvl2_count = len(lvl2_group)
-    j = 0
-    while j < lvl2_count:
-        idx = lvl2_group.index[j]
-        lvl3 = df_sorted.loc[idx, "계층구조_3레벨"]
-        lvl3_group = lvl2_group[lvl2_group["계층구조_3레벨"] == lvl3]
-        lvl3_count = len(lvl3_group)
-        for k in range(lvl3_count):
-            row_idx = lvl3_group.index[k]
-            row = df_sorted.loc[row_idx]
-            html += "<tr>"
-            if j == 0 and k == 0:
-                html += f"<td rowspan='{lvl2_count}'>{lvl2}</td>"
-            if k == 0:
-                html += f"<td rowspan='{lvl3_count}'>{lvl3}</td>"
-            html += f"<td>{row['제품코드']}</td><td>{row['제품명']}</td></tr>"
-        j += lvl3_count
-    i += lvl2_count
-
-html += "</table>"
-
-# 병합된 테이블 출력
-st.markdown(html, unsafe_allow_html=True)
+        st.markdown("</div>", unsafe_allow_html=True)
 
 
 st.markdown("---")
