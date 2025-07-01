@@ -34,7 +34,7 @@ if "계층구조_2레벨" not in df.columns or "계층구조_3레벨" not in df.
             return "FG0009 : 부산물", "부산물"
         elif code.startswith("GID1") or code.startswith("GID2") or code.startswith("GID3"):
             return "FG0001 : 포도당", "포도당분말"
-        elif code.startswith("GID6"): or code.startswith("GID7"):
+        elif code.startswith("GID6") or code.startswith("GID7"):
             return "FG0001 : 포도당", "포도당액상"
         elif code.startswith("GIS62"):
             return "FG0002 : 물엿", "고감미75"
