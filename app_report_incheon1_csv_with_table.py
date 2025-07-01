@@ -58,6 +58,10 @@ def format_features(text):
 #제품 계층구조 컬럼이 없을 경우 자동 추가
 if "계층구조_2레벨" not in df.columns or "계층구조_3레벨" not in df.columns:
     def get_hierarchy(code):
+        if pd.isna(code):  # NaN일 경우 기본값 반환
+            return "기타", "기타"
+        code = str(code)   # 문자열로 변환
+        
         if code.startswith("GIB"):
             return "FG0009 : 부산물", "부산물"
         elif code.startswith("GID1") or code.startswith("GID2") or code.startswith("GID3"):
