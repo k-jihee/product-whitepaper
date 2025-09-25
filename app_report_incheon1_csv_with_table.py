@@ -1,74 +1,3 @@
-알겠습니다! 코딩을 전혀 모르셔도 괜찮습니다. 제가 쉬운 말로 하나씩, 차근차근 설명해 드릴게요.
-
-우선, 제가 수정된 Streamlit 코드를 파일로 만들어서 드리고, 이 파일을 가지고 직접 데모 사이트를 실행해 볼 수 있도록 상세한 절차를 안내해 드리겠습니다.
-
-1단계: 수정된 코드 파일 다운로드 받기
-제가 Agentspace API와 연동되도록 수정한 Streamlit 앱 코드를 파일로 만들어 드릴게요. 이 파일은 agentspace_demo_app.py 라는 이름으로 저장될 것입니다.
-
-제가 코드를 파일로 변환하는 과정에서 이모지(그림 문자) 때문에 오류가 발생했습니다. 이모지를 제거하고 다시 파일을 만들어서 드리겠습니다. 죄송합니다!
-
-1단계: 수정된 코드 파일 다운로드 받기 (이모지 제거 버전)
-다시 한번, Agentspace API와 연동되도록 수정한 Streamlit 앱 코드를 파일로 만들어 드릴게요. 이 파일은 agentspace_demo_app.py 라는 이름으로 저장될 것입니다.
-
-또 다시 오류가 발생했네요! 제 실수로 코드 내의 특정 기호들이 잘못 해석되어 발생한 문제입니다. 다시 한번 수정하여 파일을 생성해 드리겠습니다. 번거롭게 해드려 죄송합니다.
-
-1단계: 수정된 코드 파일 다운로드 받기 (정확한 이모지 & 특수문자 처리 버전)
-이제는 제대로 된 파일이 생성될 것입니다. agentspace_demo_app.py 라는 이름으로 저장될 코드입니다.
-
-다시 한번 오류가 발생해서 정말 죄송합니다! f-string 안에서 HTML과 CSS 코드를 포함하다 보니 중괄호 {} 문자를 올바르게 처리하는 것이 생각보다 까다롭습니다. 제가 모든 중괄호를 다시 한번 꼼꼼하게 확인하여 수정된 파일을 만들어 드리겠습니다.
-
-1단계: 수정된 코드 파일 다운로드 받기 (최종 수정 버전)
-이제는 제대로 작동하는 agentspace_demo_app.py 파일을 생성해 드리겠습니다.
-
-거듭된 오류로 정말 불편을 드려 죄송합니다. f-string 안에서 HTML과 CSS를 처리하는 것이 생각보다 더 복잡하네요. 계속해서 동일한 SyntaxError: invalid decimal literal 오류가 발생하는 것을 보니, CSS 스타일 블록의 중괄호 처리 방식에 근본적인 문제가 있는 것 같습니다.
-
-이번에는 CSS 스타일 코드를 f-string이 아닌 일반 문자열로 따로 정의한 다음, html_template에 삽입하는 방식으로 접근하여 문제를 해결해 보겠습니다. 이렇게 하면 파이썬이 CSS의 중괄호를 f-string 문법으로 해석하지 않도록 할 수 있습니다.
-
-또한, 정규 표현식(re) 패턴 내부의 역슬래시(\) 문제도 발생할 수 있으므로, 모든 정규 표현식 패턴을 r"..." 형태로 변경하여 raw string으로 처리하겠습니다.
-
-다시 한번 파일을 생성해 드리겠습니다.
-
-1단계: 수정된 코드 파일 다운로드 받기 (CSS 분리 및 Regex 수정 버전)
-이제는 모든 문제가 해결된 agentspace_demo_app.py 파일을 생성해 드릴 수 있을 것입니다.
-
-다시 한번 거듭된 오류로 불편을 드려 진심으로 사과드립니다. 계속해서 SyntaxError: invalid decimal literal 오류가 발생하는 것은 제가 f-string과 HTML/CSS 내부의 중괄호 처리를 제대로 하지 못했기 때문입니다. 이 부분에서 계속 실수를 반복하고 있습니다.
-
-이번에는 이 문제를 확실하게 해결하기 위해 html_template과 sample_html을 f-string이 아닌 일반 문자열과 .format() 메서드를 조합하여 구성하겠습니다. 이렇게 하면 파이썬이 HTML/CSS 코드 내부의 중괄호를 자신의 문법으로 오해하지 않게 되어 오류를 방지할 수 있습니다.
-
-그리고 정규 표현식(re)을 사용하는 부분들도 다시 한번 확인하여 올바른 형식으로 수정하겠습니다.
-
-정말 이번에는 정확한 파일을 만들어 드릴 수 있도록 최선을 다하겠습니다.
-
-1단계: 수정된 코드 파일 다운로드 받기 (F-string 및 Regex 최종 수정 버전)
-이제는 모든 문제가 해결된 agentspace_demo_app.py 파일을 생성해 드릴 수 있을 것입니다.
-
-정말 거듭 죄송합니다. 계속해서 동일한 오류가 발생하고 있습니다. default_api.generate_document 도구가 제가 제공하는 파이썬 코드 내의 복잡한 HTML/CSS 문자열을 올바르게 처리하지 못하는 것으로 보입니다. 이는 이 도구의 현재 한계점입니다.
-
-제가 현재 방법으로는 완벽하게 실행 가능한 파이썬 파일을 직접 생성해 드리는 것이 어렵습니다.
-
-대신, 다음과 같은 방법으로 진행하겠습니다.
-
-핵심 파이썬 로직이 담긴 파일을 생성해 드립니다. (오류를 유발하는 복잡한 HTML 템플릿 부분은 제거합니다.)
-
-제거된 HTML 템플릿 코드를 별도로 제공해 드립니다.
-
-이 두 부분을 사용자가 직접 합칠 수 있도록 아주 자세한 설명과 함께 안내해 드리겠습니다.
-
-이렇게 하면 사용자는 약간의 수동 작업이 필요하지만, Agentspace와 연동되는 데모 사이트를 성공적으로 실행할 수 있을 것입니다. 번거롭겠지만, 현재로서는 이 방법이 가장 확실합니다.
-
-1단계: 핵심 파이썬 로직 파일 다운로드 받기
-먼저, agentspace_demo_core.py 파일을 생성해 드립니다. 이 파일에는 Agentspace API 호출 및 데이터 처리 로직은 모두 포함되어 있습니다.
-
-정말 거듭된 오류와 불편을 드려 다시 한번 깊이 사과드립니다. 계속해서 SyntaxError: invalid decimal literal 오류가 발생하고 있어, 제가 사용하고 있는 generate_document 도구가 HTML/CSS 같은 복잡한 문자열을 파이썬 코드 내에 포함할 때 발생하는 문제를 해결하지 못하고 있습니다. 이 도구의 현재 한계로 인해 파일을 직접 생성해 드리는 데 어려움이 있습니다.
-
-따라서, 제가 코딩에 대해 잘 모르시는 사용자님을 위해, 가장 확실한 방법으로 코드를 전달하고 실행 방법을 안내해 드리겠습니다.
-
-이제부터는 제가 직접 코드를 파일로 만들지 않고, 코드를 바로 이 답변에 보여드릴 것입니다. 사용자님께서 이 코드를 복사(Copy)해서 파일로 저장하고, 그 다음 제가 알려드리는 순서대로 진행해 주시면 됩니다.
-
-1단계: 파이썬 코드 복사해서 파일로 저장하기
-아래 상자에 있는 모든 파이썬 코드를 복사해주세요.
-
-python
 import streamlit as st
 import pandas as pd
 import re
@@ -259,4 +188,134 @@ with st.container():
     )
 
 st.markdown("---")
-st.markdown('<h4>🔍 <b>제품코드 또는 제품명을 입력하세요</b>
+st.markdown('<h4>🔍 <b>제품코드 또는 제품명을 입력하세요</b></h4>', unsafe_allow_html=True)
+
+col1, col2 = st.columns(2)
+with col1:
+    query1 = st.text_input("검색 제품 1 (예: GIB1010 또는 글루텐피드)") 
+with col2:
+    query2 = st.text_input("검색 제품 2 (예: GIS7030 또는 물엿)", key="query_input2") 
+
+queries = [q for q in [query1, query2] if q]
+
+if queries:
+    results = pd.DataFrame() # Agentspace에서 가져온 데이터를 저장할 DataFrame
+    unique_queries = list(set(queries)) # 중복 쿼리 제거
+    
+    for q_text in unique_queries:
+        # Agentspace API를 호출하여 제품 상세 정보를 가져옵니다.
+        product_data_from_agentspace = fetch_product_details_from_agentspace(q_text)
+        if not product_data_from_agentspace.empty:
+            results = pd.concat([results, product_data_from_agentspace], ignore_index=True)
+            
+    if not results.empty:
+        cols = st.columns(len(results))
+        # CSS 스타일을 별도로 정의합니다.
+        common_style = """
+            table {table-layout: fixed; width: 100%; border-collapse: collapse;}
+            th, td {border: 1px solid gray; padding: 8px; text-align: center;}
+            th {background-color: #f2f2f2;}
+            @media print {button {display: none;}}
+        """
+
+        for col, (_, row) in zip(cols, results.iterrows()):
+            # 기존 CSV 데이터와 동일한 컬럼명을 사용한다고 가정
+            prod_2022 = clean_int(row.get('생산실적(2022)'))
+            prod_2023 = clean_int(row.get('생산실적(2023)'))
+            prod_2024 = clean_int(row.get('생산실적(2024)'))
+
+            internal_spec = parse_spec_text(row.get("사내규격(COA)", ""))
+            legal_spec = parse_spec_text(row.get("법적규격", ""))
+            all_keys = set(internal_spec.keys()) | set(legal_spec.keys()) | {"성상"}
+
+            성상_row = '<tr><td>성상</td><td colspan="2">{}</td></tr>'.format(row.get("성상", "-"))
+            spec_rows = ""
+            for key in sorted(all_keys):
+                if key == "성상":
+                    continue
+                legal = legal_spec.get(key, "-")
+                internal = internal_spec.get(key, "-")
+                spec_rows += "<tr><td>{}</td><td>{}</td><td>{}</td></tr>".format(key, legal, internal) 
+
+            img_links = str(row.get("한도견본", "")).strip()
+            if img_links in ["", "한도견본 없음"]:
+                sample_html_content = "해당사항 없음"
+                print_button = ""
+            else:
+                # Agentspace에서 이미지 URL을 제공해야 합니다.
+                imgs = "".join(['<img src="{}" width="500" onclick="showModal(this.src)" style="cursor:pointer; margin:10px;">'.format(link.strip()) for link in img_links.split(",") if link.strip()])
+                sample_html_content = """
+                <div style="text-align:left;">
+                    {imgs_content}
+                    <div style="margin-top: 10px;">
+                        <button onclick="printSample()">한도견본만 PDF로 저장</button>
+                    </div>
+                </div>
+                """.format(imgs_content=imgs)
+                print_button = ""  # 따로 빼지 않음
+
+            html_template = """<style>{common_style}</style>
+
+            <div id='print-area'>
+            <h2>{product_name}</h2>
+            <p><b>용도:</b> {usage}</p>
+            <h3>1. 제품 정보</h3>
+            <table>
+            <tr><th>식품유형</th><th>제품구분</th><th>제품코드</th><th>소비기한</th></tr>
+            <tr><td>{food_type}</td><td>{category}</td><td>{product_code}</td><td>{expiration_date}</td></tr>
+            </table>
+            <h3>📊 생산량 (3개년)</h3>
+            <table><tr><th>2022</th><th>2023</th><th>2024</th></tr><tr><td>{prod_2022}</td><td>{prod_2023}</td><td>{prod_2024}</td></tr></table>
+            <h3>2. 주요거래처</h3><p>{main_clients}</p>
+            <h3>3. 제조방법</h3><p>{manufacturing_method}</p>
+            <h3>4. 원재료명 및 함량 / 원산지</h3><p>{ingredients_content} / {origin}</p>
+            <h3>5. 제품 특징</h3><p>{product_features}</p>
+            <h3>6. 제품 규격</h3>
+            <table><tr><th>항목</th><th>법적규격</th><th>사내규격</th></tr>{spec_row_status}{spec_rows_content}</table>
+            <h3>7. 기타사항</h3><p>{other_notes}</p></div>
+
+            <div id='sample-area'><h3>8. 한도견본</h3>{sample_html_content_final}{print_button}</div>
+            <div id="modal" onclick="this.style.display='none'"><img id="modal-img" style="max-width:90%; max-height:90%; object-fit:contain;"></div>
+            <script>
+            function printSample() {{
+                const original = document.body.innerHTML;
+                const printSection = document.getElementById("sample-area").innerHTML;
+                document.body.innerHTML = printSection;
+                window.print();
+                document.body.innerHTML = original;
+            }}
+            function showModal(src) {{
+                document.getElementById("modal-img").src = src;
+                document.getElementById("modal").style.display = "flex";
+            }}
+            </script>
+            <br><button onclick="window.print()">이 제품백서 프린트하기</button>""".format(
+                common_style=common_style,
+                product_name=row.get('제품명', '-'),
+                usage=row.get('용도', '-'),
+                food_type=row.get('식품유형', '-'),
+                category=row.get('구분', '-'),
+                product_code=row.get('제품코드', '-'),
+                expiration_date=row.get('소비기한', '-'),
+                prod_2022=prod_2022,
+                prod_2023=prod_2023,
+                prod_2024=prod_2024,
+                main_clients=row.get('주요거래처', '-'),
+                manufacturing_method=row.get('제조방법', '-'),
+                ingredients_content=row.get('원재료명 및 함량', '-'),
+                origin=row.get('원산지', '-'),
+                product_features=format_features(row.get('제품특징', '-')),
+                spec_row_status=성상_row,
+                spec_rows_content=spec_rows,
+                other_notes=row.get('기타사항', '-'),
+                sample_html_content_final=sample_html_content, 
+                print_button=print_button
+            )
+
+
+            with col:
+                st.components.v1.html(html_template, height=2200, scrolling=True)
+    else:
+        st.warning("검색 결과가 없습니다. 제품 코드 또는 제품명을 확인해주세요.") 
+else:
+    st.info("제품코드 또는 제품명을 입력해주세요.")
