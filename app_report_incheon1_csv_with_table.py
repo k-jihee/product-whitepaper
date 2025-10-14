@@ -440,8 +440,26 @@ def page_docs_request_user():
             st.info("본인 이름으로 접수된 요청이 없습니다.")
             return
 
-        st.write(f"**'{requester}'님의 최근 요청 20건**")
-        st.dataframe(_mine.tail(20), use_container_width=True)
+        st.write(f"**'{requester}'님의 요청 (일별 보기)**")
+
+# 날짜 컬럼 추가
+_mine2 = _ensure_date_columns(_mine)
+
+# 그룹 기준 선택
+group_choice = st.radio("그룹 기준", ["요청일(입력시각)", "마감일"], horizontal=True)
+group_key = "요청일" if group_choice == "요청일(입력시각)" else "마감일"
+
+# (선택) 최근 N일만 보기 필터
+recent_days = st.slider("최근 N일만 보기 (0=전체)", min_value=0, max_value=60, value=0, step=5)
+if recent_days > 0 and not _mine2.empty:
+    cutoff = pd.Timestamp.today().date() - pd.Timedelta(days=recent_days)
+    _mine2 = _mine2[_mine2[group_key] >= cutoff]
+
+# 날짜별 접기 테이블
+_user_cols = ["timestamp", "team", "due", "category", "priority", "ref_product", "status", "details"]
+_user_cols = [c for c in _user_cols if c in _mine2.columns]
+_render_grouped_by_date(_mine2, group_key, _user_cols)
+# 교체 끝
 
         _approved_list = _mine[_mine["status"] == "승인"]
         if _approved_list.empty:
