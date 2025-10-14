@@ -1,60 +1,5 @@
-
 import streamlit as st
 import pandas as pd
-# ====== HELPER FUNCS (auto-injected) ======
-def _load_products_for_select():
-    try:
-        return load_product_df()
-    except Exception:
-        import pandas as _pd
-        try:
-            return _pd.read_csv("product_data.csv", encoding="utf-8")
-        except Exception:
-            return _pd.DataFrame(columns=["제품코드","제품명"])
-
-def render_ref_product_picker():
-    import streamlit as st
-    df_products = _load_products_for_select()
-    if not df_products.empty and {"제품코드","제품명"}.issubset(set(df_products.columns)):
-        opts = (
-            df_products[["제품코드","제품명"]]
-            .astype(str).dropna()
-            .assign(_opt=lambda d: d["제품코드"].str.strip() + " | " + d["제품명"].str.strip())
-            ["_opt"].drop_duplicates().sort_values().tolist()
-        )
-    else:
-        opts = []
-    multi_pick = st.toggle("여러 제품 선택", value=False, help="여러 제품에 대한 요청이라면 켜주세요.")
-    if multi_pick:
-        picked = st.multiselect("관련 제품코드/명 (검색 가능)", options=opts, placeholder="예: GID*** | 포도당...")
-        return ", ".join(picked) if picked else ""
-    else:
-        return st.selectbox("관련 제품코드/명 (선택)", options=[""] + opts, index=0,
-                            placeholder="클릭 후 검색/선택",
-                            help="클릭하면 검색 드롭다운이 열립니다.")
-
-def render_category_checklist():
-    import streamlit as st
-    st.markdown("**요청 종류**")
-    colA, colB, colC, colD = st.columns(4)
-    labels = [
-        "HACCP 인증서",
-        "ISO9001 인증서",
-        "제품규격",
-        "FSSC22000 인증서",
-        "할랄인증서",
-        "원산지규격서",
-        "MSDS",
-        "기타",
-    ]
-    checks = []
-    cols = [colA, colB, colC, colD]
-    for i, lbl in enumerate(labels):
-        with cols[i % 4]:
-            checks.append(st.checkbox(lbl, key=f"req_kind_{i}"))
-    return ", ".join([lbl for lbl, on in zip(labels, checks) if on])
-# ====== END HELPERS ======
-
 import re
 import os
 from datetime import datetime
@@ -352,8 +297,58 @@ def page_docs_request():
             team = st.text_input("부서")
             due = st.date_input("희망 마감일")
         with col2:
-            category = render_category_checklist()priority = st.select_slider("우선순위", ["낮음","보통","높음","긴급"], value="보통")
-            ref_product = render_ref_product_picker()
+            
+            # ▼ 변경: 요청 종류 → 체크리스트 고정 항목
+            st.markdown("**요청 종류**")
+            _colA, _colB, _colC, _colD = st.columns(4)
+            _labels = [
+                "HACCP 인증서",
+                "ISO9001 인증서",
+                "제품규격",
+                "FSSC22000 인증서",
+                "할랄인증서",
+                "원산지규격서",
+                "MSDS",
+                "기타",
+            ]
+            _checks = []
+            for idx, lbl in enumerate(_labels):
+                with [_colA, _colB, _colC, _colD][idx % 4]:
+                    _checks.append(st.checkbox(lbl, key=f"req_kind_{idx}"))
+            category = ", ".join([lbl for lbl, on in zip(_labels, _checks) if on])
+            # ▲ 변경 끝
+            priority = st.select_slider("우선순위", ["낮음","보통","높음","긴급"], value="보통")
+            
+            # ▼ 변경: 관련 제품코드/명 입력 → 검색 가능한 드롭다운(옵션: 다중 선택)
+            try:
+                df_products = load_product_df()
+            except Exception:
+                import pandas as _pd
+                try:
+                    df_products = _pd.read_csv("product_data.csv", encoding="utf-8")
+                except Exception:
+                    df_products = _pd.DataFrame(columns=["제품코드","제품명"])
+
+            if not df_products.empty and {"제품코드","제품명"}.issubset(set(df_products.columns)):
+                _opts = (df_products[["제품코드","제품명"]]
+                         .astype(str)
+                         .dropna()
+                         .assign(_opt=lambda d: d["제품코드"].str.strip() + " | " + d["제품명"].str.strip())
+                         ["_opt"]
+                         .drop_duplicates()
+                         .sort_values()
+                         .tolist())
+            else:
+                _opts = []
+
+            multi_pick = st.toggle("여러 제품 선택", value=False, help="여러 제품에 대한 요청이라면 켜주세요.")
+            if multi_pick:
+                _picked = st.multiselect("관련 제품코드/명 (검색 가능)", options=_opts, placeholder="예: GID*** | 포도당...")
+                ref_product = ", ".join(_picked) if _picked else ""
+            else:
+                ref_product = st.selectbox("관련 제품코드/명 (선택)", options=[""] + _opts, index=0, placeholder="클릭 후 검색/선택", help="클릭하면 검색 드롭다운이 열립니다.")
+            # ▲ 변경 끝
+
         details = st.text_area("상세 요청 내용", height=140)
         files = st.file_uploader("참고 파일 업로드 (다중)", accept_multiple_files=True)
         submitted = st.form_submit_button("요청 저장")
@@ -371,9 +366,6 @@ def page_docs_request():
                 "details": details, "files": ";".join(saved_files)
             }
             path = os.path.join(DATA_DIR, "doc_requests.csv")
-            # 상태 컬럼 기본값 보정
-            if "status" not in rec:
-                rec["status"] = "대기"
             pd.DataFrame([rec]).to_csv(path, mode="a", index=False, encoding="utf-8-sig",
                                        header=not os.path.exists(path))
             st.success("요청이 저장되었습니다.")
@@ -385,7 +377,9 @@ def page_docs_request():
         st.subheader("📊 요청 현황")
         st.dataframe(pd.read_csv(path), use_container_width=True)
 
-        # ▼ 내 요청 & 다운로드 (승인된 건만 표시)
+        # ▼ 추가: 내 요청 & 다운로드 (승인된 건만)
+        st.markdown("---")
+        st.subheader("내 요청 & 다운로드")
         try:
             _df_all = pd.read_csv(path)
         except Exception:
@@ -393,8 +387,6 @@ def page_docs_request():
         _me = requester if "requester" in locals() else ""
         if _me and not _df_all.empty and "status" in _df_all.columns:
             _mine = _df_all[_df_all["requester"].astype(str) == str(_me)]
-            st.markdown("---")
-            st.subheader("내 요청 & 다운로드")
             if _mine.empty:
                 st.info("본인 요청 내역이 없습니다.")
             else:
@@ -433,7 +425,29 @@ def page_docs_request():
                     st.info("승인된 요청이 아직 없습니다.")
         else:
             st.caption("본인 이름을 '요청자'에 입력하면, 승인 후 다운로드 섹션이 나타납니다.")
-        # ▲ 끝
+
+        # ▼ 추가: 관리자 승인(품질팀)
+        with st.expander("🔑 관리자 승인(품질팀)"):
+            _admin_pw = st.text_input("관리자 암호", type="password")
+            _ADMIN = os.environ.get("INCHON1_ADMIN_PW", "quality#77")
+            if _admin_pw == _ADMIN:
+                try:
+                    _df = pd.read_csv(path)
+                except Exception:
+                    _df = pd.DataFrame()
+                if _df.empty:
+                    st.info("요청 기록이 없습니다.")
+                else:
+                    st.dataframe(_df, use_container_width=True)
+                    _sel_idx = st.number_input("승인/반려할 행 인덱스", min_value=0, max_value=max(0, len(_df)-1), step=1)
+                    _new_status = st.selectbox("처리", ["승인","반려","대기","진행중"], index=0)
+                    if st.button("상태 반영"):
+                        _df.loc[int(_sel_idx), "status"] = _new_status
+                        _df.to_csv(path, index=False, encoding="utf-8-sig")
+                        st.success("상태가 반영되었습니다.")
+            elif _admin_pw:
+                st.error("관리자 암호가 올바르지 않습니다.")
+        # ▲ 추가 끝
 # ============================
 # 페이지: VOC 기록(이상발생해석)
 # ============================
@@ -467,9 +481,6 @@ def page_voc():
                 "files": ";".join(saved_files)
             }
             path = os.path.join(DATA_DIR, "voc_logs.csv")
-            # 상태 컬럼 기본값 보정
-            if "status" not in rec:
-                rec["status"] = "대기"
             pd.DataFrame([rec]).to_csv(path, mode="a", index=False, encoding="utf-8-sig",
                                        header=not os.path.exists(path))
             st.success("VOC가 저장되었습니다.")
@@ -511,35 +522,3 @@ elif page == "서류 및 관련 자료 요청":
     page_docs_request()
 else:
     page_voc()
-
-
-# ▼ 관리자 승인(품질팀) · 파일 업로드(선택)
-with st.expander("🔑 관리자 승인(품질팀) / 📤 문서 업로드"):
-    _admin_pw = st.text_input("관리자 암호", type="password")
-    _ADMIN = os.environ.get("INCHON1_ADMIN_PW", "quality#77")
-    if _admin_pw == _ADMIN:
-        _req_csv = os.path.join(DATA_DIR, "doc_requests.csv")
-        if os.path.exists(_req_csv):
-            _df = pd.read_csv(_req_csv)
-            st.dataframe(_df, use_container_width=True)
-            _sel_idx = st.number_input("승인/반려할 행 인덱스", min_value=0, max_value=max(0, len(_df)-1), step=1)
-            _new_status = st.selectbox("처리", ["승인","반려","대기","진행중"], index=0)
-            if st.button("상태 반영(요청서류)"):
-                _df.loc[int(_sel_idx), "status"] = _new_status
-                _df.to_csv(_req_csv, index=False, encoding="utf-8-sig")
-                st.success("상태가 반영되었습니다.")
-        else:
-            st.info("요청 기록(doc_requests.csv)이 아직 없습니다.")
-
-        st.markdown("---")
-        st.subheader("📤 승인용 문서 업로드 (data/uploads/)")
-        _files = st.file_uploader("PDF 업로드", type=["pdf"], accept_multiple_files=True)
-        if _files:
-            for _f in _files:
-                _save = os.path.join(UPLOAD_DIR, _f.name)
-                with open(_save, "wb") as out:
-                    out.write(_f.read())
-            st.success(f"{len(_files)}개 파일 업로드 완료")
-    elif _admin_pw:
-        st.error("관리자 암호가 올바르지 않습니다.")
-# ▲ 끝
