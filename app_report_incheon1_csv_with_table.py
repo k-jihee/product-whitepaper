@@ -36,7 +36,7 @@ ensure_dir(UPLOAD_DIR)
 
 def clean_int(value):
     try:
-        # 정규표현식 수정: r"\[^\d.\]" -> r"[^\d.]"
+        # 정규표현식 수정
         cleaned = re.sub(r"[^\d.]", "", str(value))
         if cleaned == "":
             return "-"
@@ -50,7 +50,7 @@ def parse_spec_text(spec_text):
     lines = str(spec_text).splitlines()
     spec_dict = {}
     for line in lines:
-        # 정규표현식 수정: r"\\s\*\\d+\\.\\s\*(.+?)\\s\*:\\s\*(.+)" -> r"\s*\d+\.\s*(.+?)\s*:\s*(.+)"
+        # 정규표현식 수정
         match = re.match(r"\s*\d+\.\s*(.+?)\s*:\s*(.+)", line)
         if match:
             key, value = match.groups()
@@ -60,7 +60,7 @@ def parse_spec_text(spec_text):
 def format_features(text):
     if pd.isna(text):
         return "-"
-    # 정규표현식 수정: r"\\s\*-\\s\*" -> r"\s*-\s*"
+    # 정규표현식 수정
     items = re.split(r"\s*-\s*", text.strip())
     items = [item for item in items if item]
     return "<br>".join(f"• {item.strip()}" for item in items)
@@ -73,7 +73,7 @@ def load_product_df():
     try:
         df = pd.read_csv("product_data.csv", encoding="utf-8")
         if "용도" in df.columns:
-            # 정규표현식 수정: r"\\s\*-\\s\*" -> r"\s*-\s*"
+            # 정규표현식 수정
             df["용도"] = df["용도"].astype(str).str.replace(r"\s*-\s*", " / ", regex=True)
         # 계층구조 자동 생성
         if "계층구조_2레벨" not in df.columns or "계층구조_3레벨" not in df.columns:
@@ -318,7 +318,7 @@ def _load_doc_requests_df(csv_path):
         st.error(f"❌ '{os.path.basename(csv_path)}' 파일을 읽는 중 예기치 않은 오류가 발생했습니다: {e}")
         return pd.DataFrame(columns=["timestamp", "requester", "team", "due", "category", "priority", "ref_product", "details", "files", "status"])
 
-    # Ensure 'status' column exists. If not, add it with a default value, but without the st.info message.
+    # Ensure 'status' column exists. If not, add it with a default value.
     if 'status' not in df.columns:
         df['status'] = '대기'
     
@@ -364,10 +364,11 @@ def page_docs_request():
                 df_products = _pd.DataFrame(columns=["제품코드","제품명"])
 
         if not df_products.empty and {"제품코드","제품명"}.issubset(set(df_products.columns)):
+            # AttributeError 수정: .strip() -> .str.strip()
             _opts = (df_products[["제품코드","제품명"]]
                          .astype(str)
                          .dropna()
-                         .assign(_opt=lambda d: d["제품코드"].strip() + " | " + d["제품명"].strip())
+                         .assign(_opt=lambda d: d["제품코드"].str.strip() + " | " + d["제품명"].str.strip())
                          ["_opt"]
                          .drop_duplicates()
                          .sort_values()
@@ -509,11 +510,16 @@ def page_docs_request():
                              key='admin_df') # 'on_change=None' 제거
                 
                 with st.form("admin_form"):
-                    _sel_idx = st.number_input("승인/반려할 행 인덱스", min_value=0, max_value=max(0, len(_df)-1), step=1)
+                    _sel_idx = st.number_input("승인/반려할 행 인덱스", min_value=0, max_value=max(0, len(_df)-1) if not _df.empty else 0, step=1)
                     
                     # Selectbox options and current value
                     status_options = ["승인","반려","대기","진행중"]
-                    current_status = _df.loc[int(_sel_idx), 'status'] if 'status' in _df.columns and not _df.empty else '대기'
+                    # _df가 비어있지 않고 'status' 컬럼이 있으며, _sel_idx가 유효한 경우에만 current_status를 가져옴
+                    if not _df.empty and 'status' in _df.columns and int(_sel_idx) < len(_df):
+                        current_status = _df.loc[int(_sel_idx), 'status']
+                    else:
+                        current_status = '대기' # _df가 비어있거나 _sel_idx가 유효하지 않으면 '대기'로 기본값 설정
+
                     # Find the integer index of the current status
                     default_index = status_options.index(current_status) if current_status in status_options else 2 # Default to '대기' (index 2)
                     
@@ -521,9 +527,12 @@ def page_docs_request():
                     
                     submitted = st.form_submit_button("상태 반영")
                     if submitted:
-                        _df.loc[int(_sel_idx), "status"] = _new_status
-                        _df.to_csv(path, index=False, encoding="utf-8-sig")
-                        st.success(f"인덱스 {_sel_idx}의 상태가 '{_new_status}'(으)로 변경되었습니다. 페이지를 새로고침하여 확인하세요.")
+                        if not _df.empty and int(_sel_idx) < len(_df):
+                            _df.loc[int(_sel_idx), "status"] = _new_status
+                            _df.to_csv(path, index=False, encoding="utf-8-sig")
+                            st.success(f"인덱스 {_sel_idx}의 상태가 '{_new_status}'(으)로 변경되었습니다. 페이지를 새로고침하여 확인하세요.")
+                        else:
+                            st.warning("선택된 인덱스에 해당하는 요청이 없습니다.")
                         
             except FileNotFoundError:
                 st.info("요청 기록이 없습니다.")
