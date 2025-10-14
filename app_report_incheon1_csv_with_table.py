@@ -230,7 +230,7 @@ def product_card(row):
     <h3>5. 제품 특징</h3><p>{format_features(row.get('제품특징', '-'))}</p>
     <h3>6. 제품 규격</h3>
     <table><tr><th>항목</th><th>법적규격</th><th>사내규격</th></tr>{성상_row}{spec_rows}</table>
-    <h3>7. 기타사항</h3><p>{row.get(' 기타사항', '-')}</p></div>
+    <h3>7. 기타사항</h3><p>{row.get('기타사항', '-')}</p></div>
 
     <div id='sample-area'><h3>8. 한도견본</h3>{sample_html}{print_button}</div>
     <div id="modal" onclick="this.style.display='none'"><img id="modal-img" style="max-width:90%; max-height:90%; object-fit:contain;"></div>
@@ -287,29 +287,35 @@ def page_product():
 # Helper function for loading doc requests CSV
 # ============================
 def _load_doc_requests_df(csv_path):
+    # If file does not exist or is empty, return a DataFrame with all expected columns
     if not os.path.exists(csv_path) or os.path.getsize(csv_path) == 0:
-        # Return an empty DataFrame with expected columns if file doesn't exist or is empty
         return pd.DataFrame(columns=["timestamp", "requester", "team", "due", "category", "priority", "ref_product", "details", "files", "status"])
+
+    df = pd.DataFrame() # Initialize df
     try:
+        # Try reading with 'warn' first
         df = pd.read_csv(csv_path, encoding="utf-8-sig", on_bad_lines='warn')
-        return df
-    except UnicodeDecodeError:
-        st.error(f"❌ '{os.path.basename(csv_path)}' 파일을 읽는 중 인코딩 오류가 발생했습니다. 파일 인코딩을 확인해주세요.")
-        return pd.DataFrame()
     except pd.errors.ParserError as e:
-        st.error(f"❌ '{os.path.basename(csv_path)}' 파일 구조 오류: {e}. 파일 내용이 올바른 CSV 형식인지 확인해주세요.")
-        st.info("파일에 잘못된 형식의 줄이 있을 수 있습니다. 데이터 손실을 감수하고 건너뛰려면 관리자에게 문의하세요.")
+        st.warning(f"⚠️ '{os.path.basename(csv_path)}' 파일 파싱 오류 발생. 손상된 줄을 건너뛰고 다시 시도합니다. (오류: {e})")
         try:
-            # Attempt to read by skipping bad lines as a last resort
+            # If ParserError, try skipping bad lines
             df = pd.read_csv(csv_path, encoding="utf-8-sig", on_bad_lines='skip')
-            st.warning(f"'{os.path.basename(csv_path)}' 파일의 일부 손상된 줄을 건너뛰었습니다. 데이터가 불완전할 수 있습니다.")
-            return df
         except Exception as inner_e:
-            st.error(f"손상된 줄을 건너뛰면서 파일을 읽는 중에도 오류 발생: {inner_e}")
-            return pd.DataFrame()
+            st.error(f"❌ 손상된 줄을 건너뛰면서 파일을 읽는 중에도 오류 발생: {inner_e}")
+            return pd.DataFrame(columns=["timestamp", "requester", "team", "due", "category", "priority", "ref_product", "details", "files", "status"]) # Return empty df on severe error
+    except UnicodeDecodeError:
+        st.error(f"❌ '{os.path.basename(csv_path)}' 파일을 읽는 중 인코딩 오류가 발생했습니다. 파일 인코딩을 확인해주세요. (현재: utf-8-sig)")
+        return pd.DataFrame(columns=["timestamp", "requester", "team", "due", "category", "priority", "ref_product", "details", "files", "status"])
     except Exception as e:
         st.error(f"❌ '{os.path.basename(csv_path)}' 파일을 읽는 중 예기치 않은 오류가 발생했습니다: {e}")
-        return pd.DataFrame()
+        return pd.DataFrame(columns=["timestamp", "requester", "team", "due", "category", "priority", "ref_product", "details", "files", "status"])
+
+    # Ensure 'status' column exists. If not, add it with a default value.
+    if 'status' not in df.columns:
+        df['status'] = '대기'
+        st.info(f"'{os.path.basename(csv_path)}' 파일에 'status' 컬럼이 없어 '대기'로 자동 추가되었습니다.")
+    
+    return df
 
 # ============================
 # 페이지: 서류 및 관련 자료 요청
