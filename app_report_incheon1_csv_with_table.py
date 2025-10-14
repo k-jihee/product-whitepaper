@@ -36,7 +36,7 @@ ensure_dir(UPLOAD_DIR)
 
 def clean_int(value):
     try:
-        # 정규표현식 수정
+        # 정규표현식 수정: r"\[^\d.\]" -> r"[^\d.]"
         cleaned = re.sub(r"[^\d.]", "", str(value))
         if cleaned == "":
             return "-"
@@ -50,7 +50,7 @@ def parse_spec_text(spec_text):
     lines = str(spec_text).splitlines()
     spec_dict = {}
     for line in lines:
-        # 정규표현식 수정
+        # 정규표현식 수정: r"\\s\*\\d+\\.\\s\*(.+?)\\s\*:\\s\*(.+)" -> r"\s*\d+\.\s*(.+?)\s*:\s*(.+)"
         match = re.match(r"\s*\d+\.\s*(.+?)\s*:\s*(.+)", line)
         if match:
             key, value = match.groups()
@@ -60,7 +60,7 @@ def parse_spec_text(spec_text):
 def format_features(text):
     if pd.isna(text):
         return "-"
-    # 정규표현식 수정
+    # 정규표현식 수정: r"\\s\*-\\s\*" -> r"\s*-\s*"
     items = re.split(r"\s*-\s*", text.strip())
     items = [item for item in items if item]
     return "<br>".join(f"• {item.strip()}" for item in items)
@@ -73,7 +73,7 @@ def load_product_df():
     try:
         df = pd.read_csv("product_data.csv", encoding="utf-8")
         if "용도" in df.columns:
-            # 정규표현식 수정
+            # 정규표현식 수정: r"\\s\*-\\s\*" -> r"\s*-\s*"
             df["용도"] = df["용도"].astype(str).str.replace(r"\s*-\s*", " / ", regex=True)
         # 계층구조 자동 생성
         if "계층구조_2레벨" not in df.columns or "계층구조_3레벨" not in df.columns:
@@ -318,7 +318,7 @@ def _load_doc_requests_df(csv_path):
         st.error(f"❌ '{os.path.basename(csv_path)}' 파일을 읽는 중 예기치 않은 오류가 발생했습니다: {e}")
         return pd.DataFrame(columns=["timestamp", "requester", "team", "due", "category", "priority", "ref_product", "details", "files", "status"])
 
-    # Ensure 'status' column exists. If not, add it with a default value.
+    # Ensure 'status' column exists. If not, add it with a default value, but without the st.info message.
     if 'status' not in df.columns:
         df['status'] = '대기'
     
@@ -329,7 +329,7 @@ def _load_doc_requests_df(csv_path):
 # ============================
 def page_docs_request():
     st.title("🗂️ 서류 및 관련 자료 요청")
-    st.caption("예: HACCP 인증서, 원산지증명서, 공정흐름도, 그외 인증서 등")
+    st.caption("예: HACCP 인증서, 원재료 사양서, 시험성적서, 공정흐름도, 교육자료 등")
     
     requester = st.text_input("요청자 (이름을 입력하면 '내 요청' 및 '다운로드' 확인 가능)")
 
@@ -344,8 +344,8 @@ def page_docs_request():
             st.markdown("**요청 종류**")
             _colA, _colB, _colC, _colD = st.columns(4)
             _labels = [
-                "HACCP 인증서", "ISO9001 인증서", "제품규격", "FSSC22000", # "FSSC22000 인증서" -> "FSSC22000"
-                "할랄인증서", "원산지증명서", "MSDS", "기타",
+                "HACCP 인증서", "ISO9001 인증서", "제품규격", "FSSC22000",
+                "할랄인증서", "원산지규격서", "MSDS", "기타",
             ]
             _checks = []
             for idx, lbl in enumerate(_labels):
@@ -512,16 +512,13 @@ def page_docs_request():
                 with st.form("admin_form"):
                     _sel_idx = st.number_input("승인/반려할 행 인덱스", min_value=0, max_value=max(0, len(_df)-1) if not _df.empty else 0, step=1)
                     
-                    # Selectbox options and current value
                     status_options = ["승인","반려","대기","진행중"]
-                    # _df가 비어있지 않고 'status' 컬럼이 있으며, _sel_idx가 유효한 경우에만 current_status를 가져옴
                     if not _df.empty and 'status' in _df.columns and int(_sel_idx) < len(_df):
                         current_status = _df.loc[int(_sel_idx), 'status']
                     else:
-                        current_status = '대기' # _df가 비어있거나 _sel_idx가 유효하지 않으면 '대기'로 기본값 설정
+                        current_status = '대기' 
 
-                    # Find the integer index of the current status
-                    default_index = status_options.index(current_status) if current_status in status_options else 2 # Default to '대기' (index 2)
+                    default_index = status_options.index(current_status) if current_status in status_options else 2 
                     
                     _new_status = st.selectbox("처리", status_options, index=default_index)
                     
@@ -537,8 +534,8 @@ def page_docs_request():
             except FileNotFoundError:
                 st.info("요청 기록이 없습니다.")
             except Exception as e:
-                st.error(f"관리자 뷰 로딩 중 오류: {e}") # 일반적인 오류 메시지
-                st.exception(e) # 자세한 트레이스백을 보여줌
+                st.error(f"관리자 뷰 로딩 중 오류: {e}")
+                st.exception(e)
 
         elif _admin_pw:
             st.error("관리자 암호가 올바르지 않습니다.")
