@@ -36,7 +36,6 @@ ensure_dir(UPLOAD_DIR)
 
 def clean_int(value):
     try:
-        # 정규표현식 수정
         cleaned = re.sub(r"[^\d.]", "", str(value))
         if cleaned == "":
             return "-"
@@ -50,7 +49,6 @@ def parse_spec_text(spec_text):
     lines = str(spec_text).splitlines()
     spec_dict = {}
     for line in lines:
-        # 정규표현식 수정
         match = re.match(r"\s*\d+\.\s*(.+?)\s*:\s*(.+)", line)
         if match:
             key, value = match.groups()
@@ -60,7 +58,6 @@ def parse_spec_text(spec_text):
 def format_features(text):
     if pd.isna(text):
         return "-"
-    # 정규표현식 수정
     items = re.split(r"\s*-\s*", text.strip())
     items = [item for item in items if item]
     return "<br>".join(f"• {item.strip()}" for item in items)
@@ -73,7 +70,6 @@ def load_product_df():
     try:
         df = pd.read_csv("product_data.csv", encoding="utf-8")
         if "용도" in df.columns:
-            # 정규표현식 수정
             df["용도"] = df["용도"].astype(str).str.replace(r"\s*-\s*", " / ", regex=True)
         # 계층구조 자동 생성
         if "계층구조_2레벨" not in df.columns or "계층구조_3레벨" not in df.columns:
@@ -167,7 +163,6 @@ def page_chatbot():
                 "name": name, "team": team, "need": need
             }
             path = os.path.join(DATA_DIR, "chatbot_requests.csv")
-            # 상태 컬럼 기본값 보정
             if "status" not in rec:
                 rec["status"] = "대기"
             pd.DataFrame([rec]).to_csv(path, mode="a", index=False, encoding="utf-8-sig",
@@ -200,7 +195,10 @@ def product_card(row):
         sample_html = "해당사항 없음"
         print_button = ""
     else:
-        imgs = "".join(f'<img src="{link.strip()}" width="500" onclick="showModal(this.src)" style="cursor:pointer; margin:10px;">' for link in img_links.split(",") if link.strip())
+        imgs = "".join(
+            f'<img src="{link.strip()}" width="500" onclick="showModal(this.src)" style="cursor:pointer; margin:10px;">'
+            for link in img_links.split(",") if link.strip()
+        )
         sample_html = f"""
         <div style="text-align:left;">
             {imgs}
@@ -216,6 +214,7 @@ def product_card(row):
     th, td {{ border: 1px solid gray; padding: 8px; text-align: center; }}
     th {{ background-color: #f2f2f2; }}
     @media print {{ button {{ display: none; }} }}
+    #modal {{ display:none; position:fixed; left:0; top:0; width:100vw; height:100vh; background:rgba(0,0,0,0.7); align-items:center; justify-content:center; }}
     </style>
 
     <div id='print-area'>
@@ -258,7 +257,6 @@ def page_product():
     st.title("📘 제품백서")
     df = load_product_df()
     with st.expander("📋 인천 1공장 전제품 목록", expanded=False):
-        # 오타 수정: "계층구분_3레벨" -> "계층구조_3레벨"
         st.dataframe(df[["계층구조_2레벨","계층구조_3레벨","제품코드","제품명"]].dropna().reset_index(drop=True), use_container_width=True)
 
     st.markdown("---")
@@ -289,39 +287,46 @@ def page_product():
         st.info("제품코드 또는 제품명을 입력해주세요.")
 
 # ============================
-# Helper function for loading doc requests CSV
+# Helper: doc requests CSV loader
 # ============================
 def _load_doc_requests_df(csv_path):
-    # If file does not exist or is empty, return a DataFrame with all expected columns
     if not os.path.exists(csv_path) or os.path.getsize(csv_path) == 0:
-        df = pd.DataFrame(columns=["timestamp", "requester", "team", "due", "category", "priority", "ref_product", "details", "files", "status"])
+        df = pd.DataFrame(columns=[
+            "timestamp", "requester", "team", "due", "category",
+            "priority", "ref_product", "details", "files", "status"
+        ])
         if 'status' not in df.columns:
-            df['status'] = '대기' 
+            df['status'] = '대기'
         return df
 
-    df = pd.DataFrame() # Initialize df
+    df = pd.DataFrame()
     try:
-        # Try reading with 'warn' first
         df = pd.read_csv(csv_path, encoding="utf-8-sig", on_bad_lines='warn')
     except pd.errors.ParserError as e:
         st.warning(f"⚠️ '{os.path.basename(csv_path)}' 파일 파싱 오류 발생. 손상된 줄을 건너뛰고 다시 시도합니다. (오류: {e})")
         try:
-            # If ParserError, try skipping bad lines
             df = pd.read_csv(csv_path, encoding="utf-8-sig", on_bad_lines='skip')
         except Exception as inner_e:
             st.error(f"❌ 손상된 줄을 건너뛰면서 파일을 읽는 중에도 오류 발생: {inner_e}")
-            return pd.DataFrame(columns=["timestamp", "requester", "team", "due", "category", "priority", "ref_product", "details", "files", "status"]) # Return empty df on severe error
+            return pd.DataFrame(columns=[
+                "timestamp", "requester", "team", "due", "category",
+                "priority", "ref_product", "details", "files", "status"
+            ])
     except UnicodeDecodeError:
         st.error(f"❌ '{os.path.basename(csv_path)}' 파일을 읽는 중 인코딩 오류가 발생했습니다. 파일 인코딩을 확인해주세요. (현재: utf-8-sig)")
-        return pd.DataFrame(columns=["timestamp", "requester", "team", "due", "category", "priority", "ref_product", "details", "files", "status"])
+        return pd.DataFrame(columns=[
+            "timestamp", "requester", "team", "due", "category",
+            "priority", "ref_product", "details", "files", "status"
+        ])
     except Exception as e:
         st.error(f"❌ '{os.path.basename(csv_path)}' 파일을 읽는 중 예기치 않은 오류가 발생했습니다: {e}")
-        return pd.DataFrame(columns=["timestamp", "requester", "team", "due", "category", "priority", "ref_product", "details", "files", "status"])
+        return pd.DataFrame(columns=[
+            "timestamp", "requester", "team", "due", "category",
+            "priority", "ref_product", "details", "files", "status"
+        ])
 
-    # Ensure 'status' column exists. If not, add it with a default value.
     if 'status' not in df.columns:
         df['status'] = '대기'
-    
     return df
 
 # ============================
@@ -333,7 +338,7 @@ def page_docs_request():
     
     requester = st.text_input("요청자 (이름을 입력하면 '내 요청' 및 '다운로드' 확인 가능)")
 
-    path = os.path.join(DATA_DIR, "doc_requests.csv") # Define path once
+    path = os.path.join(DATA_DIR, "doc_requests.csv")
 
     with st.form("doc_req_form", clear_on_submit=True):
         col1, col2 = st.columns(2)
@@ -364,7 +369,6 @@ def page_docs_request():
                 df_products = _pd.DataFrame(columns=["제품코드","제품명"])
 
         if not df_products.empty and {"제품코드","제품명"}.issubset(set(df_products.columns)):
-            # AttributeError 수정: .strip() -> .str.strip()
             _opts = (df_products[["제품코드","제품명"]]
                          .astype(str)
                          .dropna()
@@ -420,7 +424,7 @@ def page_docs_request():
         st.caption("상단의 '요청자'에 이름을 입력하면, 본인의 요청 내역 및 승인된 파일 다운로드 섹션이 나타납니다.")
     else:
         try:
-            _df_all = _load_doc_requests_df(path) # Use the helper function here
+            _df_all = _load_doc_requests_df(path)
             _mine = _df_all[_df_all["requester"].astype(str) == str(requester)]
             if _mine.empty:
                 st.info("본인 이름으로 접수된 요청이 없습니다.")
@@ -450,27 +454,39 @@ def page_docs_request():
                         with st.container(border=True):
                             st.write(f"**요청일: {approved_req.get('timestamp')} / 제품: {_prod_str if _prod_str else 'N/A'}**")
                             
-                            product_codes = [p.split('|')[0].strip() for p in _prod_str.split(',') if '|' in p] if _prod_str else ['N/A'] 
-                            requested_certs = [c.strip() for c in _cat_str.split(',') if c.strip()]
+                            # ✅ (수정) ref_product 파싱: 파이프(|) 유무와 상관없이 코드 인식
+                            tokens = [t.strip() for t in str(_prod_str).split(',') if t.strip()]
+                            product_codes = []
+                            for t in tokens:
+                                product_codes.append(t.split('|')[0].strip())  # '코드 | 제품명'이면 왼쪽만, 아니면 그대로 코드
+                            if not product_codes:
+                                product_codes = ['N/A'] 
+
+                            requested_certs = [c.strip() for c in str(_cat_str).split(',') if c.strip()]
                             
                             if not requested_certs: 
                                 st.write("다운로드할 인증서 종류가 지정되지 않았습니다.")
                                 continue
 
                             files_for_this_request = []
+                            extensions = ["pdf", "docx", "xlsx", "pptx", "jpg", "png"]
 
                             for code in product_codes:
+                                if code == 'N/A':
+                                    continue
+
                                 for cert_label in requested_certs:
                                     cert_key = _cert_name_map.get(cert_label, cert_label) 
                                     
-                                    extensions = ["pdf", "docx", "xlsx", "pptx", "jpg", "png"]
                                     file_found_for_this_item = False
                                     for ext in extensions:
                                         _fname = f"{code}_{cert_key}.{ext}"
                                         _fpath = os.path.join(UPLOAD_DIR, _fname)
                                         
                                         if os.path.exists(_fpath):
-                                            files_for_this_request.append({"path": _fpath, "name": _fname, "label": f"{code} - {cert_label}"})
+                                            files_for_this_request.append({
+                                                "path": _fpath, "name": _fname, "label": f"{code} - {cert_label}"
+                                            })
                                             file_found_for_this_item = True
                                             found_any_files_globally = True
                                             break 
@@ -490,7 +506,6 @@ def page_docs_request():
                             elif not _prod_str and not _cat_str: 
                                 st.write("다운로드 가능한 파일 정보가 없습니다.")
 
-
                     if not found_any_files_globally:
                         st.info("다운로드 가능한 승인된 파일이 없습니다. 관리자에게 문의하세요.")
                 else:
@@ -505,9 +520,8 @@ def page_docs_request():
         _ADMIN = os.environ.get("INCHON1_ADMIN_PW", "quality#77")
         if _admin_pw == _ADMIN:
             try:
-                _df = _load_doc_requests_df(path) # Use the helper function here
-                st.dataframe(_df, use_container_width=True, 
-                             key='admin_df') # 'on_change=None' 제거
+                _df = _load_doc_requests_df(path)
+                st.dataframe(_df, use_container_width=True, key='admin_df')
                 
                 with st.form("admin_form"):
                     _sel_idx = st.number_input("승인/반려할 행 인덱스", min_value=0, max_value=max(0, len(_df)-1) if not _df.empty else 0, step=1)
@@ -540,7 +554,7 @@ def page_docs_request():
         elif _admin_pw:
             st.error("관리자 암호가 올바르지 않습니다.")
         
-        # ▼▼▼ 디버깅 섹션 추가 ▼▼▼
+        # ▼▼▼ 디버깅 섹션 ▼▼▼
         with st.expander("🐛 파일 시스템 디버깅 (관리자용)"):
             st.write(f"현재 앱이 인식하는 UPLOAD_DIR 절대 경로: `{os.path.abspath(UPLOAD_DIR)}`")
             if os.path.exists(UPLOAD_DIR):
@@ -593,7 +607,6 @@ def page_voc():
                                        header=not os.path.exists(path))
             st.success("VOC가 저장되었습니다.")
 
-    # 목록/간단 분석
     path = os.path.join(DATA_DIR, "voc_logs.csv")
     if os.path.exists(path):
         st.markdown("---")
@@ -622,7 +635,9 @@ with st.sidebar:
     st.markdown("---")
     st.caption("© Samyang Incheon 1 Plant • Internal Use Only")
 
+# ============================
 # 라우팅
+# ============================
 if page == "챗봇":
     page_chatbot()
 elif page == "제품백서":
