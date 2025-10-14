@@ -289,7 +289,7 @@ def page_product():
 # ============================
 def page_docs_request():
     st.title("🗂️ 서류 및 관련 자료 요청")
-    st.caption("예: HACCP 인증서, 원재료 사양서, 시험성적서, 공정흐름도, 교육자료 등")
+    st.caption("예: HACCP 인증서, 원산지증명서, ISO9001 인증서, 공정흐름도, MSDS 등")
     with st.form("doc_req_form", clear_on_submit=True):
         col1, col2 = st.columns(2)
         with col1:
