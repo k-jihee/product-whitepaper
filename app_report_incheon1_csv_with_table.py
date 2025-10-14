@@ -63,7 +63,6 @@ def format_features(text):
     items = [item for item in items if item]
     return "<br>".join(f"• {item.strip()}" for item in items)
 
-# 1) 공용 유틸 추가 (파일 상단 유틸 근처에 붙여넣기)
 def _ensure_date_columns(df: pd.DataFrame):
     """요청일(입력 시각)과 마감일을 날짜 컬럼으로 안전하게 추가"""
     d = df.copy()
@@ -432,11 +431,11 @@ def page_docs_request_user():
         _mine2 = _ensure_date_columns(_mine)
 
         # 그룹 기준 선택
-        group_choice = st.radio("그룹 기준", ["요청일(입력시각)", "마감일"], horizontal=True)
+        group_choice = st.radio("그룹 기준", ["요청일(입력시각)", "마감일"], horizontal=True, key="user_group_choice")
         group_key = "요청일" if group_choice == "요청일(입력시각)" else "마감일"
 
         # (선택) 최근 N일만 보기 필터
-        recent_days = st.slider("최근 N일만 보기 (0=전체)", min_value=0, max_value=60, value=0, step=5)
+        recent_days = st.slider("최근 N일만 보기 (0=전체)", min_value=0, max_value=60, value=0, step=5, key="user_recent_days")
         if recent_days > 0 and not _mine2.empty:
             cutoff = pd.Timestamp.today().date() - pd.Timedelta(days=recent_days)
             _mine2 = _mine2[_mine2[group_key] >= cutoff]
@@ -535,14 +534,14 @@ def page_docs_admin():
         # 필터: 그룹 기준 + 기간
         colA, colB, colC = st.columns([1.2, 1, 2])
         with colA:
-            group_choice = st.radio("그룹 기준", ["요청일(입력시각)", "마감일"], horizontal=True)
+            group_choice = st.radio("그룹 기준", ["요청일(입력시각)", "마감일"], horizontal=True, key="admin_group_choice")
             group_key = "요청일" if group_choice == "요청일(입력시각)" else "마감일"
 
         with colB:
-            recent_days = st.slider("최근 N일", min_value=0, max_value=180, value=30, step=10)
+            recent_days = st.slider("최근 N일", min_value=0, max_value=180, value=30, step=10, key="admin_recent_days")
 
         with colC:
-            status_filter = st.multiselect("상태 필터", ["대기", "진행중", "승인", "반려"], default=["대기","진행중","승인","반려"])
+            status_filter = st.multiselect("상태 필터", ["대기", "진행중", "승인", "반려"], default=["대기","진행중","승인","반려"], key="admin_status_filter")
 
         # 상태 필터 적용
         if status_filter:
@@ -595,8 +594,41 @@ def page_voc():
         with c2:
             source = st.selectbox("유형", ["고객 VOC", "내부 이상", "민원", "기타"])
         with c3:
+            # Fixing the severity slider based on user's input "LowCritical"
+            # It seems like a typo, assuming "Low", "Medium", "High", "Critical" is intended based on original code.
             severity = st.select_slider("심각도", ["Low","Medium","High","Critical"], value="Medium")
-        product = st.text_input("관련 제품코드/명 (선택)")
+
+        # 제품선택 로직을 서류 요청 페이지에서 가져옴
+        try:
+            df_products = load_product_df()
+        except Exception:
+            import pandas as _pd
+            try:
+                df_products = _pd.read_csv("product_data.csv", encoding="utf-8")
+            except Exception:
+                df_products = _pd.DataFrame(columns=["제품코드","제품명"])
+
+        if not df_products.empty and {"제품코드","제품명"}.issubset(set(df_products.columns)):
+            _opts = (df_products[["제품코드","제품명"]]
+                        .astype(str)
+                        .dropna()
+                        .assign(_opt=lambda d: d["제품코드"].str.strip() + " | " + d["제품명"].str.strip())
+                        ["_opt"]
+                        .drop_duplicates()
+                        .sort_values()
+                        .tolist())
+        else:
+            _opts = []
+
+        multi_pick_voc = st.toggle("여러 제품 선택", value=False, help="여러 제품에 대한 VOC라면 켜주세요.", key="voc_multi_pick")
+        if multi_pick_voc:
+            _picked_voc = st.multiselect("관련 제품코드/명 (검색 가능)", options=_opts, placeholder="예: GID*** | 포도당...", key="voc_product_multiselect")
+            product = ", ".join(_picked_voc) if _picked_voc else ""
+        else:
+            product = st.selectbox("관련 제품코드/명 (선택)", options=[""] + _opts, index=0,
+                                       placeholder="클릭 후 검색/선택",
+                                       help="클릭하면 검색 드롭다운이 열립니다.", key="voc_product_selectbox")
+
         desc = st.text_area("내용", height=120)
         cause = st.text_area("원인(가설)", height=100)
         action = st.text_area("즉시조치/대책", height=100)
@@ -660,3 +692,4 @@ elif page == "서류 승인(관리자)":
     page_docs_admin()
 else:
     page_voc()
+
