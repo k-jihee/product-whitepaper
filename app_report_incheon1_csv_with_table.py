@@ -137,37 +137,16 @@ def load_product_df():
 def page_chatbot():
     st.title("💬 인천1공장 챗봇 (베타)")
     st.info("사내망 연결형 챗봇 연동 전까지는 간단한 FAQ 검색과 폼만 제공됩니다.")
-    # 간단한 키워드 FAQ (제품백서 내에서)
     df = load_product_df()
-    query = st.text_input("무엇을 도와드릴까요? 키워드 입력 (예: 정제포도당 CCP를 알려줘, 제네덱스 공정시 사용되는 mesh망 크기를 알려줘, 제네덱스 식품유형은?등)")
+    query = st.text_input("무엇을 도와드릴까요? (예: 정제포도당 CCP, 제네덱스 mesh, 식품유형 등)")
     if query:
         mask = pd.Series(False, index=df.index)
         for col in [c for c in df.columns if df[c].dtype == object]:
             mask |= df[col].astype(str).str.contains(query, case=False, na=False)
         hits = df.loc[mask, ["제품코드","제품명","제품특징","사내규격(COA)"]].head(30)
+        st.dataframe(hits if not hits.empty else pd.DataFrame(), use_container_width=True)
         if hits.empty:
             st.warning("검색 결과가 없습니다.")
-        else:
-            st.dataframe(hits, use_container_width=True)
-
-    st.markdown("---")
-    st.subheader("챗봇 개선 제안/요청")
-    with st.form("chatbot_request_form", clear_on_submit=True):
-        name = st.text_input("요청자")
-        team = st.text_input("부서")
-        need = st.text_area("원하는 기능/학습데이터", height=120)
-        submitted = st.form_submit_button("요청 저장")
-        if submitted:
-            rec = {
-                "timestamp": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
-                "name": name, "team": team, "need": need
-            }
-            path = os.path.join(DATA_DIR, "chatbot_requests.csv")
-            if "status" not in rec:
-                rec["status"] = "대기"
-            pd.DataFrame([rec]).to_csv(path, mode="a", index=False, encoding="utf-8-sig",
-                                       header=not os.path.exists(path))
-            st.success("요청이 저장되었습니다.")
 
 # ============================
 # 페이지: 제품백서
@@ -313,7 +292,7 @@ def _load_doc_requests_df(csv_path):
                 "priority", "ref_product", "details", "files", "status"
             ])
     except UnicodeDecodeError:
-        st.error(f"❌ '{os.path.basename(csv_path)}' 파일을 읽는 중 인코딩 오류가 발생했습니다. 파일 인코딩을 확인해주세요. (현재: utf-8-sig)")
+        st.error(f"❌ '{os.path.basename(csv_path)}' 파일을 읽는 중 인코딩 오류가 발생했습니다. (현재: utf-8-sig)")
         return pd.DataFrame(columns=[
             "timestamp", "requester", "team", "due", "category",
             "priority", "ref_product", "details", "files", "status"
@@ -330,14 +309,13 @@ def _load_doc_requests_df(csv_path):
     return df
 
 # ============================
-# 페이지: 서류 및 관련 자료 요청
+# 페이지: 서류 요청(사용자)
 # ============================
-def page_docs_request():
-    st.title("🗂️ 서류 및 관련 자료 요청")
-    st.caption("예: HACCP 인증서, 원산지증명서, MSDS, 공정흐름도 등")
-    
-    requester = st.text_input("요청자 (이름을 입력하면 '내 요청' 및 '다운로드' 확인 가능)")
+def page_docs_request_user():
+    st.title("🗂️ 서류 요청 (사용자)")
+    st.caption("예: HACCP, ISO9001, 제품규격, FSSC22000, 할랄, 원산지규격서, MSDS 등")
 
+    requester = st.text_input("요청자 (이름을 입력하면 '내 요청' 및 '다운로드' 확인 가능)")
     path = os.path.join(DATA_DIR, "doc_requests.csv")
 
     with st.form("doc_req_form", clear_on_submit=True):
@@ -350,7 +328,7 @@ def page_docs_request():
             _colA, _colB, _colC, _colD = st.columns(4)
             _labels = [
                 "HACCP 인증서", "ISO9001 인증서", "제품규격", "FSSC22000",
-                "할랄인증서", "원산지증명서", "MSDS", "기타",
+                "할랄인증서", "원산지규격서", "MSDS", "기타",
             ]
             _checks = []
             for idx, lbl in enumerate(_labels):
@@ -358,7 +336,8 @@ def page_docs_request():
                     _checks.append(st.checkbox(lbl, key=f"req_kind_{idx}"))
             category = ", ".join([lbl for lbl, on in zip(_labels, _checks) if on])
             priority = st.select_slider("우선순위", ["낮음","보통","높음","긴급"], value="보통")
-            
+
+        # 제품선택
         try:
             df_products = load_product_df()
         except Exception:
@@ -370,13 +349,13 @@ def page_docs_request():
 
         if not df_products.empty and {"제품코드","제품명"}.issubset(set(df_products.columns)):
             _opts = (df_products[["제품코드","제품명"]]
-                         .astype(str)
-                         .dropna()
-                         .assign(_opt=lambda d: d["제품코드"].str.strip() + " | " + d["제품명"].str.strip())
-                         ["_opt"]
-                         .drop_duplicates()
-                         .sort_values()
-                         .tolist())
+                        .astype(str)
+                        .dropna()
+                        .assign(_opt=lambda d: d["제품코드"].str.strip() + " | " + d["제품명"].str.strip())
+                        ["_opt"]
+                        .drop_duplicates()
+                        .sort_values()
+                        .tolist())
         else:
             _opts = []
 
@@ -385,12 +364,14 @@ def page_docs_request():
             _picked = st.multiselect("관련 제품코드/명 (검색 가능)", options=_opts, placeholder="예: GID*** | 포도당...")
             ref_product = ", ".join(_picked) if _picked else ""
         else:
-            ref_product = st.selectbox("관련 제품코드/명 (선택)", options=[""] + _opts, index=0, placeholder="클릭 후 검색/선택", help="클릭하면 검색 드롭다운이 열립니다.")
+            ref_product = st.selectbox("관련 제품코드/명 (선택)", options=[""] + _opts, index=0,
+                                       placeholder="클릭 후 검색/선택",
+                                       help="클릭하면 검색 드롭다운이 열립니다.")
 
         details = st.text_area("상세 요청 내용", height=140)
         files = st.file_uploader("참고 파일 업로드 (다중)", accept_multiple_files=True)
         submitted = st.form_submit_button("요청 저장")
-        
+
         if submitted:
             if not requester:
                 st.error("요청자 이름을 반드시 입력해주세요.")
@@ -411,149 +392,146 @@ def page_docs_request():
                                            header=not os.path.exists(path))
                 st.success("요청이 저장되었습니다.")
 
-    # 요청 현황
-    if os.path.exists(path):
-        st.markdown("---")
-        st.subheader("📊 요청 현황")
-        df_requests_status = _load_doc_requests_df(path)
-        st.dataframe(df_requests_status, use_container_width=True)
-
+    # 🔒 사용자 페이지는 '전체 요청 현황'을 보여주지 않음 (본인 것만)
     st.markdown("---")
     st.subheader("내 요청 & 다운로드")
     if not requester:
         st.caption("상단의 '요청자'에 이름을 입력하면, 본인의 요청 내역 및 승인된 파일 다운로드 섹션이 나타납니다.")
-    else:
-        try:
-            _df_all = _load_doc_requests_df(path)
-            _mine = _df_all[_df_all["requester"].astype(str) == str(requester)]
-            if _mine.empty:
-                st.info("본인 이름으로 접수된 요청이 없습니다.")
-            else:
-                st.write(f"**'{requester}'님의 최근 요청 20건**")
-                st.dataframe(_mine.tail(20), use_container_width=True)
-                
-                _approved_list = _mine[_mine["status"]=="승인"]
-                if not _approved_list.empty:
-                    st.markdown("---")
-                    st.success("✅ **승인된 요청 파일 다운로드**")
-                    st.info("관리자가 파일 이름 규칙(`제품코드_인증서종류.확장자`)에 맞게 업로드한 경우에만 파일이 표시됩니다.")
+        return
 
-                    _cert_name_map = {
-                        "HACCP 인증서": "HACCP", "ISO9001 인증서": "ISO9001",
-                        "제품규격": "SPEC", "FSSC22000": "FSSC22000",
-                        "할랄인증서": "HALAL", "원산지규격서": "COO", "MSDS": "MSDS",
-                        "기타": "ETC" 
-                    }
-                    
-                    found_any_files_globally = False
+    try:
+        _df_all = _load_doc_requests_df(path)
+        _mine = _df_all[_df_all["requester"].astype(str) == str(requester)]
+        if _mine.empty:
+            st.info("본인 이름으로 접수된 요청이 없습니다.")
+            return
 
-                    for idx, approved_req in _approved_list.iterrows():
-                        _cat_str = approved_req.get("category", "")
-                        _prod_str = approved_req.get("ref_product", "")
-                        
-                        with st.container(border=True):
-                            st.write(f"**요청일: {approved_req.get('timestamp')} / 제품: {_prod_str if _prod_str else 'N/A'}**")
-                            
-                            # ✅ (수정) ref_product 파싱: 파이프(|) 유무와 상관없이 코드 인식
-                            tokens = [t.strip() for t in str(_prod_str).split(',') if t.strip()]
-                            product_codes = []
-                            for t in tokens:
-                                product_codes.append(t.split('|')[0].strip())  # '코드 | 제품명'이면 왼쪽만, 아니면 그대로 코드
-                            if not product_codes:
-                                product_codes = ['N/A'] 
+        st.write(f"**'{requester}'님의 최근 요청 20건**")
+        st.dataframe(_mine.tail(20), use_container_width=True)
 
-                            requested_certs = [c.strip() for c in str(_cat_str).split(',') if c.strip()]
-                            
-                            if not requested_certs: 
-                                st.write("다운로드할 인증서 종류가 지정되지 않았습니다.")
-                                continue
+        _approved_list = _mine[_mine["status"] == "승인"]
+        if _approved_list.empty:
+            st.info("아직 승인된 요청이 없습니다.")
+            return
 
-                            files_for_this_request = []
-                            extensions = ["pdf", "docx", "xlsx", "pptx", "jpg", "png"]
+        st.markdown("---")
+        st.success("✅ **승인된 요청 파일 다운로드**")
+        st.info("파일명 규칙: `제품코드_인증서키.확장자` (예: GIS7030_HACCP.pdf)")
 
-                            for code in product_codes:
-                                if code == 'N/A':
-                                    continue
+        _cert_name_map = {
+            "HACCP 인증서": "HACCP", "ISO9001 인증서": "ISO9001",
+            "제품규격": "SPEC", "FSSC22000": "FSSC22000",
+            "할랄인증서": "HALAL", "원산지규격서": "COO", "MSDS": "MSDS",
+            "기타": "ETC"
+        }
+        extensions = ["pdf", "docx", "xlsx", "pptx", "jpg", "png"]
 
-                                for cert_label in requested_certs:
-                                    cert_key = _cert_name_map.get(cert_label, cert_label) 
-                                    
-                                    file_found_for_this_item = False
-                                    for ext in extensions:
-                                        _fname = f"{code}_{cert_key}.{ext}"
-                                        _fpath = os.path.join(UPLOAD_DIR, _fname)
-                                        
-                                        if os.path.exists(_fpath):
-                                            files_for_this_request.append({
-                                                "path": _fpath, "name": _fname, "label": f"{code} - {cert_label}"
-                                            })
-                                            file_found_for_this_item = True
-                                            found_any_files_globally = True
-                                            break 
-                                    
-                                    if not file_found_for_this_item and cert_label != "기타":
-                                        st.warning(f"❌ '{code} - {cert_label}' 파일을 찾을 수 없습니다. (예상 파일명: `{code}_{cert_key}.*` in `{os.path.abspath(UPLOAD_DIR)}`)")
-                            
-                            if files_for_this_request:
-                                for file_info in files_for_this_request:
-                                    with open(file_info["path"], "rb") as _f:
-                                        st.download_button(
-                                            label=f"⬇️ {file_info['label']}",
-                                            data=_f.read(),
-                                            file_name=file_info["name"],
-                                            mime="application/octet-stream"
-                                        )
-                            elif not _prod_str and not _cat_str: 
-                                st.write("다운로드 가능한 파일 정보가 없습니다.")
+        found_any_files_globally = False
 
-                    if not found_any_files_globally:
-                        st.info("다운로드 가능한 승인된 파일이 없습니다. 관리자에게 문의하세요.")
+        for _, approved_req in _approved_list.iterrows():
+            _cat_str = approved_req.get("category", "")
+            _prod_str = approved_req.get("ref_product", "")
+
+            with st.container(border=True):
+                st.write(f"**요청일: {approved_req.get('timestamp')} / 제품: {_prod_str if _prod_str else 'N/A'}**")
+
+                # ✅ 파이프(|) 유무와 상관없이 코드 인식
+                tokens = [t.strip() for t in str(_prod_str).split(',') if t.strip()]
+                product_codes = [t.split('|')[0].strip() for t in tokens] or ['N/A']
+
+                requested_certs = [c.strip() for c in str(_cat_str).split(',') if c.strip()]
+                if not requested_certs:
+                    st.write("다운로드할 인증서 종류가 지정되지 않았습니다.")
+                    continue
+
+                files_for_this_request = []
+
+                for code in product_codes:
+                    if code == 'N/A':
+                        continue
+                    for cert_label in requested_certs:
+                        cert_key = _cert_name_map.get(cert_label, cert_label)
+                        file_found = False
+                        for ext in extensions:
+                            fname = f"{code}_{cert_key}.{ext}"
+                            fpath = os.path.join(UPLOAD_DIR, fname)
+                            if os.path.exists(fpath):
+                                files_for_this_request.append({"path": fpath, "name": fname,
+                                                               "label": f"{code} - {cert_label}"})
+                                found_any_files_globally = True
+                                file_found = True
+                                break
+                        if not file_found and cert_label != "기타":
+                            st.warning(f"❌ '{code} - {cert_label}' 파일을 찾을 수 없습니다. "
+                                       f"(예상: `{code}_{cert_key}.*` in `{os.path.abspath(UPLOAD_DIR)}`)")
+
+                if files_for_this_request:
+                    for file_info in files_for_this_request:
+                        with open(file_info["path"], "rb") as _f:
+                            st.download_button(
+                                label=f"⬇️ {file_info['label']}",
+                                data=_f.read(),
+                                file_name=file_info["name"],
+                                mime="application/octet-stream"
+                            )
+
+        if not found_any_files_globally:
+            st.info("다운로드 가능한 승인된 파일이 없습니다. 품질팀에 문의하세요.")
+
+    except FileNotFoundError:
+        st.info("아직 요청 기록이 없습니다.")
+    except Exception as e:
+        st.error(f"내 요청을 불러오는 중 오류 발생: {e}")
+
+# ============================
+# 페이지: 서류 승인(관리자)
+# ============================
+def page_docs_admin():
+    st.title("🛡️ 서류 승인 (관리자)")
+    st.caption("품질팀 전용: 전체 요청 조회 및 승인/반려 처리")
+
+    _admin_pw = st.text_input("관리자 암호", type="password", key="admin_pw")
+    _ADMIN = os.environ.get("INCHON1_ADMIN_PW", "quality#77")
+    path = os.path.join(DATA_DIR, "doc_requests.csv")
+
+    if not _admin_pw:
+        st.info("관리자 암호를 입력하세요.")
+        return
+    if _admin_pw != _ADMIN:
+        st.error("관리자 암호가 올바르지 않습니다.")
+        return
+
+    try:
+        df = _load_doc_requests_df(path)
+        st.subheader("📋 전체 요청 목록")
+        st.dataframe(df, use_container_width=True, key='admin_df')
+
+        st.markdown("---")
+        with st.form("admin_form"):
+            colA, colB = st.columns([1, 2])
+            with colA:
+                sel_idx = st.number_input("승인/반려할 행 인덱스", min_value=0,
+                                          max_value=max(0, len(df)-1) if not df.empty else 0, step=1)
+            with colB:
+                status_options = ["승인","반려","대기","진행중"]
+                current_status = df.loc[int(sel_idx), 'status'] if not df.empty else '대기'
+                default_index = status_options.index(current_status) if current_status in status_options else 2
+                new_status = st.selectbox("처리 상태", status_options, index=default_index)
+
+            submitted = st.form_submit_button("상태 반영")
+            if submitted:
+                if not df.empty and int(sel_idx) < len(df):
+                    df.loc[int(sel_idx), "status"] = new_status
+                    df.to_csv(path, index=False, encoding="utf-8-sig")
+                    st.success(f"인덱스 {sel_idx}의 상태가 '{new_status}'(으)로 변경되었습니다. 새로고침 후 확인하세요.")
                 else:
-                    st.info("아직 승인된 요청이 없습니다.")
-        except FileNotFoundError:
-            st.info("아직 요청 기록이 없습니다.")
-        except Exception as e:
-            st.error(f"내 요청을 불러오는 중 오류 발생: {e}")
+                    st.warning("선택된 인덱스에 해당하는 요청이 없습니다.")
+    except FileNotFoundError:
+        st.info("요청 기록이 없습니다.")
+    except Exception as e:
+        st.error(f"관리자 뷰 로딩 중 오류: {e}")
+        st.exception(e)
 
-    with st.expander("🔑 관리자 승인(품질팀)"):
-        _admin_pw = st.text_input("관리자 암호", type="password", key="admin_pw")
-        _ADMIN = os.environ.get("INCHON1_ADMIN_PW", "quality#77")
-        if _admin_pw == _ADMIN:
-            try:
-                _df = _load_doc_requests_df(path)
-                st.dataframe(_df, use_container_width=True, key='admin_df')
-                
-                with st.form("admin_form"):
-                    _sel_idx = st.number_input("승인/반려할 행 인덱스", min_value=0, max_value=max(0, len(_df)-1) if not _df.empty else 0, step=1)
-                    
-                    status_options = ["승인","반려","대기","진행중"]
-                    if not _df.empty and 'status' in _df.columns and int(_sel_idx) < len(_df):
-                        current_status = _df.loc[int(_sel_idx), 'status']
-                    else:
-                        current_status = '대기' 
-
-                    default_index = status_options.index(current_status) if current_status in status_options else 2 
-                    
-                    _new_status = st.selectbox("처리", status_options, index=default_index)
-                    
-                    submitted = st.form_submit_button("상태 반영")
-                    if submitted:
-                        if not _df.empty and int(_sel_idx) < len(_df):
-                            _df.loc[int(_sel_idx), "status"] = _new_status
-                            _df.to_csv(path, index=False, encoding="utf-8-sig")
-                            st.success(f"인덱스 {_sel_idx}의 상태가 '{_new_status}'(으)로 변경되었습니다. 페이지를 새로고침하여 확인하세요.")
-                        else:
-                            st.warning("선택된 인덱스에 해당하는 요청이 없습니다.")
-                        
-            except FileNotFoundError:
-                st.info("요청 기록이 없습니다.")
-            except Exception as e:
-                st.error(f"관리자 뷰 로딩 중 오류: {e}")
-                st.exception(e)
-
-        elif _admin_pw:
-            st.error("관리자 암호가 올바르지 않습니다.")
-        
 # ============================
 # 페이지: VOC 기록(이상발생해석)
 # ============================
@@ -612,9 +590,9 @@ with st.sidebar:
     st.markdown("### 메뉴")
     page = st.radio(
         "섹션을 선택하세요",
-        ["챗봇", "제품백서", "서류 및 관련 자료 요청", "VOC 기록(이상발생해석)"],
+        ["챗봇", "제품백서", "서류 요청(사용자)", "서류 승인(관리자)", "VOC 기록(이상발생해석)"],
         label_visibility="collapsed",
-        index=1
+        index=2
     )
     st.markdown("---")
     st.caption("© Samyang Incheon 1 Plant • Internal Use Only")
@@ -626,7 +604,9 @@ if page == "챗봇":
     page_chatbot()
 elif page == "제품백서":
     page_product()
-elif page == "서류 및 관련 자료 요청":
-    page_docs_request()
+elif page == "서류 요청(사용자)":
+    page_docs_request_user()
+elif page == "서류 승인(관리자)":
+    page_docs_admin()
 else:
     page_voc()
