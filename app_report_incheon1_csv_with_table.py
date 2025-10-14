@@ -62,6 +62,40 @@ def format_features(text):
     items = [item for item in items if item]
     return "<br>".join(f"• {item.strip()}" for item in items)
 
+def _ensure_date_columns(df: pd.DataFrame):
+    """요청일(입력 시각)과 마감일을 날짜 컬럼으로 안전하게 추가"""
+    d = df.copy()
+    # 요청일: timestamp(문자열) → date
+    d["요청일"] = pd.to_datetime(d.get("timestamp", None), errors="coerce").dt.date
+    # 마감일: due(문자열) → date
+    d["마감일"] = pd.to_datetime(d.get("due", None), errors="coerce").dt.date
+    return d
+
+def _render_grouped_by_date(df: pd.DataFrame, group_key: str, columns_to_show: list):
+    """
+    날짜별로 접어서 표시. group_key는 '요청일' 또는 '마감일'
+    columns_to_show는 테이블로 보여줄 컬럼 목록
+    """
+    if df.empty:
+        st.info("표시할 데이터가 없습니다.")
+        return
+    if group_key not in df.columns:
+        st.warning(f"'{group_key}' 기준 열이 없어 그룹화할 수 없습니다.")
+        return
+
+    # NaT/NaN 제거 후 날짜 내림차순
+    tmp = df.dropna(subset=[group_key]).copy()
+    if tmp.empty:
+        st.info("유효한 날짜 데이터가 없습니다.")
+        return
+
+    # 최신 날짜가 위로 오게 정렬
+    days = sorted(tmp[group_key].unique(), reverse=True)
+    for day in days:
+        day_df = tmp[tmp[group_key] == day].copy()
+        with st.expander(f"📅 {day} — {len(day_df)}건", expanded=False):
+            st.dataframe(day_df[columns_to_show], use_container_width=True)
+
 # ============================
 # 제품백서 로딩
 # ============================
