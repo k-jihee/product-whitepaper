@@ -143,7 +143,7 @@ def page_chatbot():
     st.info("사내망 연결형 챗봇 연동 전까지는 간단한 FAQ 검색과 폼만 제공됩니다.")
     # 간단한 키워드 FAQ (제품백서 내에서)
     df = load_product_df()
-    query = st.text_input("무엇을 도와드릴까요? 키워드 입력 (예: CCP, mesh, 포도당)")
+    query = st.text_input("무엇을 도와드릴까요? 키워드 입력 (예: 정제포도당 CCP를 알려줘, 제네덱스 공정시 사용되는 mesh망 크기를 알려줘, 제네덱스 식품유형은?등)")
     if query:
         mask = pd.Series(False, index=df.index)
         for col in [c for c in df.columns if df[c].dtype == object]:
