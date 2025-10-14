@@ -502,7 +502,7 @@ def page_voc():
 # 사이드바 네비게이션
 # ============================
 with st.sidebar:
-    st.image("https://upload.wikimedia.org/wikipedia/commons/9/9a/Samyang_logo_2020.svg", width=140)
+    st.markdown("## 🏭 삼양사 인천 1공장 제품백서")
     st.markdown("## 메뉴")
     page = st.radio(
         "섹션을 선택하세요",
