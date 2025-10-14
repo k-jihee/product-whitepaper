@@ -62,6 +62,38 @@ def format_features(text):
     items = [item for item in items if item]
     return "<br>".join(f"• {item.strip()}" for item in items)
 
+# === 일별 그룹 표시 유틸 ===
+def _ensure_date_columns(df: pd.DataFrame):
+    """요청일(입력 시각)과 마감일을 날짜 컬럼으로 안전하게 추가"""
+    d = df.copy()
+    d["요청일"] = pd.to_datetime(d.get("timestamp", None), errors="coerce").dt.date
+    d["마감일"] = pd.to_datetime(d.get("due", None), errors="coerce").dt.date
+    return d
+
+def _render_grouped_by_date(df: pd.DataFrame, group_key: str, columns_to_show: list):
+    """
+    날짜별로 접어서 표시. group_key는 '요청일' 또는 '마감일'
+    columns_to_show는 테이블로 보여줄 컬럼 목록
+    """
+    if df.empty:
+        st.info("표시할 데이터가 없습니다.")
+        return
+    if group_key not in df.columns:
+        st.warning(f"'{group_key}' 기준 열이 없어 그룹화할 수 없습니다.")
+        return
+
+    tmp = df.dropna(subset=[group_key]).copy()
+    if tmp.empty:
+        st.info("유효한 날짜 데이터가 없습니다.")
+        return
+
+    days = sorted(tmp[group_key].unique(), reverse=True)
+    for day in days:
+        day_df = tmp[tmp[group_key] == day].copy()
+        with st.expander(f"📅 {day} — {len(day_df)}건", expanded=False):
+            cols = [c for c in columns_to_show if c in day_df.columns]
+            st.dataframe(day_df[cols], use_container_width=True)
+
 # ============================
 # 제품백서 로딩
 # ============================
@@ -201,7 +233,7 @@ def product_card(row):
     <p><b>용도:</b> {row.get('용도', '-')}</p>
     <h3>1. 제품 정보</h3>
     <table>
-    <tr><th>식품유형</th><th>제품구분</th><th>제품코드</th><th>소비기한</th></tr>
+    <tr><th>식품유형</th><th>제품구분</</th><th>제품코드</th><th>소비기한</th></tr>
     <tr><td>{row.get('식품유형', '-')}</td><td>{row.get('구분', '-')}</td><td>{row.get('제품코드', '-')}</td><td>{row.get('소비기한', '-')}</td></tr>
     </table>
     <h3>📊 생산량 (3개년)</h3>
@@ -349,13 +381,9 @@ def page_docs_request_user():
 
         if not df_products.empty and {"제품코드","제품명"}.issubset(set(df_products.columns)):
             _opts = (df_products[["제품코드","제품명"]]
-                        .astype(str)
-                        .dropna()
+                        .astype(str).dropna()
                         .assign(_opt=lambda d: d["제품코드"].str.strip() + " | " + d["제품명"].str.strip())
-                        ["_opt"]
-                        .drop_duplicates()
-                        .sort_values()
-                        .tolist())
+                        ["_opt"].drop_duplicates().sort_values().tolist())
         else:
             _opts = []
 
@@ -392,7 +420,7 @@ def page_docs_request_user():
                                            header=not os.path.exists(path))
                 st.success("요청이 저장되었습니다.")
 
-    # 🔒 사용자 페이지는 '전체 요청 현황'을 보여주지 않음 (본인 것만)
+    # 사용자 페이지: 본인 요청만 + 일별 보기
     st.markdown("---")
     st.subheader("내 요청 & 다운로드")
     if not requester:
@@ -406,9 +434,21 @@ def page_docs_request_user():
             st.info("본인 이름으로 접수된 요청이 없습니다.")
             return
 
-        st.write(f"**'{requester}'님의 최근 요청 20건**")
-        st.dataframe(_mine.tail(20), use_container_width=True)
+        st.write(f"**'{requester}'님의 요청 (일별 보기)**")
+        _mine2 = _ensure_date_columns(_mine)
 
+        group_choice = st.radio("그룹 기준", ["요청일(입력시각)", "마감일"], horizontal=True)
+        group_key = "요청일" if group_choice == "요청일(입력시각)" else "마감일"
+
+        recent_days = st.slider("최근 N일만 보기 (0=전체)", min_value=0, max_value=60, value=0, step=5)
+        if recent_days > 0 and not _mine2.empty:
+            cutoff = pd.Timestamp.today().date() - pd.Timedelta(days=recent_days)
+            _mine2 = _mine2[_mine2[group_key] >= cutoff]
+
+        _user_cols = ["timestamp", "team", "due", "category", "priority", "ref_product", "status", "details"]
+        _render_grouped_by_date(_mine2, group_key, _user_cols)
+
+        # 승인된 파일 다운로드
         _approved_list = _mine[_mine["status"] == "승인"]
         if _approved_list.empty:
             st.info("아직 승인된 요청이 없습니다.")
@@ -435,7 +475,6 @@ def page_docs_request_user():
             with st.container(border=True):
                 st.write(f"**요청일: {approved_req.get('timestamp')} / 제품: {_prod_str if _prod_str else 'N/A'}**")
 
-                # ✅ 파이프(|) 유무와 상관없이 코드 인식
                 tokens = [t.strip() for t in str(_prod_str).split(',') if t.strip()]
                 product_codes = [t.split('|')[0].strip() for t in tokens] or ['N/A']
 
@@ -503,16 +542,37 @@ def page_docs_admin():
 
     try:
         df = _load_doc_requests_df(path)
-        st.subheader("📋 전체 요청 목록")
-        st.dataframe(df, use_container_width=True, key='admin_df')
+
+        st.subheader("📋 전체 요청 목록 (일별 보기)")
+        df2 = _ensure_date_columns(df)
+
+        colA, colB, colC = st.columns([1.2, 1, 2])
+        with colA:
+            group_choice = st.radio("그룹 기준", ["요청일(입력시각)", "마감일"], horizontal=True)
+            group_key = "요청일" if group_choice == "요청일(입력시각)" else "마감일"
+        with colB:
+            recent_days = st.slider("최근 N일", min_value=0, max_value=180, value=30, step=10)
+        with colC:
+            status_filter = st.multiselect("상태 필터", ["대기", "진행중", "승인", "반려"],
+                                           default=["대기","진행중","승인","반려"])
+
+        if status_filter:
+            df2 = df2[df2["status"].isin(status_filter)]
+
+        if recent_days > 0 and not df2.empty:
+            cutoff = pd.Timestamp.today().date() - pd.Timedelta(days=recent_days)
+            df2 = df2[df2[group_key] >= cutoff]
+
+        _admin_cols = ["timestamp", "requester", "team", "due", "category", "priority", "ref_product", "status", "details"]
+        _render_grouped_by_date(df2, group_key, _admin_cols)
 
         st.markdown("---")
         with st.form("admin_form"):
-            colA, colB = st.columns([1, 2])
-            with colA:
+            col1, col2 = st.columns([1, 2])
+            with col1:
                 sel_idx = st.number_input("승인/반려할 행 인덱스", min_value=0,
                                           max_value=max(0, len(df)-1) if not df.empty else 0, step=1)
-            with colB:
+            with col2:
                 status_options = ["승인","반려","대기","진행중"]
                 current_status = df.loc[int(sel_idx), 'status'] if not df.empty else '대기'
                 default_index = status_options.index(current_status) if current_status in status_options else 2
@@ -587,7 +647,7 @@ def page_voc():
 with st.sidebar:
     st.markdown("## 🏭 삼양사 인천 1공장 제품백서")
     st.markdown("---")
-    st.markdown("### 메뉴")
+    st.mark말("### 메뉴")
     page = st.radio(
         "섹션을 선택하세요",
         ["챗봇", "제품백서", "서류 요청(사용자)", "서류 승인(관리자)", "VOC 기록(이상발생해석)"],
