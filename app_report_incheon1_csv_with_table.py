@@ -8,6 +8,7 @@ from datetime import datetime
 # 기본 설정 & 인증
 # ============================
 st.set_page_config(page_title="인천1공장 포털", layout="wide")
+
 PASSWORD = os.environ.get("INCHON1_PORTAL_PASSWORD", "samyang!11")
 
 if "authenticated" not in st.session_state:
@@ -62,6 +63,7 @@ def format_features(text):
     items = [item for item in items if item]
     return "<br>".join(f"• {item.strip()}" for item in items)
 
+# 1) 공용 유틸 추가 (파일 상단 유틸 근처에 붙여넣기)
 def _ensure_date_columns(df: pd.DataFrame):
     """요청일(입력 시각)과 마감일을 날짜 컬럼으로 안전하게 추가"""
     d = df.copy()
@@ -189,11 +191,9 @@ def product_card(row):
     prod_2022 = clean_int(row.get('생산실적(2022)'))
     prod_2023 = clean_int(row.get('생산실적(2023)'))
     prod_2024 = clean_int(row.get('생산실적(2024)'))
-
     internal_spec = parse_spec_text(row.get("사내규격(COA)", ""))
     legal_spec = parse_spec_text(row.get("법적규격", ""))
     all_keys = set(internal_spec.keys()) | set(legal_spec.keys()) | {"성상"}
-
     성상_row = '<tr><td>성상</td><td colspan="2">{}</td></tr>'.format(row.get("성상", "-"))
     spec_rows = ""
     for key in sorted(all_keys):
@@ -202,7 +202,6 @@ def product_card(row):
         legal = legal_spec.get(key, "-")
         internal = internal_spec.get(key, "-")
         spec_rows += f"<tr><td>{key}</td><td>{legal}</td><td>{internal}</td></tr>"
-
     img_links = str(row.get("한도견본", "")).strip()
     if img_links in ["", "한도견본 없음"]:
         sample_html = "해당사항 없음"
@@ -221,7 +220,6 @@ def product_card(row):
         </div>
         """
         print_button = ""
-
     html_template = f"""<style>
     table {{ table-layout: fixed; width: 100%; border-collapse: collapse; }}
     th, td {{ border: 1px solid gray; padding: 8px; text-align: center; }}
@@ -229,7 +227,6 @@ def product_card(row):
     @media print {{ button {{ display: none; }} }}
     #modal {{ display:none; position:fixed; left:0; top:0; width:100vw; height:100vh; background:rgba(0,0,0,0.7); align-items:center; justify-content:center; }}
     </style>
-
     <div id='print-area'>
     <h2>{row.get('제품명', '-')}</h2>
     <p><b>용도:</b> {row.get('용도', '-')}</p>
@@ -247,7 +244,6 @@ def product_card(row):
     <h3>6. 제품 규격</h3>
     <table><tr><th>항목</th><th>법적규격</th><th>사내규격</th></tr>{성상_row}{spec_rows}</table>
     <h3>7. 기타사항</h3><p>{row.get('기타사항', '-')}</p></div>
-
     <div id='sample-area'><h3>8. 한도견본</h3>{sample_html}{print_button}</div>
     <div id="modal" onclick="this.style.display='none'"><img id="modal-img" style="max-width:90%; max-height:90%; object-fit:contain;"></div>
     <script>
@@ -271,7 +267,6 @@ def page_product():
     df = load_product_df()
     with st.expander("📋 인천 1공장 전제품 목록", expanded=False):
         st.dataframe(df[["계층구조_2레벨","계층구조_3레벨","제품코드","제품명"]].dropna().reset_index(drop=True), use_container_width=True)
-
     st.markdown("---")
     st.markdown('<h4>🔍 <b>제품코드 또는 제품명을 입력하세요</b></h4>', unsafe_allow_html=True)
     col1, col2 = st.columns(2)
@@ -280,7 +275,6 @@ def page_product():
     with col2:
         q2 = st.text_input("🔎 제품 2 (예: GIS7030 또는 물엿)")
     queries = [q for q in [q1, q2] if q]
-
     if queries:
         results = pd.DataFrame()
         for q in queries:
@@ -311,7 +305,6 @@ def _load_doc_requests_df(csv_path):
         if 'status' not in df.columns:
             df['status'] = '대기'
         return df
-
     df = pd.DataFrame()
     try:
         df = pd.read_csv(csv_path, encoding="utf-8-sig", on_bad_lines='warn')
@@ -337,7 +330,6 @@ def _load_doc_requests_df(csv_path):
             "timestamp", "requester", "team", "due", "category",
             "priority", "ref_product", "details", "files", "status"
         ])
-
     if 'status' not in df.columns:
         df['status'] = '대기'
     return df
@@ -348,10 +340,8 @@ def _load_doc_requests_df(csv_path):
 def page_docs_request_user():
     st.title("🗂️ 서류 요청 (사용자)")
     st.caption("예: HACCP, ISO9001, 제품규격, FSSC22000, 할랄, 원산지규격서, MSDS 등")
-
     requester = st.text_input("요청자 (이름을 입력하면 '내 요청' 및 '다운로드' 확인 가능)")
     path = os.path.join(DATA_DIR, "doc_requests.csv")
-
     with st.form("doc_req_form", clear_on_submit=True):
         col1, col2 = st.columns(2)
         with col1:
@@ -370,7 +360,6 @@ def page_docs_request_user():
                     _checks.append(st.checkbox(lbl, key=f"req_kind_{idx}"))
             category = ", ".join([lbl for lbl, on in zip(_labels, _checks) if on])
             priority = st.select_slider("우선순위", ["낮음","보통","높음","긴급"], value="보통")
-
         # 제품선택
         try:
             df_products = load_product_df()
@@ -380,7 +369,6 @@ def page_docs_request_user():
                 df_products = _pd.read_csv("product_data.csv", encoding="utf-8")
             except Exception:
                 df_products = _pd.DataFrame(columns=["제품코드","제품명"])
-
         if not df_products.empty and {"제품코드","제품명"}.issubset(set(df_products.columns)):
             _opts = (df_products[["제품코드","제품명"]]
                         .astype(str)
@@ -392,7 +380,6 @@ def page_docs_request_user():
                         .tolist())
         else:
             _opts = []
-
         multi_pick = st.toggle("여러 제품 선택", value=False, help="여러 제품에 대한 요청이라면 켜주세요.")
         if multi_pick:
             _picked = st.multiselect("관련 제품코드/명 (검색 가능)", options=_opts, placeholder="예: GID*** | 포도당...")
@@ -401,11 +388,9 @@ def page_docs_request_user():
             ref_product = st.selectbox("관련 제품코드/명 (선택)", options=[""] + _opts, index=0,
                                        placeholder="클릭 후 검색/선택",
                                        help="클릭하면 검색 드롭다운이 열립니다.")
-
         details = st.text_area("상세 요청 내용", height=140)
         files = st.file_uploader("참고 파일 업로드 (다중)", accept_multiple_files=True)
         submitted = st.form_submit_button("요청 저장")
-
         if submitted:
             if not requester:
                 st.error("요청자 이름을 반드시 입력해주세요.")
@@ -425,14 +410,12 @@ def page_docs_request_user():
                 pd.DataFrame([rec]).to_csv(path, mode="a", index=False, encoding="utf-8-sig",
                                            header=not os.path.exists(path))
                 st.success("요청이 저장되었습니다.")
-
     # 🔒 사용자 페이지는 '전체 요청 현황'을 보여주지 않음 (본인 것만)
     st.markdown("---")
     st.subheader("내 요청 & 다운로드")
     if not requester:
         st.caption("상단의 '요청자'에 이름을 입력하면, 본인의 요청 내역 및 승인된 파일 다운로드 섹션이 나타납니다.")
         return
-
     try:
         _df_all = _load_doc_requests_df(path)
         _mine = _df_all[_df_all["requester"].astype(str) == str(requester)]
@@ -440,26 +423,28 @@ def page_docs_request_user():
             st.info("본인 이름으로 접수된 요청이 없습니다.")
             return
 
+        # 2) 사용자 페이지(내 요청) — “일별 보기”로 교체
+        # 기존: st.dataframe(_mine.tail(20), ...)
+        # 교체: 날짜 그룹 선택 + 그룹 표시
         st.write(f"**'{requester}'님의 요청 (일별 보기)**")
 
-# 날짜 컬럼 추가
-_mine2 = _ensure_date_columns(_mine)
+        # 날짜 컬럼 추가
+        _mine2 = _ensure_date_columns(_mine)
 
-# 그룹 기준 선택
-group_choice = st.radio("그룹 기준", ["요청일(입력시각)", "마감일"], horizontal=True)
-group_key = "요청일" if group_choice == "요청일(입력시각)" else "마감일"
+        # 그룹 기준 선택
+        group_choice = st.radio("그룹 기준", ["요청일(입력시각)", "마감일"], horizontal=True)
+        group_key = "요청일" if group_choice == "요청일(입력시각)" else "마감일"
 
-# (선택) 최근 N일만 보기 필터
-recent_days = st.slider("최근 N일만 보기 (0=전체)", min_value=0, max_value=60, value=0, step=5)
-if recent_days > 0 and not _mine2.empty:
-    cutoff = pd.Timestamp.today().date() - pd.Timedelta(days=recent_days)
-    _mine2 = _mine2[_mine2[group_key] >= cutoff]
+        # (선택) 최근 N일만 보기 필터
+        recent_days = st.slider("최근 N일만 보기 (0=전체)", min_value=0, max_value=60, value=0, step=5)
+        if recent_days > 0 and not _mine2.empty:
+            cutoff = pd.Timestamp.today().date() - pd.Timedelta(days=recent_days)
+            _mine2 = _mine2[_mine2[group_key] >= cutoff]
 
-# 날짜별 접기 테이블
-_user_cols = ["timestamp", "team", "due", "category", "priority", "ref_product", "status", "details"]
-_user_cols = [c for c in _user_cols if c in _mine2.columns]
-_render_grouped_by_date(_mine2, group_key, _user_cols)
-# 교체 끝
+        # 날짜별 접기 테이블
+        _user_cols = ["timestamp", "team", "due", "category", "priority", "ref_product", "status", "details"]
+        _user_cols = [c for c in _user_cols if c in _mine2.columns]
+        _render_grouped_by_date(_mine2, group_key, _user_cols)
 
         _approved_list = _mine[_mine["status"] == "승인"]
         if _approved_list.empty:
@@ -469,7 +454,6 @@ _render_grouped_by_date(_mine2, group_key, _user_cols)
         st.markdown("---")
         st.success("✅ **승인된 요청 파일 다운로드**")
         st.info("파일명 규칙: `제품코드_인증서키.확장자` (예: GIS7030_HACCP.pdf)")
-
         _cert_name_map = {
             "HACCP 인증서": "HACCP", "ISO9001 인증서": "ISO9001",
             "제품규격": "SPEC", "FSSC22000": "FSSC22000",
@@ -477,27 +461,20 @@ _render_grouped_by_date(_mine2, group_key, _user_cols)
             "기타": "ETC"
         }
         extensions = ["pdf", "docx", "xlsx", "pptx", "jpg", "png"]
-
         found_any_files_globally = False
-
         for _, approved_req in _approved_list.iterrows():
             _cat_str = approved_req.get("category", "")
             _prod_str = approved_req.get("ref_product", "")
-
             with st.container(border=True):
                 st.write(f"**요청일: {approved_req.get('timestamp')} / 제품: {_prod_str if _prod_str else 'N/A'}**")
-
                 # ✅ 파이프(|) 유무와 상관없이 코드 인식
                 tokens = [t.strip() for t in str(_prod_str).split(',') if t.strip()]
                 product_codes = [t.split('|')[0].strip() for t in tokens] or ['N/A']
-
                 requested_certs = [c.strip() for c in str(_cat_str).split(',') if c.strip()]
                 if not requested_certs:
                     st.write("다운로드할 인증서 종류가 지정되지 않았습니다.")
                     continue
-
                 files_for_this_request = []
-
                 for code in product_codes:
                     if code == 'N/A':
                         continue
@@ -516,7 +493,6 @@ _render_grouped_by_date(_mine2, group_key, _user_cols)
                         if not file_found and cert_label != "기타":
                             st.warning(f"❌ '{code} - {cert_label}' 파일을 찾을 수 없습니다. "
                                        f"(예상: `{code}_{cert_key}.*` in `{os.path.abspath(UPLOAD_DIR)}`)")
-
                 if files_for_this_request:
                     for file_info in files_for_this_request:
                         with open(file_info["path"], "rb") as _f:
@@ -526,10 +502,8 @@ _render_grouped_by_date(_mine2, group_key, _user_cols)
                                 file_name=file_info["name"],
                                 mime="application/octet-stream"
                             )
-
         if not found_any_files_globally:
             st.info("다운로드 가능한 승인된 파일이 없습니다. 품질팀에 문의하세요.")
-
     except FileNotFoundError:
         st.info("아직 요청 기록이 없습니다.")
     except Exception as e:
@@ -541,24 +515,50 @@ _render_grouped_by_date(_mine2, group_key, _user_cols)
 def page_docs_admin():
     st.title("🛡️ 서류 승인 (관리자)")
     st.caption("품질팀 전용: 전체 요청 조회 및 승인/반려 처리")
-
     _admin_pw = st.text_input("관리자 암호", type="password", key="admin_pw")
     _ADMIN = os.environ.get("INCHON1_ADMIN_PW", "quality#77")
     path = os.path.join(DATA_DIR, "doc_requests.csv")
-
     if not _admin_pw:
         st.info("관리자 암호를 입력하세요.")
         return
     if _admin_pw != _ADMIN:
         st.error("관리자 암호가 올바르지 않습니다.")
         return
-
     try:
         df = _load_doc_requests_df(path)
-        st.subheader("📋 전체 요청 목록")
-        st.dataframe(df, use_container_width=True, key='admin_df')
+        
+        # 3) 관리자 페이지(전체 요청) — “일별 보기 + 기간 필터” 추가
+        st.subheader("📋 전체 요청 목록 (일별 보기)")
 
-        st.markdown("---")
+        df2 = _ensure_date_columns(df)
+
+        # 필터: 그룹 기준 + 기간
+        colA, colB, colC = st.columns([1.2, 1, 2])
+        with colA:
+            group_choice = st.radio("그룹 기준", ["요청일(입력시각)", "마감일"], horizontal=True)
+            group_key = "요청일" if group_choice == "요청일(입력시각)" else "마감일"
+
+        with colB:
+            recent_days = st.slider("최근 N일", min_value=0, max_value=180, value=30, step=10)
+
+        with colC:
+            status_filter = st.multiselect("상태 필터", ["대기", "진행중", "승인", "반려"], default=["대기","진행중","승인","반려"])
+
+        # 상태 필터 적용
+        if status_filter:
+            df2 = df2[df2["status"].isin(status_filter)]
+
+        # 기간 필터 적용
+        if recent_days > 0 and not df2.empty:
+            cutoff = pd.Timestamp.today().date() - pd.Timedelta(days=recent_days)
+            df2 = df2[df2[group_key] >= cutoff]
+
+        _admin_cols = ["timestamp", "requester", "team", "due", "category", "priority", "ref_product", "status", "details"]
+        _admin_cols = [c for c in _admin_cols if c in df2.columns]
+        _render_grouped_by_date(df2, group_key, _admin_cols)
+        
+        st.markdown("---") # Add a separator before the form
+        
         with st.form("admin_form"):
             colA, colB = st.columns([1, 2])
             with colA:
@@ -569,7 +569,6 @@ def page_docs_admin():
                 current_status = df.loc[int(sel_idx), 'status'] if not df.empty else '대기'
                 default_index = status_options.index(current_status) if current_status in status_options else 2
                 new_status = st.selectbox("처리 상태", status_options, index=default_index)
-
             submitted = st.form_submit_button("상태 반영")
             if submitted:
                 if not df.empty and int(sel_idx) < len(df):
@@ -620,7 +619,6 @@ def page_voc():
             pd.DataFrame([rec]).to_csv(path, mode="a", index=False, encoding="utf-8-sig",
                                        header=not os.path.exists(path))
             st.success("VOC가 저장되었습니다.")
-
     path = os.path.join(DATA_DIR, "voc_logs.csv")
     if os.path.exists(path):
         st.markdown("---")
