@@ -329,7 +329,7 @@ def _load_doc_requests_df(csv_path):
 # ============================
 def page_docs_request():
     st.title("🗂️ 서류 및 관련 자료 요청")
-    st.caption("예: HACCP 인증서, 원재료 사양서, 시험성적서, 공정흐름도, 교육자료 등")
+    st.caption("예: HACCP 인증서, 원산지증명서, 공정흐름도, 그외 인증서 등")
     
     requester = st.text_input("요청자 (이름을 입력하면 '내 요청' 및 '다운로드' 확인 가능)")
 
@@ -345,7 +345,7 @@ def page_docs_request():
             _colA, _colB, _colC, _colD = st.columns(4)
             _labels = [
                 "HACCP 인증서", "ISO9001 인증서", "제품규격", "FSSC22000", # "FSSC22000 인증서" -> "FSSC22000"
-                "할랄인증서", "원산지규격서", "MSDS", "기타",
+                "할랄인증서", "원산지증명서", "MSDS", "기타",
             ]
             _checks = []
             for idx, lbl in enumerate(_labels):
