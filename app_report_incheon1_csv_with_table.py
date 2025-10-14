@@ -367,7 +367,7 @@ def page_docs_request():
             _opts = (df_products[["제품코드","제품명"]]
                          .astype(str)
                          .dropna()
-                         .assign(_opt=lambda d: d["제품코드"].str.strip() + " | " + d["제품명"].str.strip())
+                         .assign(_opt=lambda d: d["제품코드"].strip() + " | " + d["제품명"].strip())
                          ["_opt"]
                          .drop_duplicates()
                          .sort_values()
@@ -510,7 +510,14 @@ def page_docs_request():
                 
                 with st.form("admin_form"):
                     _sel_idx = st.number_input("승인/반려할 행 인덱스", min_value=0, max_value=max(0, len(_df)-1), step=1)
-                    _new_status = st.selectbox("처리", ["승인","반려","대기","진행중"], index=_df.loc[int(_sel_idx), 'status'] if 'status' in _df.columns and _df.loc[int(_sel_idx), 'status'] in ["승인","반려","대기","진행중"] else 2)
+                    
+                    # Selectbox options and current value
+                    status_options = ["승인","반려","대기","진행중"]
+                    current_status = _df.loc[int(_sel_idx), 'status'] if 'status' in _df.columns and not _df.empty else '대기'
+                    # Find the integer index of the current status
+                    default_index = status_options.index(current_status) if current_status in status_options else 2 # Default to '대기' (index 2)
+                    
+                    _new_status = st.selectbox("처리", status_options, index=default_index)
                     
                     submitted = st.form_submit_button("상태 반영")
                     if submitted:
