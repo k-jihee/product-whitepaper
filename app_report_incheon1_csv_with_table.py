@@ -334,7 +334,7 @@ def _load_doc_requests_df(csv_path):
 # ============================
 def page_docs_request():
     st.title("🗂️ 서류 및 관련 자료 요청")
-    st.caption("예: HACCP 인증서, 원재료 사양서, 시험성적서, 공정흐름도, 교육자료 등")
+    st.caption("예: HACCP 인증서, 원산지증명서, MSDS, 공정흐름도 등")
     
     requester = st.text_input("요청자 (이름을 입력하면 '내 요청' 및 '다운로드' 확인 가능)")
 
@@ -350,7 +350,7 @@ def page_docs_request():
             _colA, _colB, _colC, _colD = st.columns(4)
             _labels = [
                 "HACCP 인증서", "ISO9001 인증서", "제품규격", "FSSC22000",
-                "할랄인증서", "원산지규격서", "MSDS", "기타",
+                "할랄인증서", "원산지증명서", "MSDS", "기타",
             ]
             _checks = []
             for idx, lbl in enumerate(_labels):
@@ -554,22 +554,6 @@ def page_docs_request():
         elif _admin_pw:
             st.error("관리자 암호가 올바르지 않습니다.")
         
-        # ▼▼▼ 디버깅 섹션 ▼▼▼
-        with st.expander("🐛 파일 시스템 디버깅 (관리자용)"):
-            st.write(f"현재 앱이 인식하는 UPLOAD_DIR 절대 경로: `{os.path.abspath(UPLOAD_DIR)}`")
-            if os.path.exists(UPLOAD_DIR):
-                st.write(f"`{UPLOAD_DIR}` 폴더에 있는 파일 목록:")
-                try:
-                    files_in_dir = os.listdir(UPLOAD_DIR)
-                    if not files_in_dir:
-                        st.warning("폴더가 비어있습니다.")
-                    else:
-                        st.write(files_in_dir)
-                except Exception as e:
-                    st.error(f"폴더를 읽는 중 오류 발생: {e}")
-            else:
-                st.error(f"`{UPLOAD_DIR}` 폴더를 찾을 수 없습니다. GitHub 저장소에 폴더가 올바르게 생성되었는지 확인해주세요.")
-
 # ============================
 # 페이지: VOC 기록(이상발생해석)
 # ============================
