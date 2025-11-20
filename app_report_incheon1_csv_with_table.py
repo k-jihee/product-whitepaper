@@ -170,38 +170,40 @@ def load_product_df():
 # 페이지: AI 에이전트(플레이스홀더)
 # ============================
 def page_chatbot():
-
-    html_code = """
+    # 1) 이 페이지에서는 전체 앱 스크롤바 숨기기
+    hide_scroll_css = """
     <style>
-      /* Streamlit 안에서 꽉 차게 보이도록 */
-      #samibot_iframe {
-        width: 100%;
-        border: none;
-      }
-    </style>
+    /* 전체 앱 영역 스크롤 막기 + 스크롤바 숨기기 */
+    html, body, [data-testid="stAppViewContainer"], [data-testid="stVerticalBlock"] {
+        overflow: hidden !important;
+        height: 100%;
+    }
 
+    /* 크롬/엣지에서 스크롤바 안 보이게 */
+    ::-webkit-scrollbar {
+        width: 0px;
+        height: 0px;
+    }
+    </style>
+    """
+    st.markdown(hide_scroll_css, unsafe_allow_html=True)
+   
+    # 2) 화면(브라우저) 높이에 맞게 iframe만 꽉 차도록
+    html_code = """
     <iframe
-        id="samibot_iframe"
         src="https://samibot.samyang.com/chatbot/9e054af9-fdbe-4290-b914-7620c73a5e1d"
+        style="
+            width: 100%;
+            height: calc(100vh - 90px);  /* 위쪽 타이틀/여백 만큼 빼줌 */
+            border: none;
+        "
         allow="clipboard-write; microphone; camera">
     </iframe>
-
-    <script>
-      function resizeIframe() {
-        const iframe = document.getElementById('samibot_iframe');
-        if (!iframe) return;
-        // 상단 타이틀/여백 조금 빼고 전체 화면 높이에 맞추기
-        const offset = 130;  // 필요하면 숫자만 조절해도 됨
-        iframe.style.height = (window.innerHeight - offset) + 'px';
-      }
-
-      window.addEventListener('load', resizeIframe);
-      window.addEventListener('resize', resizeIframe);
-    </script>
     """
 
-    # 여기 height는 "컴포넌트 전체 최소 높이" 느낌이라 크게만 잡아주면 됩니다
+    # 컴포넌트 높이는 대충 크게만 주면 됨 (실제 높이는 위 style에서 잡음)
     st.components.v1.html(html_code, height=800, scrolling=False)
+
 
 
 # ============================
