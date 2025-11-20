@@ -170,7 +170,7 @@ def load_product_df():
 # 페이지: AI 에이전트(플레이스홀더)
 # ============================
 def page_chatbot():
-    # 0) 이 페이지에서는 헤더/여백/바깥 스크롤 최소화
+    # 0) 이 페이지에서는 헤더/사이드바/메인 컨테이너 스크롤 전부 숨기기
     st.markdown(
         """
         <style>
@@ -179,18 +179,19 @@ def page_chatbot():
             display: none;
         }
 
-        /* 메인 컨테이너 여백 제거 + 너비 최대화 */
+        /* 메인 컨테이너 여백 제거 */
         main .block-container {
-            padding-top: 0rem;
-            padding-bottom: 0rem;
-            padding-left: 0rem;
-            padding-right: 0rem;
+            padding: 0;
             margin: 0;
             max-width: 100%;
         }
 
-        /* 전체 앱 스크롤 숨기기 */
-        html, body, [data-testid="stAppViewContainer"] {
+        /* 전체 앱 컨테이너와 메인 영역, 사이드바 스크롤 숨기기 */
+        html, body,
+        [data-testid="stAppViewContainer"],
+        [data-testid="stMain"],
+        [data-testid="stSidebar"],
+        [data-testid="stVerticalBlock"] {
             margin: 0;
             height: 100%;
             overflow: hidden !important;
@@ -200,21 +201,25 @@ def page_chatbot():
         unsafe_allow_html=True,
     )
 
-    # 1) 화면 전체를 거의 다 쓰는 iframe (position: fixed 제거, 높이 100vh)
+    # 1) 화면 전체를 덮는 iframe (이 화면만 보이게)
     iframe_html = """
     <iframe
         src="https://samibot.samyang.com/chatbot/9e054af9-fdbe-4290-b914-7620c73a5e1d"
         style="
-            width: 100%;
-            height: 80vh;   /* 브라우저 높이만큼 사용 */
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
             border: none;
         "
         allow="clipboard-write; microphone; camera">
     </iframe>
     """
 
-    # 여기 height는 '컴포넌트 박스의 최소 높이' 느낌이라 700~800 정도로만 잡아주면 충분
+    # 컴포넌트 자체는 화면에 잡히게 최소 높이만 줌
     st.components.v1.html(iframe_html, height=800, scrolling=False)
+
 
 # ============================
 # 페이지: 제품백서
