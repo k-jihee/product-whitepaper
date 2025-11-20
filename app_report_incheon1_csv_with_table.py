@@ -167,7 +167,7 @@ def load_product_df():
         return pd.DataFrame()
 
 # ============================
-# 페이지: 챗봇(플레이스홀더)
+# 페이지: AI 에이전트(플레이스홀더)
 # ============================
 def page_chatbot():
 
@@ -693,7 +693,7 @@ with st.sidebar:
     st.markdown("### 메뉴")
     page = st.radio(
         "섹션을 선택하세요",
-        ["챗봇", "제품백서", "서류 요청(사용자)", "서류 승인(관리자)", "VOC 기록(이상발생해석)"],
+        ["AI 에이전트", "제품백서", "서류 요청(사용자)", "서류 승인(관리자)", "VOC 기록(이상발생해석)"],
         label_visibility="collapsed",
         index=2
     )
@@ -703,7 +703,7 @@ with st.sidebar:
 # ============================
 # 라우팅
 # ============================
-if page == "챗봇":
+if page == "AI 에이전트":
     page_chatbot()
 elif page == "제품백서":
     page_product()
