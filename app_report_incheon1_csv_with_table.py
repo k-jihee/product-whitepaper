@@ -170,40 +170,48 @@ def load_product_df():
 # 페이지: AI 에이전트(플레이스홀더)
 # ============================
 def page_chatbot():
-    # 1) 이 페이지에서는 전체 앱 스크롤바 숨기기
-    hide_scroll_css = """
-    <style>
-    /* 전체 앱 영역 스크롤 막기 + 스크롤바 숨기기 */
-    html, body, [data-testid="stAppViewContainer"], [data-testid="stVerticalBlock"] {
-        overflow: hidden !important;
-        height: 100%;
-    }
+    # 1) 이 페이지에서는 스트림릿 쪽 여백/헤더/스크롤을 최대한 제거
+    st.markdown(
+        """
+        <style>
+        /* 상단 기본 헤더 숨기기 */
+        header[data-testid="stHeader"] {
+            display: none;
+        }
 
-    /* 크롬/엣지에서 스크롤바 안 보이게 */
-    ::-webkit-scrollbar {
-        width: 0px;
-        height: 0px;
-    }
-    </style>
-    """
-    st.markdown(hide_scroll_css, unsafe_allow_html=True)
-   
-    # 2) 화면(브라우저) 높이에 맞게 iframe만 꽉 차도록
-    html_code = """
+        /* 메인 컨테이너 여백 없애기 */
+        main .block-container {
+            padding-top: 0rem;
+            padding-bottom: 0rem;
+        }
+
+        /* 페이지 전체 스크롤 숨기기 */
+        html, body {
+            margin: 0;
+            height: 100%;
+            overflow: hidden !important;
+        }
+        </style>
+        """,
+        unsafe_allow_html=True,
+    )
+
+    
+    # 2) 화면 전체를 거의 다 쓰도록 iframe만 배치
+    iframe_html = """
     <iframe
         src="https://samibot.samyang.com/chatbot/9e054af9-fdbe-4290-b914-7620c73a5e1d"
         style="
             width: 100%;
-            height: calc(100vh - 90px);  /* 위쪽 타이틀/여백 만큼 빼줌 */
+            height: calc(100vh - 80px); /* 위 제목 부분만큼 빼줌, 필요시 숫자 조정 */
             border: none;
         "
         allow="clipboard-write; microphone; camera">
     </iframe>
     """
 
-    # 컴포넌트 높이는 대충 크게만 주면 됨 (실제 높이는 위 style에서 잡음)
-    st.components.v1.html(html_code, height=800, scrolling=False)
-
+    # 여기 height는 대충 크게만 주면 되고, 실제 높이는 위 style에서 맞춰짐
+    st.components.v1.html(iframe_html, height=800, scrolling=False)
 
 
 # ============================
