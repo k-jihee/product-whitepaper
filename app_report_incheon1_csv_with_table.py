@@ -206,7 +206,7 @@ def page_chatbot():
         src="https://samibot.samyang.com/chatbot/9e054af9-fdbe-4290-b914-7620c73a5e1d"
         style="
             width: 100%;
-            height: 100vh;   /* 브라우저 높이만큼 사용 */
+            height: 80vh;   /* 브라우저 높이만큼 사용 */
             border: none;
         "
         allow="clipboard-write; microphone; camera">
