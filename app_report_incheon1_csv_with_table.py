@@ -210,7 +210,7 @@ def page_chatbot():
             top: 0;
             left: 0;
             width: 100vw;
-            height: 100vh;
+            height: 80vh;
             border: none;
         "
         allow="clipboard-write; microphone; camera">
