@@ -170,11 +170,39 @@ def load_product_df():
 # 페이지: 챗봇(플레이스홀더)
 # ============================
 def page_chatbot():
-    st.components.v1.iframe(
-        "https://samibot.samyang.com/chatbot/9e054af9-fdbe-4290-b914-7620c73a5e1d",
-        height=800,       # 필요에 따라 조정 가능
-        scrolling=True
-    )
+    st.title("💬 인천1공장 챗봇")
+
+    html_code = """
+    <style>
+      /* Streamlit 안에서 꽉 차게 보이도록 */
+      #samibot_iframe {
+        width: 100%;
+        border: none;
+      }
+    </style>
+
+    <iframe
+        id="samibot_iframe"
+        src="https://samibot.samyang.com/chatbot/9e054af9-fdbe-4290-b914-7620c73a5e1d"
+        allow="clipboard-write; microphone; camera">
+    </iframe>
+
+    <script>
+      function resizeIframe() {
+        const iframe = document.getElementById('samibot_iframe');
+        if (!iframe) return;
+        // 상단 타이틀/여백 조금 빼고 전체 화면 높이에 맞추기
+        const offset = 130;  // 필요하면 숫자만 조절해도 됨
+        iframe.style.height = (window.innerHeight - offset) + 'px';
+      }
+
+      window.addEventListener('load', resizeIframe);
+      window.addEventListener('resize', resizeIframe);
+    </script>
+    """
+
+    # 여기 height는 "컴포넌트 전체 최소 높이" 느낌이라 크게만 잡아주면 됩니다
+    st.components.v1.html(html_code, height=800, scrolling=False)
 
 
 # ============================
@@ -661,7 +689,7 @@ def page_voc():
 # 사이드바 네비게이션
 # ============================
 with st.sidebar:
-    st.markdown("## 🏭 삼양사 인천 1공장 제품백서")
+    st.markdown("## 🏭 삼양사 인천 1공장 AI 에이전트 🏭")
     st.markdown("---")
     st.markdown("### 메뉴")
     page = st.radio(
