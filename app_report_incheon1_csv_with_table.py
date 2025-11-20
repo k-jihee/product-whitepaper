@@ -59,9 +59,22 @@ def parse_spec_text(spec_text):
 def format_features(text):
     if pd.isna(text):
         return "-"
-    items = re.split(r"\s*-\s*", text.strip())
-    items = [item for item in items if item]
-    return "<br>".join(f"• {item.strip()}" for item in items)
+
+    # 1) 줄 단위로 먼저 나누기
+    lines = str(text).splitlines()
+
+    items = []
+    for line in lines:
+        line = line.strip()
+        if not line:
+            continue
+        # 2) 맨 앞에 붙은 -, • 같은 불릿 제거
+        #    예: "- 정제포도당(1A) 대비 입자가 큼" → "정제포도당(1A) 대비 입자가 큼"
+        line = re.sub(r"^[-•]\s*", "", line)
+        items.append(line)
+
+    # 3) 각 줄 앞에 •를 붙이고 <br>로 줄바꿈
+    return "<br>".join(f"• {item}" for item in items)
 
 def _ensure_date_columns(df: pd.DataFrame):
     """요청일(입력 시각)과 마감일을 날짜 컬럼으로 안전하게 추가"""
