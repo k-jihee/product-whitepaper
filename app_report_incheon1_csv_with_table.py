@@ -170,8 +170,6 @@ def load_product_df():
 # 페이지: 챗봇(플레이스홀더)
 # ============================
 def page_chatbot():
-    st.title("💬 인천1공장 챗봇")
-
     st.components.v1.iframe(
         "https://samibot.samyang.com/chatbot/9e054af9-fdbe-4290-b914-7620c73a5e1d",
         height=800,       # 필요에 따라 조정 가능
