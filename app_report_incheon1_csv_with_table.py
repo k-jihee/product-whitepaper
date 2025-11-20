@@ -170,18 +170,14 @@ def load_product_df():
 # 페이지: 챗봇(플레이스홀더)
 # ============================
 def page_chatbot():
-    st.title("💬 인천1공장 챗봇 (베타)")
-    st.info("사내망 연결형 챗봇 연동 전까지는 간단한 FAQ 검색과 폼만 제공됩니다.")
-    df = load_product_df()
-    query = st.text_input("무엇을 도와드릴까요? (예: 정제포도당 CCP, 제네덱스 mesh, 식품유형 등)")
-    if query:
-        mask = pd.Series(False, index=df.index)
-        for col in [c for c in df.columns if df[c].dtype == object]:
-            mask |= df[col].astype(str).str.contains(query, case=False, na=False)
-        hits = df.loc[mask, ["제품코드","제품명","제품특징","사내규격(COA)"]].head(30)
-        st.dataframe(hits if not hits.empty else pd.DataFrame(), use_container_width=True)
-        if hits.empty:
-            st.warning("검색 결과가 없습니다.")
+    st.title("💬 인천1공장 챗봇")
+
+    st.components.v1.iframe(
+        "https://samibot.samyang.com/chatbot/9e054af9-fdbe-4290-b914-7620c73a5e1d",
+        height=800,       # 필요에 따라 조정 가능
+        scrolling=True
+    )
+
 
 # ============================
 # 페이지: 제품백서
