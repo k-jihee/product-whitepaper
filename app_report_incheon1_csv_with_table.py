@@ -716,55 +716,77 @@ def page_voc():
 
 def page_home():
     st.markdown("""
-        <h1 style='text-align:center; margin-bottom:20px;'>🏭 인천1공장 AI 포털</h1>
         <style>
-            .search-box {
-                width: 80%;
-                margin: 0 auto;
-                margin-top: 30px;
-            }
-            .card-container {
-                display: flex;
-                justify-content: center;
-                gap: 25px;
-                margin-top: 40px;
-            }
-            .menu-card {
-                width: 180px;
-                padding: 25px;
-                background: #ffffff10;
-                border-radius: 16px;
-                text-align: center;
-                cursor: pointer;
-                border: 1px solid #ffffff30;
-            }
-            .menu-card:hover {
-                background: #ffffff20;
-            }
+        .feature-container {
+            display: flex;
+            justify-content: center;
+            align-items: stretch;
+            gap: 25px;
+            margin-top: 40px;
+        }
+        .feature-card {
+            width: 230px;
+            height: 250px;
+            background: white;
+            border-radius: 14px;
+            padding: 25px 20px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+            text-align: center;
+            cursor: pointer;
+            transition: 0.2s;
+            border: 1px solid #f1f1f1;
+        }
+        .feature-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+        }
+        .feature-icon {
+            font-size: 40px;
+            margin-bottom: 15px;
+        }
+        .feature-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+        .feature-desc {
+            font-size: 13px;
+            color: #666;
+        }
         </style>
     """, unsafe_allow_html=True)
 
-    # 🔍 검색창 → 클릭하면 자동 챗봇 이동
-    query = st.text_input("","", placeholder="AI 에이전트에게 질문하기...", key="home_search")
+    st.markdown("<h1 style='text-align:center;'>🏭 인천1공장 AI 포털</h1>", unsafe_allow_html=True)
+
+    # 검색창 → 자동 챗봇 이동
+    query = st.text_input("", "", placeholder="AI 에이전트에게 질문하기...")
 
     if query:
         st.session_state['page'] = "AI 에이전트"
         st.rerun()
 
-    st.markdown("<div class='card-container'>", unsafe_allow_html=True)
+    st.markdown("<div class='feature-container'>", unsafe_allow_html=True)
 
-    # 4개의 메인 기능 카드
-    cards = {
-        "📘 제품백서": "제품백서",
-        "🤖 AI 에이전트": "AI 에이전트",
-        "🗂️ 서류 요청": "서류 요청(사용자)",
-        "📣 VOC 로그": "VOC 기록(이상발생해석)",
-    }
+    # 카드 데이터
+    cards = [
+        {"emoji": "📘", "title": "제품 백서", "desc": "제품 정보, 규격, COA를 확인합니다.", "goto": "제품백서"},
+        {"emoji": "🤖", "title": "AI 에이전트", "desc": "질문하면 바로 챗봇으로 이동합니다.", "goto": "AI 에이전트"},
+        {"emoji": "🗂️", "title": "서류 요청", "desc": "HACCP, ISO, 규격서 등을 요청합니다.", "goto": "서류 요청(사용자)"},
+        {"emoji": "📣", "title": "VOC 로그", "desc": "VOC 및 이상 발생 내역을 저장합니다.", "goto": "VOC 기록(이상발생해석)"},
+    ]
 
-    for label, page_name in cards.items():
-        if st.button(label, key=page_name):
-            st.session_state['page'] = page_name
-            st.rerun()
+    # HTML 카드 생성
+    for c in cards:
+        card_html = f"""
+        <a href="#" onclick="fetch('/?page={c['goto']}'); window.location.reload();" style="text-decoration:none;">
+        <div class='feature-card'>
+            <div class='feature-icon'>{c['emoji']}</div>
+            <div class='feature-title'>{c['title']}</div>
+            <div class='feature-desc'>{c['desc']}</div>
+        </div>
+        </a>
+        """
+        st.markdown(card_html, unsafe_allow_html=True)
 
     st.markdown("</div>", unsafe_allow_html=True)
 
