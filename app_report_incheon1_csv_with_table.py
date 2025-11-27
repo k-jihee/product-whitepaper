@@ -714,26 +714,88 @@ def page_voc():
             st.write("심각도별 건수")
             st.bar_chart(df["severity"].value_counts())
 
+def page_home():
+    st.markdown("""
+        <h1 style='text-align:center; margin-bottom:20px;'>🏭 인천1공장 AI 포털</h1>
+        <style>
+            .search-box {
+                width: 80%;
+                margin: 0 auto;
+                margin-top: 30px;
+            }
+            .card-container {
+                display: flex;
+                justify-content: center;
+                gap: 25px;
+                margin-top: 40px;
+            }
+            .menu-card {
+                width: 180px;
+                padding: 25px;
+                background: #ffffff10;
+                border-radius: 16px;
+                text-align: center;
+                cursor: pointer;
+                border: 1px solid #ffffff30;
+            }
+            .menu-card:hover {
+                background: #ffffff20;
+            }
+        </style>
+    """, unsafe_allow_html=True)
+
+    # 🔍 검색창 → 클릭하면 자동 챗봇 이동
+    query = st.text_input("","", placeholder="AI 에이전트에게 질문하기...", key="home_search")
+
+    if query:
+        st.session_state['page'] = "AI 에이전트"
+        st.rerun()
+
+    st.markdown("<div class='card-container'>", unsafe_allow_html=True)
+
+    # 4개의 메인 기능 카드
+    cards = {
+        "📘 제품백서": "제품백서",
+        "🤖 AI 에이전트": "AI 에이전트",
+        "🗂️ 서류 요청": "서류 요청(사용자)",
+        "📣 VOC 로그": "VOC 기록(이상발생해석)",
+    }
+
+    for label, page_name in cards.items():
+        if st.button(label, key=page_name):
+            st.session_state['page'] = page_name
+            st.rerun()
+
+    st.markdown("</div>", unsafe_allow_html=True)
+
 # ============================
 # 사이드바 네비게이션
 # ============================
 with st.sidebar:
-    st.markdown("## 🏭 삼양사 인천 1공장 AI 에이전트 🏭")
+    st.markdown("## 🏭 삼양사 인천 1공장 AI 에이전트")
     st.markdown("---")
     st.markdown("### 메뉴")
+
+    if "page" not in st.session_state:
+        st.session_state["page"] = "Home"
+
     page = st.radio(
         "섹션을 선택하세요",
-        ["AI 에이전트", "제품백서", "서류 요청(사용자)", "서류 승인(관리자)", "VOC 기록(이상발생해석)"],
-        label_visibility="collapsed",
-        index=2
+        ["Home", "AI 에이전트", "제품백서", "서류 요청(사용자)", "서류 승인(관리자)", "VOC 기록(이상발생해석)"],
+        index=["Home","AI 에이전트","제품백서","서류 요청(사용자)","서류 승인(관리자)","VOC 기록(이상발생해석)"].index(st.session_state["page"]),
+        label_visibility="collapsed"
     )
+
+    st.session_state["page"] = page
     st.markdown("---")
-    st.caption("© Samyang Incheon 1 Plant • Internal Use Only")
+
 
 # ============================
 # 라우팅
 # ============================
-if page == "AI 에이전트":
+if page == "Home":
+    page_home()
+elif page == "AI 에이전트":
     page_chatbot()
 elif page == "제품백서":
     page_product()
@@ -743,4 +805,5 @@ elif page == "서류 승인(관리자)":
     page_docs_admin()
 else:
     page_voc()
+
 
