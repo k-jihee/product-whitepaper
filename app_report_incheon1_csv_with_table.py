@@ -723,6 +723,7 @@ def page_home():
             align-items: stretch;
             gap: 25px;
             margin-top: 40px;
+            flex-wrap: nowrap;   /* 무조건 가로로 */
         }
         .feature-card {
             width: 230px;
@@ -753,42 +754,41 @@ def page_home():
             font-size: 13px;
             color: #666;
         }
+        a { text-decoration: none; color: inherit; }
         </style>
     """, unsafe_allow_html=True)
 
-    st.markdown("<h1 style='text-align:center;'>🏭 인천1공장 AI 포털</h1>", unsafe_allow_html=True)
+    st.markdown("<h1 style='text-align:center;'>🏭 인천1공장 AI 에이전트 🏭</h1>", unsafe_allow_html=True)
 
-    # 검색창 → 자동 챗봇 이동
     query = st.text_input("", "", placeholder="AI 에이전트에게 질문하기...")
-
     if query:
         st.session_state['page'] = "AI 에이전트"
         st.rerun()
 
-    st.markdown("<div class='feature-container'>", unsafe_allow_html=True)
-
     # 카드 데이터
     cards = [
-        {"emoji": "📘", "title": "제품 백서", "desc": "제품 정보, 규격, COA를 확인합니다.", "goto": "제품백서"},
         {"emoji": "🤖", "title": "AI 에이전트", "desc": "질문하면 바로 챗봇으로 이동합니다.", "goto": "AI 에이전트"},
+        {"emoji": "📘", "title": "제품 백서", "desc": "제품 정보, 규격, COA를 확인합니다.", "goto": "제품백서"},
         {"emoji": "🗂️", "title": "서류 요청", "desc": "HACCP, ISO, 규격서 등을 요청합니다.", "goto": "서류 요청(사용자)"},
-        {"emoji": "📣", "title": "VOC 로그", "desc": "VOC 및 이상 발생 내역을 저장합니다.", "goto": "VOC 기록(이상발생해석)"},
+        {"emoji": "📣", "title": "VOC 로그", "desc": "VOC 및 이상발생 내역을 기록합니다.", "goto": "VOC 기록(이상발생해석)"},
     ]
 
-    # HTML 카드 생성
+    # ---- 핵심: 카드 전체를 하나의 HTML 블록으로 렌더링 ----
+    html_cards = "<div class='feature-container'>"
     for c in cards:
-        card_html = f"""
-        <a href="#" onclick="fetch('/?page={c['goto']}'); window.location.reload();" style="text-decoration:none;">
-        <div class='feature-card'>
-            <div class='feature-icon'>{c['emoji']}</div>
-            <div class='feature-title'>{c['title']}</div>
-            <div class='feature-desc'>{c['desc']}</div>
-        </div>
+        html_cards += f"""
+        <a href="#" onclick="fetch('/?page={c['goto']}'); window.location.reload();">
+            <div class='feature-card'>
+                <div class='feature-icon'>{c['emoji']}</div>
+                <div class='feature-title'>{c['title']}</div>
+                <div class='feature-desc'>{c['desc']}</div>
+            </div>
         </a>
         """
-        st.markdown(card_html, unsafe_allow_html=True)
+    html_cards += "</div>"
 
-    st.markdown("</div>", unsafe_allow_html=True)
+    st.markdown(html_cards, unsafe_allow_html=True)
+
 
 # ============================
 # 사이드바 네비게이션
