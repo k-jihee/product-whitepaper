@@ -107,7 +107,7 @@ def show_intro_page():
 
             /* 🔹 텍스트/버튼 영역: 이미지 바로 아래에 위치하게 */
             .intro-section {
-                margin-top: -80px;        
+                margin-top: -200px;        
             }
 
             /* ✅ 버튼 글씨 강제 색상 지정 */
