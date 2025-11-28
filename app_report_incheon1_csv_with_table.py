@@ -59,14 +59,11 @@ def tweak_sidebar_arrow():
             stroke: #ffffff !important;
         }
 
-        /* 버튼 배경도 살짝 어둡게 (선택사항) */
+        /* 버튼 배경 / 테두리 제거 (투명) */
         [data-testid="stSidebarCollapseButton"] > button {
-            background-color: rgba(0, 0, 0, 0.6) !important;
-            border-radius: 999px !important;
-            border: 1px solid #ffffff80 !important;
-        }
-        [data-testid="stSidebarCollapseButton"] > button:hover {
-            background-color: rgba(255, 255, 255, 0.15) !important;
+            background: transparent !important;
+            border: none !important;
+            box-shadow: none !important;
         }
 
         /* ===========================
