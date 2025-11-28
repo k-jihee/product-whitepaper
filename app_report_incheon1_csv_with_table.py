@@ -93,7 +93,7 @@ def show_intro_page():
             /* intro 이미지 크기 */
             .intro-wrap img {
                 width: 100%;
-                max-width: 900px;
+                max-width: 1900px;
                 margin-left: auto;
                 margin-right: auto;
                 display: block;
@@ -112,6 +112,17 @@ def show_intro_page():
                 padding: 0.8rem 1.5rem;
                 font-weight: 600;
             }
+
+            /* 상단 로봇 이미지 아래로 이동 */
+            .hero-image {
+                margin-top: 60px;
+            }
+
+            /* 버튼 텍스트 색상 진하게 */
+            .enter-button {
+                color: #222 !important;
+                font-weight: 600;
+            }         
         </style>
     """, unsafe_allow_html=True)
 
