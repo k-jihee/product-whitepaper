@@ -1128,14 +1128,13 @@ def page_home():
             background: #eceff4 !important;
         }
 
-        /* ✅ Home 카드 컨테이너 테두리를 흰색으로 강제 */
-        /* st.container(border=True) 가 만들어내는 div 는 style 속성에 border 가 들어가므로,
-           그걸 기준으로 잡아서 색을 덮어쓴다 */
-        div[data-testid="stVerticalBlock"] > div[style*="border: 1px solid"] {
+        /* ✅ Home에서 border=True 걸린 컨테이너 테두리를 흰색으로 강제 */
+        div[data-testid="stVerticalBlock"] div[style*="border: 1px solid"] {
             border: 1px solid rgba(255,255,255,0.95) !important;
             border-radius: 18px !important;
             background: rgba(0,0,0,0.35) !important;
         }
+
 
         </style>
     """, unsafe_allow_html=True)
@@ -1170,8 +1169,6 @@ def page_home():
     if clicked:
         st.session_state["page"] = "인천 1공장 AI 챗봇"
         st.rerun()
-
-
 
 
     # 카드 데이터
