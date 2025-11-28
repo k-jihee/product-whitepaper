@@ -717,6 +717,30 @@ def page_voc():
 # 페이지: 홈 (대시보드)
 # ============================
 def page_home():
+def page_home():
+
+    # 🔥 챗봇 페이지에서 전체 레이아웃을 숨겼던 CSS 초기화 (타이틀이 다시 보이도록)
+    st.markdown("""
+        <style>
+        html, body,
+        [data-testid="stAppViewContainer"],
+        [data-testid="stMain"],
+        [data-testid="stSidebar"],
+        [data-testid="stVerticalBlock"] {
+            overflow: auto !important;
+            height: auto !important;
+        }
+        main .block-container {
+            padding: 1rem 2rem !important;
+            margin: auto !important;
+            max-width: 100% !important;
+        }
+        header[data-testid="stHeader"] {
+            display: block !important;
+        }
+        </style>
+    """, unsafe_allow_html=True)
+    
     # 🔎 질문하기 창(클릭 → 챗봇 이동)
     st.markdown("""
         <style>
@@ -737,6 +761,8 @@ def page_home():
         </style>
     """, unsafe_allow_html=True)
 
+    st.markdown("<h1 class='home-title'>🏭 인천1공장 AI 에이전트에 오신걸 환영합니다. 🏭</h1>", unsafe_allow_html=True)
+    st.markdown("<p class='home-sub'>주요 기능을 한 곳에서 빠르게 이동하세요.</p>", unsafe_allow_html=True)
     st.markdown("<div class='fake-input-btn'>", unsafe_allow_html=True)
     clicked = st.button("인천 1공장 AI 챗봇에게 질문하기...", use_container_width=True, key="fake_search")
     st.markdown("</div>", unsafe_allow_html=True)
