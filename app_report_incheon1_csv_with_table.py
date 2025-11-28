@@ -107,7 +107,7 @@ def show_intro_page():
             /* 버튼 글자색 */
             .stButton > button {
                 background-color: #ffffff;
-                color: #222222 !important;
+                color: #333 !important;
                 border-radius: 999px;
                 padding: 0.8rem 1.5rem;
                 font-weight: 600;
