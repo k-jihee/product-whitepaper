@@ -598,6 +598,15 @@ def page_product():
             border-radius: 8px;
         }
 
+        /* 🔹 Expander 제목 텍스트 검정색 */
+        div[data-testid="stExpander"] summary span,
+        div[data-testid="stExpander"] summary p,
+        div[data-testid="stExpander"] summary div {
+            color: #000000 !important;
+            font-weight: 600 !important;
+        }
+
+
         /* 안쪽 텍스트 색상 */
         main .block-container h1,
         main .block-container h2,
