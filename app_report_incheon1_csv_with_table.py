@@ -68,6 +68,11 @@ set_background("binary.PNG")   # 또는 "배경.PNG"
 # [추가] 인트로 화면 로직
 # ============================
 
+# 1. 인트로 시청 여부를 저장할 세션 변수 초기화 
+if "intro_done" not in 
+    st.session_state: 
+    st.session_state["intro_done"] = False
+
 def show_intro_page():
     st.markdown("""
         <style>
@@ -125,6 +130,22 @@ def show_intro_page():
         st.markdown(
             """
             <h2 style="text-align:center; margin-bottom:0.3rem;">
+                인천 1공장 AI 에이전트 포털
+            </h2>
+            <p style="text-align:center; color:#dddddd; font-size:0.95rem;">
+                제품 백서, 서류 요청, VOC 기록을 한 곳에서 관리하는 내부 포털입니다.
+            </p>
+            """,
+            unsafe_allow_html=True,
+        )
+
+        b_col1, b_col2, b_col3 = st.columns([1, 1, 1])
+        with b_col2:
+            if st.button("🚀 시스템 접속 (Enter)", use_container_width=True):
+                st.session_state["intro_done"] = True
+                st.rerun()
+
+        st.markdown("</div>", unsafe_allow_html=True)
 
 
 # 2. 로그인 성공 후, 인트로를 아직 안 봤다면 인트로 페이지 표시 후 중단
