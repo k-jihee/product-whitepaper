@@ -1156,21 +1156,29 @@ def page_home():
         .fake-input-btn .stButton > button:hover {
             background: #eceff4 !important;
         }
-
+    # 🔥 레이아웃 & 버튼 스타일 + 홈 카드 스타일
+    st.markdown("""
+        <style>
+        ...
         /* ---------- 홈 카드 컨테이너(= st.container) 전용 스타일 ---------- */
-        /* 안에 .home-card-marker 가 들어있는 st.container만 잡아서 스타일 적용 */
-        [data-testid="stContainer"]:has(.home-card-marker) {
-            border: 3px solid #ffffff !important;            /* 흰색 테두리 */
-            border-radius: 18px !important;                  /* 모서리 둥글게 */
-            padding: 20px 18px 16px 18px !important;         /* 안쪽 여백 */
-            background: rgba(0, 0, 0, 0.75) !important;      /* 카드 배경 */
-            box-shadow: 0 0 14px rgba(255, 255, 255, 0.25) !important;  /* 은은한 빛 */
-            margin-bottom: 20px !important;                  /* 아래 간격 */
+        /* 안에 .home-card-marker 가 들어있는 카드 영역만 잡아서 스타일 적용 */
+        [data-testid="stVerticalBlock"]:has(.home-card-marker) {
+            border: 3px solid #ffffff !important;            /* ✅ 테두리 완전 흰색 */
+            border-radius: 18px !important;
+            padding: 20px 18px 16px 18px !important;
+            background: rgba(0, 0, 0, 0.75) !important;
+            box-shadow: 0 0 14px rgba(255, 255, 255, 0.25) !important;
+            margin-bottom: 20px !important;
+        }
+
+        /* 안쪽 기본 border 제거 (테마 기본 테두리 숨기기) */
+        [data-testid="stVerticalBlock"]:has(.home-card-marker) > div {
+            border: none !important;
         }
 
         /* 카드 안 텍스트 색상 */
-        [data-testid="stContainer"]:has(.home-card-marker) h4,
-        [data-testid="stContainer"]:has(.home-card-marker) p {
+        [data-testid="stVerticalBlock"]:has(.home-card-marker) h4,
+        [data-testid="stVerticalBlock"]:has(.home-card-marker) p {
             color: #ffffff !important;
         }
 
