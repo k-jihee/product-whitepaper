@@ -1166,10 +1166,11 @@ def page_home():
     cols = st.columns(len(cards))
     for col, c in zip(cols, cards):
         with col:
-            with st.container():  # border=True 안 씀
-                # ✅ 여기서부터 우리가 직접 카드 박스를 만듦
+            with st.container():
+                # ✅ div “여는 태그”만 먼저 찍기
                 st.markdown("<div class='home-card-box'>", unsafe_allow_html=True)
 
+                # 👉 이 안에 들어가는 것들이 전부 테두리 안으로 들어감
                 st.markdown(
                     f"<p style='font-weight:700; margin-bottom:4px; color:#ffffff;'>"
                     f"{c['emoji']} {c['title']}</p>",
@@ -1179,13 +1180,13 @@ def page_home():
                     f"<p style='font-size:0.9rem; color:#f0f0f0;'>{c['desc']}</p>",
                     unsafe_allow_html=True
                 )
-                st.write("")
+                st.write("")  # 여백
 
                 if st.button("바로가기", key=f"go_{c['goto']}"):
                     st.session_state["page"] = c["goto"]
                     st.rerun()
 
-                # ✅ div 닫기
+                # ✅ 마지막에 div “닫는 태그”
                 st.markdown("</div>", unsafe_allow_html=True)
 
 
