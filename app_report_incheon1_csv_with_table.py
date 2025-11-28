@@ -72,11 +72,12 @@ set_background("binary.PNG")   # 또는 "배경.PNG"
 if "intro_done" not in st.session_state:
     st.session_state["intro_done"] = False
 
+
 def show_intro_page():
-    # 인트로 화면에서는 사이드바 숨기기 + 여백 조정
+    # 인트로 화면에서는 사이드바를 숨기고, 여백/폭을 조정
     st.markdown("""
         <style>
-            [data-testid="stSidebar"] {display: none;} /* 사이드바 숨김 */
+            [data-testid="stSidebar"] {display: none;}  /* 사이드바 숨김 */
             .block-container {
                 padding-top: 3rem;
                 max-width: 900px;
@@ -87,13 +88,12 @@ def show_intro_page():
     col1, col2, col3 = st.columns([1, 8, 1])
 
     with col2:
-        # ✅ 인트로 메인 이미지 (정적 이미지 / 로봇 일러스트 등)
-        #   ▶ intro_image.png 파일을 앱 폴더에 넣어두면 됩니다.
+        # ✅ 인트로 메인 이미지
+        #    intro_image.png 파일을 이 스크립트와 같은 폴더에 두세요.
         st.image("intro_image.png", use_container_width=True)
 
         st.markdown("---")
 
-        # 타이틀 + 한 줄 설명
         st.markdown(
             """
             <h2 style="text-align:center; margin-bottom:0.3rem;">
@@ -115,6 +115,12 @@ def show_intro_page():
             if st.button("🚀 시스템 접속 (Enter)", use_container_width=True):
                 st.session_state["intro_done"] = True
                 st.rerun()
+
+
+# 2. 로그인 성공 후, 인트로를 아직 안 봤다면 인트로 페이지 표시 후 중단
+if st.session_state.authenticated and not st.session_state["intro_done"]:
+    show_intro_page()
+    st.stop()  # 여기서 코드 실행 종료 → 아래 Home/사이드바 안 나옴
 
 # ============================
 # 공용 유틸
