@@ -56,7 +56,7 @@ if not st.session_state.authenticated:
     st.stop()
 
 # ✅ 여기 추가
-set_background("bg_binary.png")
+set_background("binary.png")
 
 
 # ============================
