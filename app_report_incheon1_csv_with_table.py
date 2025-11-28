@@ -90,21 +90,21 @@ def show_intro_page():
                 max-width: 1100px;
             }
 
-            /* intro 이미지 크기 */
+            /* 🔹 인트로 이미지 크기 & 정렬 */
             .intro-wrap img {
-                width: 120%;
-                max-width: 1200px;
+                width: 135%;             /* 기존 120% → 135% 로 확대 */
+                max-width: 1350px;       /* 최대치도 같이 키움 */
                 margin-left: auto;
                 margin-right: auto;
                 display: block;
             }
 
-            /* ⬆️ 여기 추가: 텍스트·버튼을 위로 올리는 영역 */
+            /* 🔹 텍스트/버튼 영역: 이미지 바로 아래에 위치하게 */
             .intro-section {
-                margin-top: -80px;   /* 원하는 만큼 숫자 조절 가능 */
+                margin-top: 20px;        /* 기존 -80px → 20px (위로 안 끌어올림) */
             }
 
-            /* 버튼 글자색 */
+            /* 버튼 스타일 */
             .stButton > button {
                 background-color: #ffffff;
                 color: #333 !important;
@@ -113,7 +113,7 @@ def show_intro_page():
                 font-weight: 600;
             }
 
-            /* 상단 로봇 이미지 아래로 이동 */
+            /* 상단 로봇 이미지 아래로 이동 (필요시 여백 조정) */
             .hero-image {
                 margin-top: 60px;
             }
@@ -134,7 +134,7 @@ def show_intro_page():
 
         st.markdown("---")
 
-        # ⬇️ 텍스트 + 버튼을 intro-section 클래스로 묶어 위로 올림
+        # ⬇️ 텍스트 + 버튼 영역 (이미지 바로 아래)
         st.markdown('<div class="intro-section">', unsafe_allow_html=True)
 
         st.markdown(
@@ -156,6 +156,7 @@ def show_intro_page():
                 st.rerun()
 
         st.markdown("</div>", unsafe_allow_html=True)
+
 
 
 # 2. 로그인 성공 후, 인트로를 아직 안 봤다면 인트로 페이지 표시 후 중단
