@@ -746,19 +746,19 @@ def page_home():
     """, unsafe_allow_html=True)
 
     # 상단 타이틀
-    st.markdown("<h1 class='home-title'>🏭 인천1공장 AI 포털</h1>", unsafe_allow_html=True)
+    st.markdown("<h1 class='home-title'>🏭 인천1공장 AI 에이전트에 오신걸 환영합니다. 🏭 </h1>", unsafe_allow_html=True)
     st.markdown("<p class='home-sub'>주요 기능을 한 곳에서 빠르게 이동하세요.</p>", unsafe_allow_html=True)
 
-    # 검색창 → AI 에이전트로 이동
-    query = st.text_input("", "", placeholder="AI 에이전트에게 질문하기...")
+    # 검색창 → 인천 1공장 AI 챗봇으로 이동
+    query = st.text_input("", "", placeholder="인천 1공장 AI 챗봇에게 질문하기...")
     if query:
-        st.session_state["page"] = "AI 에이전트"
+        st.session_state["page"] = "인천 1공장 AI 챗봇"
         st.rerun()
 
     # 카드 데이터
     cards = [
+        {"emoji": "🤖", "title": "인천 1공장 AI 챗봇", "desc": "질문하면 바로 챗봇으로 이동합니다.", "goto": "인천 1공장 AI 챗봇"},
         {"emoji": "📘", "title": "제품 백서", "desc": "제품 정보, 규격, COA를 확인합니다.", "goto": "제품백서"},
-        {"emoji": "🤖", "title": "AI 에이전트", "desc": "질문하면 바로 챗봇으로 이동합니다.", "goto": "AI 에이전트"},
         {"emoji": "🗂️", "title": "서류 요청", "desc": "HACCP, ISO, 규격서 등을 요청합니다.", "goto": "서류 요청(사용자)"},
         {"emoji": "📣", "title": "VOC 로그", "desc": "VOC 및 이상 발생 내역을 기록합니다.", "goto": "VOC 기록(이상발생해석)"},
     ]
@@ -795,8 +795,8 @@ with st.sidebar:
 
     page = st.radio(
         "섹션을 선택하세요",
-        ["Home", "AI 에이전트", "제품백서", "서류 요청(사용자)", "서류 승인(관리자)", "VOC 기록(이상발생해석)"],
-        index=["Home","AI 에이전트","제품백서","서류 요청(사용자)","서류 승인(관리자)","VOC 기록(이상발생해석)"].index(st.session_state["page"]),
+        ["Home", "인천 1공장 AI 챗봇", "제품백서", "서류 요청(사용자)", "서류 승인(관리자)", "VOC 기록(이상발생해석)"],
+        index=["Home","인천 1공장 AI 챗봇","제품백서","서류 요청(사용자)","서류 승인(관리자)","VOC 기록(이상발생해석)"].index(st.session_state["page"]),
         label_visibility="collapsed"
     )
 
@@ -810,7 +810,7 @@ with st.sidebar:
 # ============================
 if page == "Home":
     page_home()
-elif page == "AI 에이전트":
+elif page == "인천 1공장 AI 챗봇":
     page_chatbot()
 elif page == "제품백서":
     page_product()
