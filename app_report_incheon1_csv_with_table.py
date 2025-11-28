@@ -1127,7 +1127,7 @@ def page_home():
             max-width: 100% !important;
         }
 
-        /* 모든 버튼: 흰 배경 + 진한 글씨 */
+        /* 기본 버튼: 흰 배경 + 진한 글씨 */
         .stButton > button {
             background-color: #ffffff !important;
             color: #111111 !important;
@@ -1157,19 +1157,26 @@ def page_home():
             background: #eceff4 !important;
         }
 
-        /* ---------- 홈 카드 영역 전용 스타일 ---------- */
-        .home-card {
-            border: 3px solid #ffffff;            /* 흰색 테두리 */
-            border-radius: 18px;                  /* 모서리 둥글게 */
-            padding: 20px 18px 16px 18px;         /* 안쪽 여백 */
-            background: rgba(0, 0, 0, 0.75);      /* 카드 배경 */
-            box-shadow: 0 0 14px rgba(255, 255, 255, 0.35);  /* 흰색 빛 번짐 */
-            margin-bottom: 20px;                  /* 아래 간격 */
+        /* ---------- 홈 카드 컨테이너(= st.container) 전용 스타일 ---------- */
+        /* 안에 .home-card-marker 가 들어있는 st.container만 잡아서 스타일 적용 */
+        [data-testid="stContainer"]:has(.home-card-marker) {
+            border: 3px solid #ffffff !important;            /* 흰색 테두리 */
+            border-radius: 18px !important;                  /* 모서리 둥글게 */
+            padding: 20px 18px 16px 18px !important;         /* 안쪽 여백 */
+            background: rgba(0, 0, 0, 0.75) !important;      /* 카드 배경 */
+            box-shadow: 0 0 14px rgba(255, 255, 255, 0.25) !important;  /* 은은한 빛 */
+            margin-bottom: 20px !important;                  /* 아래 간격 */
         }
 
-        .home-card h4,
-        .home-card p {
-            color: #ffffff;
+        /* 카드 안 텍스트 색상 */
+        [data-testid="stContainer"]:has(.home-card-marker) h4,
+        [data-testid="stContainer"]:has(.home-card-marker) p {
+            color: #ffffff !important;
+        }
+
+        /* 마커 자체는 화면에 보이지 않게 숨김 */
+        .home-card-marker {
+            display: none;
         }
         </style>
     """, unsafe_allow_html=True)
@@ -1216,10 +1223,10 @@ def page_home():
 
     for col, c in zip(cols, cards):
         with col:
-            # 바깥은 테두리 없는 일반 컨테이너
-            with st.container():
-                # 카드 시작 (white border)
-                st.markdown("<div class='home-card'>", unsafe_allow_html=True)
+            # 이 컨테이너에만 흰 테두리 카드 스타일을 적용
+            with st.container(border=True):
+                # CSS가 이 컨테이너를 찾을 수 있도록 마커 하나 심어두기
+                st.markdown("<span class='home-card-marker'></span>", unsafe_allow_html=True)
 
                 # 제목
                 st.markdown(
@@ -1243,13 +1250,10 @@ def page_home():
 
                 st.write("")  # 여백
 
-                # 버튼
+                # 버튼 (Streamlit 버튼 그대로 사용)
                 if st.button("바로가기", key=f"go_{c['goto']}"):
                     st.session_state["page"] = c["goto"]
                     st.rerun()
-
-                # 카드 종료
-                st.markdown("</div>", unsafe_allow_html=True)
 
 
 
