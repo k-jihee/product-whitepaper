@@ -180,7 +180,7 @@ def load_product_df():
         return pd.DataFrame()
 
 # ============================
-# 페이지: AI 에이전트(플레이스홀더)
+# 페이지: AI 챗봇(플레이스홀더)
 # ============================
 def page_chatbot():
     # 0) 이 페이지에서는 헤더/사이드바/메인 컨테이너 스크롤 전부 숨기기
@@ -804,7 +804,7 @@ def page_home():
 # 사이드바 네비게이션
 # ============================
 with st.sidebar:
-    st.markdown("## 🏭 삼양사 인천 1공장 AI 에이전트")
+    st.markdown("## 🏭 인천 1공장 AI 에이전트 🏭")
     st.markdown("---")
     st.markdown("### 메뉴")
 
