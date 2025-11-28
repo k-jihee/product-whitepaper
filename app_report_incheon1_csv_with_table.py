@@ -1223,9 +1223,7 @@ def page_home():
 
     for col, c in zip(cols, cards):
         with col:
-            # 이 컨테이너에만 흰 테두리 카드 스타일을 적용
-            with st.container(border=True):
-                # CSS가 이 컨테이너를 찾을 수 있도록 마커 하나 심어두기
+            with st.container():
                 st.markdown("<span class='home-card-marker'></span>", unsafe_allow_html=True)
 
                 # 제목
