@@ -1079,12 +1079,18 @@ def page_home():
             max-width: 100% !important;
         }
 
-        /* 기본 버튼 스타일 (흰 배경 + 진한 글씨) */
+        /* 기본 버튼 스타일 (카드 모양 네모) */
         .stButton > button {
             background-color: #ffffff !important;
             color: #111111 !important;
             font-weight: 600 !important;
-            border-radius: 999px !important;
+            border-radius: 16px !important;
+            padding: 14px 18px !important;
+            text-align: left !important;
+            white-space: pre-line !important;   /* 줄바꿈(\n) 반영 */
+            height: 80px !important;            /* 네모 높이 */
+            box-shadow: 0 4px 14px rgba(0,0,0,0.30) !important;
+            border: 1px solid rgba(255,255,255,0.95) !important;
         }
         .stButton > button * {
             color: #111111 !important;
@@ -1118,7 +1124,7 @@ def page_home():
             color: #ffffff !important;
         }
 
-        /* 🔍 상단 '질문하기' 가짜 입력창 버튼 */
+        /* 🔍 상단 '질문하기' 가짜 입력창 버튼 (이건 별도 스타일) */
         .fake-input-btn .stButton > button {
             width: 100% !important;
             border-radius: 10px !important;
@@ -1128,6 +1134,8 @@ def page_home():
             padding: 12px 16px !important;
             font-size: 14px !important;
             height: 46px !important;
+            box-shadow: none !important;
+            white-space: nowrap !important;
         }
         .fake-input-btn .stButton > button,
         .fake-input-btn .stButton > button * {
@@ -1135,27 +1143,6 @@ def page_home():
         }
         .fake-input-btn .stButton > button:hover {
             background: #eceff4 !important;
-        }
-
-        /* 🔳 홈 화면 카드용 커스텀 박스 */
-        .home-card-box {
-            background: rgba(255,255,255,0.94) !important;   /* 거의 흰색 */
-            border-radius: 18px !important;
-            padding: 18px 20px !important;
-            box-shadow: 0 4px 14px rgba(0,0,0,0.30) !important;
-            border: 1px solid rgba(255,255,255,0.95) !important;
-        }
-
-        .home-card-title {
-            font-weight: 700;
-            font-size: 1.05rem;
-            margin-bottom: 0.35rem;
-            color: #000000 !important;
-        }
-        .home-card-desc {
-            font-size: 0.9rem;
-            margin-bottom: 0.7rem;
-            color: #000000 !important;
         }
         </style>
     """, unsafe_allow_html=True)
@@ -1173,7 +1160,7 @@ def page_home():
         st.session_state["page"] = "인천 1공장 AI 챗봇"
         st.rerun()
 
-    # 🔹 카드 데이터
+    # 🔹 카드 데이터 (네모 박스 안에 들어갈 텍스트)
     cards = [
         {"emoji": "🤖", "title": "인천 1공장 AI 챗봇", "desc": "질문하면 바로 챗봇으로 이동합니다.", "goto": "인천 1공장 AI 챗봇"},
         {"emoji": "📘", "title": "제품 백서", "desc": "제품 정보, 규격, COA를 확인합니다.", "goto": "제품백서"},
@@ -1181,28 +1168,15 @@ def page_home():
         {"emoji": "📣", "title": "VOC 로그", "desc": "VOC 및 이상 발생 내역을 기록합니다.", "goto": "VOC 기록(이상발생해석)"},
     ]
 
-    # 🔳 가로 4칸 카드 – 각 칸 안에 home-card-box div로 감싸기
+    # 🔳 가로 4칸 카드 – 버튼 자체가 네모 박스
     cols = st.columns(len(cards))
     for col, c in zip(cols, cards):
         with col:
-            # 여기서 우리가 직접 만든 흰색 박스로 감쌈
-            st.markdown("<div class='home-card-box'>", unsafe_allow_html=True)
-
-            st.markdown(
-                f"<div class='home-card-title'>{c['emoji']} {c['title']}</div>",
-                unsafe_allow_html=True
-            )
-            st.markdown(
-                f"<div class='home-card-desc'>{c['desc']}</div>",
-                unsafe_allow_html=True
-            )
-
-            # 버튼은 그대로 st.button 사용
-            if st.button("바로가기", key=f"go_{c['goto']}"):
+            label = f"{c['emoji']} {c['title']}\n{c['desc']}"  # \n으로 두 줄
+            if st.button(label, key=f"go_{c['goto']}", use_container_width=True):
                 st.session_state["page"] = c["goto"]
                 st.rerun()
 
-            st.markdown("</div>", unsafe_allow_html=True)  # home-card-box 닫기
 
 
 
