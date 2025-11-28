@@ -1044,12 +1044,11 @@ def page_voc():
             st.write("심각도별 건수")
             st.bar_chart(df["severity"].value_counts())
 
-
 # ============================
 # 페이지: 홈 (대시보드)
 # ============================
 def page_home():
-    # 🔧 홈 화면 공통 스타일 (스크롤, 헤더, 버튼, 화살표, 카드 박스)
+    # 🔧 홈 화면 전용 스타일
     st.markdown("""
         <style>
         /* 레이아웃 복원 */
@@ -1079,7 +1078,7 @@ def page_home():
             max-width: 100% !important;
         }
 
-        /* 모든 기본 버튼 스타일 */
+        /* 기본 버튼 스타일 (흰 배경 + 진한 글씨) */
         .stButton > button {
             background-color: #ffffff !important;
             color: #111111 !important;
@@ -1090,18 +1089,15 @@ def page_home():
             color: #111111 !important;
         }
 
-        /* 🔥 사이드바 토글 화살표(≪, ≫)를 흰색으로 */
-        [data-testid="collapsedControl"] svg,
-        [data-testid="stSidebarNav"] svg {
-            fill: #ffffff !important;
-            stroke: #ffffff !important;
-            color: #ffffff !important;
+        /* 🔥 사이드바 접기/펼치기 화살표 버튼 스타일 */
+        [data-testid="collapsedControl"] {
+            background-color: rgba(0,0,0,0.7) !important;  /* 검은 원 배경 */
+            border-radius: 999px !important;
         }
-        [data-testid="collapsedControl"] svg:hover,
-        [data-testid="stSidebarNav"] svg:hover {
+        [data-testid="collapsedControl"] svg {
+            color: #ffffff !important;   /* 화살표는 흰색 */
             fill: #ffffff !important;
             stroke: #ffffff !important;
-            color: #ffffff !important;
         }
 
         /* 🔍 상단 '질문하기' 가짜 입력창 버튼 */
@@ -1123,27 +1119,26 @@ def page_home():
             background: #eceff4 !important;
         }
 
-        /* 🔳 홈 화면 카드 네모(4개) - 흰색 박스 + 테두리/그림자 */
-        .home-card-box {
-            background: rgba(255, 255, 255, 0.92);
-            border-radius: 16px;
-            padding: 18px 20px;
-            box-shadow: 0 4px 14px rgba(0,0,0,0.30);
-            border: 1px solid rgba(255,255,255,0.95);
-            min-height: 150px;
-        }
-        .home-card-box * {
-            color: #000000 !important;
+        /* 🔳 홈 화면 카드 네모: container(border=True)에 흰 배경 & 테두리 적용 */
+        /* 이 페이지에서 사용하는 st.container(border=True)는 모두 카드라고 가정 */
+        [data-testid="stContainer"] {
+            background: rgba(255,255,255,0.92) !important;
+            border-radius: 16px !important;
+            padding: 18px 20px !important;
+            box-shadow: 0 4px 14px rgba(0,0,0,0.30) !important;
+            border: 1px solid rgba(255,255,255,0.95) !important;
         }
 
         .home-card-title {
             font-weight: 700;
             font-size: 1.05rem;
             margin-bottom: 0.35rem;
+            color: #000000 !important;
         }
         .home-card-desc {
             font-size: 0.9rem;
             margin-bottom: 0.7rem;
+            color: #000000 !important;
         }
         </style>
     """, unsafe_allow_html=True)
@@ -1168,27 +1163,25 @@ def page_home():
         {"emoji": "📣", "title": "VOC 로그", "desc": "VOC 및 이상 발생 내역을 기록합니다.", "goto": "VOC 기록(이상발생해석)"},
     ]
 
-    # 🔳 가로 4칸 카드 — 흰색 박스로 감싸기
+    # 🔳 가로 4칸 카드 — st.container(border=True) 안에 텍스트/버튼 넣기
     cols = st.columns(len(cards))
     for col, c in zip(cols, cards):
         with col:
-            st.markdown("<div class='home-card-box'>", unsafe_allow_html=True)
+            with st.container(border=True):
+                st.markdown(
+                    f"<div class='home-card-title'>{c['emoji']} {c['title']}</div>",
+                    unsafe_allow_html=True
+                )
+                st.markdown(
+                    f"<div class='home-card-desc'>{c['desc']}</div>",
+                    unsafe_allow_html=True
+                )
+                st.write("")  # 여백
 
-            st.markdown(
-                f"<div class='home-card-title'>{c['emoji']} {c['title']}</div>",
-                unsafe_allow_html=True
-            )
-            st.markdown(
-                f"<div class='home-card-desc'>{c['desc']}</div>",
-                unsafe_allow_html=True
-            )
-            st.write("")  # 여백
+                if st.button("바로가기", key=f"go_{c['goto']}"):
+                    st.session_state["page"] = c["goto"]
+                    st.rerun()
 
-            if st.button("바로가기", key=f"go_{c['goto']}"):
-                st.session_state["page"] = c["goto"]
-                st.rerun()
-
-            st.markdown("</div>", unsafe_allow_html=True)
 
 
 
