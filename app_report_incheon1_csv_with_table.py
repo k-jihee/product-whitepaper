@@ -1111,13 +1111,14 @@ def page_home():
             background: #eceff4 !important;
         }
 
-        /* ✅ 홈 화면 메인 영역 카드 컨테이너 테두리를 흰색·두껍게 */
-        [data-testid="stMain"] div[data-testid="stContainer"] {
-            border: 2px solid rgba(255,255,255,0.95) !important;  /* 흰색 & 두께 2px */
-            border-radius: 16px !important;
-            padding: 16px 18px 14px 18px !important;              /* 안쪽 여백 */
-            background: rgba(0,0,0,0.35) !important;              /* 어두운 반투명 배경 */
+        /* ✅ Home 카드: st.columns 안에 있는 컨테이너만 흰색 두꺼운 테두리 */
+        [data-testid="stMain"] [data-testid="column"] div[data-testid="stContainer"] {
+            border: 2px solid #ffffff !important;           /* 순수 흰색 2px */
+            border-radius: 18px !important;
+            background: rgba(0,0,0,0.35) !important;        /* 살짝 어두운 배경 유지 */
+            padding: 18px 18px 14px 18px !important;
         }
+
 
         </style>
     """, unsafe_allow_html=True)
@@ -1165,11 +1166,8 @@ def page_home():
     cols = st.columns(len(cards))
     for col, c in zip(cols, cards):
         with col:
-            # border=True 빼고, 대신 안쪽에 마커를 하나 심어줌
-            with st.container():
-                # 👇 이 한 줄이 CSS에서 잡을 “마커”
-                st.markdown("<div class='home-card-marker'></div>", unsafe_allow_html=True)
-
+            # ✅ 여기 다시 border=True 사용
+            with st.container(border=True):
                 st.markdown(
                     f"<p style='font-weight:700; margin-bottom:4px; color:#ffffff;'>"
                     f"{c['emoji']} {c['title']}</p>",
@@ -1183,7 +1181,6 @@ def page_home():
                 if st.button("바로가기", key=f"go_{c['goto']}"):
                     st.session_state["page"] = c["goto"]
                     st.rerun()
-
 
 
 # ============================
