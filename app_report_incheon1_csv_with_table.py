@@ -1048,11 +1048,11 @@ def page_voc():
 # ============================
 # 페이지: 홈 (대시보드)
 # ============================
+
 def page_home():
-    # 🔧 홈 화면 전용 스타일
+    # 🔥 챗봇 페이지에서 숨겼던 레이아웃 복원 + 헤더/버튼 스타일 조정
     st.markdown("""
         <style>
-        /* 레이아웃 복원 */
         html, body,
         [data-testid="stAppViewContainer"],
         [data-testid="stMain"],
@@ -1062,64 +1062,37 @@ def page_home():
             height: auto !important;
         }
 
-        /* 상단 헤더 투명 + 그림자 제거 */
+        /* 🔶 상단 흰색 헤더 배경 제거 */
         header[data-testid="stHeader"] {
             display: block !important;
             background: transparent !important;
             box-shadow: none !important;
         }
+
+        /* 헤더 바로 아래 생기는 흰 여백 제거 */
         header[data-testid="stHeader"] + div {
             padding-top: 0 !important;
         }
 
-        /* 메인 컨테이너 여백/폭 */
+        /* 메인 컨테이너 여백/폭 조정 */
         main .block-container {
             padding: 1rem 2rem 2rem 2rem !important;
             margin: auto !important;
             max-width: 100% !important;
         }
 
-        /* 홈 카드 안의 '바로가기' 버튼만 스타일 적용 */
-        .home-card-box .stButton > button {
+        /* 🔶 모든 버튼 공통: 흰 배경 + 진한 글씨 */
+        .stButton > button {
             background-color: #ffffff !important;
             color: #111111 !important;
             font-weight: 600 !important;
             border-radius: 999px !important;
         }
-        .home-card-box .stButton > button * {
+        .stButton > button * {
             color: #111111 !important;
         }
 
-
-        /* 🔥 사이드바 접기/펼치기 화살표 버튼 (왼쪽 위 동그라미) */
-        [data-testid="stSidebarCollapseButton"],
-        [data-testid="collapsedControl"] {
-            background-color: rgba(0,0,0,0.7) !important;  /* 검은 원 배경 */
-            border-radius: 999px !important;
-        }
-        [data-testid="stSidebarCollapseButton"] svg,
-        [data-testid="collapsedControl"] svg {
-            color: #ffffff !important;   /* 화살표 흰색 */
-            fill: #ffffff !important;
-            stroke: #ffffff !important;
-        }
-
-        /* 🔥 오른쪽 상단 메뉴/툴바 아이콘도 흰색 */
-        header [data-testid="stToolbar"] svg,
-        header [data-testid="stMainMenu"] svg {
-            fill: #ffffff !important;
-            stroke: #ffffff !important;
-            color: #ffffff !important;
-        }
-
-        header [data-testid="stToolbar"] svg:hover,
-        header [data-testid="stMainMenu"] svg:hover {
-            fill: #ffffff !important;
-            stroke: #ffffff !important;
-            color: #ffffff !important;
-        }
-
-        /* 🔍 상단 '질문하기' 가짜 입력창 버튼 (이건 별도 스타일) */
+        /* 🔶 홈 화면 위쪽 '질문하기' 가짜 입력창 버튼 */
         .fake-input-btn .stButton > button {
             width: 100% !important;
             border-radius: 10px !important;
@@ -1140,11 +1113,29 @@ def page_home():
         </style>
     """, unsafe_allow_html=True)
 
-    # 제목 + 서브텍스트
+    
+    # 🔎 질문하기 창(클릭 → 챗봇 이동)
+    st.markdown("""
+        <style>
+        .fake-input-btn button {
+            width: 100% !important;
+            border-radius: 10px !important;
+            border: 1px solid #ff4b4b !important;
+            background: #f5f6fa !important;
+            color: #888 !important;
+            text-align: left !important;
+            padding: 12px 16px !important;
+            font-size: 14px !important;
+            height: 46px !important;
+        }
+        .fake-input-btn button:hover {
+            background: #eceff4 !important;
+        }
+        </style>
+    """, unsafe_allow_html=True)
+
     st.markdown("<h1 class='home-title'>🏭 인천1공장 AI 에이전트 🏭</h1>", unsafe_allow_html=True)
     st.markdown("<p class='home-sub'>주요 기능을 한 곳에서 빠르게 이동하세요.</p>", unsafe_allow_html=True)
-
-    # 🔎 질문하기 창(클릭 → 챗봇 이동)
     st.markdown("<div class='fake-input-btn'>", unsafe_allow_html=True)
     clicked = st.button("인천 1공장 AI 챗봇에게 질문하기...", use_container_width=True, key="fake_search")
     st.markdown("</div>", unsafe_allow_html=True)
@@ -1153,7 +1144,10 @@ def page_home():
         st.session_state["page"] = "인천 1공장 AI 챗봇"
         st.rerun()
 
-    # 🔹 카드 데이터 (네모 박스 안에 들어갈 텍스트)
+
+
+
+    # 카드 데이터
     cards = [
         {"emoji": "🤖", "title": "인천 1공장 AI 챗봇", "desc": "질문하면 바로 챗봇으로 이동합니다.", "goto": "인천 1공장 AI 챗봇"},
         {"emoji": "📘", "title": "제품 백서", "desc": "제품 정보, 규격, COA를 확인합니다.", "goto": "제품백서"},
@@ -1161,16 +1155,23 @@ def page_home():
         {"emoji": "📣", "title": "VOC 로그", "desc": "VOC 및 이상 발생 내역을 기록합니다.", "goto": "VOC 기록(이상발생해석)"},
     ]
 
-    # 🔳 가로 4칸 카드 – 버튼 자체가 네모 박스
+    # 🔹 가로 4칸 카드 (st.columns 사용)
     cols = st.columns(len(cards))
     for col, c in zip(cols, cards):
         with col:
-            label = f"{c['emoji']} {c['title']}\n{c['desc']}"  # \n으로 두 줄
-            if st.button(label, key=f"go_{c['goto']}", use_container_width=True):
-                st.session_state["page"] = c["goto"]
-                st.rerun()
-
-
+            with st.container(border=True):
+                st.markdown(
+                    f"<div class='home-card-title'>{c['emoji']} {c['title']}</div>",
+                    unsafe_allow_html=True
+                )
+                st.markdown(
+                    f"<div class='home-card-desc'>{c['desc']}</div>",
+                    unsafe_allow_html=True
+                )
+                st.write("")  # 여백
+                if st.button("바로가기", key=f"go_{c['goto']}"):
+                    st.session_state["page"] = c["goto"]
+                    st.rerun()
 
 
 # ============================
