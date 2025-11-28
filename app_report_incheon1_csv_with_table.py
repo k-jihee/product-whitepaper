@@ -92,8 +92,8 @@ def show_intro_page():
 
             /* intro 이미지 크기 */
             .intro-wrap img {
-                width: 100%;
-                max-width: 1900px;
+                width: 120%;
+                max-width: 1200px;
                 margin-left: auto;
                 margin-right: auto;
                 display: block;
@@ -120,7 +120,7 @@ def show_intro_page():
 
             /* 버튼 텍스트 색상 진하게 */
             .enter-button {
-                color: #222 !important;
+                color: #333 !important;
                 font-weight: 600;
             }         
         </style>
@@ -140,7 +140,7 @@ def show_intro_page():
         st.markdown(
             """
             <h2 style="text-align:center; margin-bottom:0.3rem;">
-                인천 1공장 AI 에이전트 포털
+                인천 1공장 AI 에이전트
             </h2>
             <p style="text-align:center; color:#dddddd; font-size:0.95rem;">
                 제품 백서, 서류 요청, VOC 기록을 한 곳에서 관리하는 내부 포털입니다.
