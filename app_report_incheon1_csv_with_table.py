@@ -717,7 +717,7 @@ def page_voc():
 # 페이지: 홈 (대시보드)
 # ============================
 def page_home():
-    # 질문하기 창처럼 보이는 전체폭 버튼 → 클릭 시 챗봇 페이지로 이동
+    # 🔎 질문하기 창(클릭 → 챗봇 이동)
     st.markdown("""
         <style>
         .fake-input-btn button {
@@ -727,8 +727,9 @@ def page_home():
             background: #f5f6fa !important;
             color: #888 !important;
             text-align: left !important;
-            padding: 10px 16px !important;
+            padding: 12px 16px !important;
             font-size: 14px !important;
+            height: 46px !important;
         }
         .fake-input-btn button:hover {
             background: #eceff4 !important;
@@ -736,14 +737,14 @@ def page_home():
         </style>
     """, unsafe_allow_html=True)
 
-    with st.container():
-        st.markdown("<div class='fake-input-btn'>", unsafe_allow_html=True)
-        clicked = st.button("인천 1공장 AI 챗봇에게 질문하기...", use_container_width=True)
-        st.markdown("</div>", unsafe_allow_html=True)
+    st.markdown("<div class='fake-input-btn'>", unsafe_allow_html=True)
+    clicked = st.button("인천 1공장 AI 챗봇에게 질문하기...", use_container_width=True, key="fake_search")
+    st.markdown("</div>", unsafe_allow_html=True)
 
     if clicked:
         st.session_state["page"] = "인천 1공장 AI 챗봇"
         st.rerun()
+
 
 
 
