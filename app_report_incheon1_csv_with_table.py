@@ -93,10 +93,19 @@ def show_intro_page():
             /* 🔥 intro 이미지 크게 보이게 (st.image 래핑용) */
             .intro-wrap img {
                 width: 100%;
-                max-width: 900px;  /* 더 키우려면 1100px, 1200px 등으로 변경 */
+                max-width: 1100px;  /* 더 키우려면 1100px, 1200px 등으로 변경 */
                 margin-left: auto;
                 margin-right: auto;
                 display: block;
+            }
+
+            /* ✅ 인트로 페이지 '시스템 접속' 버튼 스타일 */
+            .stButton > button {
+                background-color: #ffffff;      /* 버튼 배경 흰색 */
+                color: #222222 !important;      /* 글자 진한 회색(잘 보이게) */
+                border-radius: 999px;           /* 둥근 버튼 (선택사항) */
+                padding: 0.8rem 1.5rem;
+                font-weight: 600;
             }
         </style>
     """, unsafe_allow_html=True)
