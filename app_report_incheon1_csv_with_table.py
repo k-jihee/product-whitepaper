@@ -1113,7 +1113,7 @@ def page_home():
 
         /* ✅ Home 카드: st.columns 안에 있는 컨테이너만 흰색 두꺼운 테두리 */
         [data-testid="stMain"] [data-testid="column"] div[data-testid="stContainer"] {
-            border: 2px solid #ffffff !important;           /* 순수 흰색 2px */
+            border: 10px solid #ffffff !important;           /* 순수 흰색 2px */
             border-radius: 18px !important;
             background: rgba(0,0,0,0.35) !important;        /* 살짝 어두운 배경 유지 */
             padding: 18px 18px 14px 18px !important;
