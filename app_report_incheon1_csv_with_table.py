@@ -44,12 +44,30 @@ def set_background(image_path: str):
         unsafe_allow_html=True,
     )
 
+def tweak_sidebar_arrow():
+    st.markdown(
+        """
+        <style>
+        /* 사이드바 접기/펼치기 화살표 색상 흰색으로 */
+        [data-testid="collapsedControl"] svg {
+            fill: #ffffff !important;   /* 아이콘 면 색 */
+            color: #ffffff !important;  /* 일부 브라우저용 */
+        }
+        [data-testid="collapsedControl"] {
+            color: #ffffff !important;  /* 버튼 자체 색 */
+        }
+        </style>
+        """,
+        unsafe_allow_html=True,
+    )
+
 st.set_page_config(
     page_title="인천1공장 AI 에이전트",
     layout="wide",
     initial_sidebar_state="collapsed"   # ✅ 사이드바 기본 접힘
 )
 
+tweak_sidebar_arrow()
 
 PASSWORD = os.environ.get("INCHON1_PORTAL_PASSWORD", "samyang!11")
 
