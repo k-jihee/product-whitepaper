@@ -48,14 +48,25 @@ def tweak_sidebar_arrow():
     st.markdown(
         """
         <style>
-        /* 사이드바 접기/펼치기 화살표 색상 흰색으로 */
-        [data-testid="collapsedControl"] svg {
-            fill: #ffffff !important;   /* 아이콘 면 색 */
-            color: #ffffff !important;  /* 일부 브라우저용 */
-        }
+        /* 화살표 아이콘 색상을 제어하는 Streamlit 변수 변경 */
         [data-testid="collapsedControl"] {
-            color: #ffffff !important;  /* 버튼 자체 색 */
+            /* 아이콘 색상을 직접 지정 */
+            color: #FFFFFF !important; 
+            /* 내부 아이콘의 fill 속성을 직접 지정 (일부 버전에서 필요) */
+            fill: #FFFFFF !important; 
         }
+
+        /* Streamlit v1.18+ 에서 아이콘 색상을 제어하는 CSS 변수 오버라이드 */
+        /* 이 방법이 최신 버전에서 가장 효과적일 수 있습니다. */
+        [data-testid="stSidebarContent"] > div:first-child > section {
+            --text-color: #FFFFFF !important; /* 사이드바 내부 텍스트 및 아이콘 색상에 영향을 줌 */
+        }
+        
+        /* 이전 선택자 유지 */
+        [data-testid="collapsedControl"] svg {
+            fill: #FFFFFF !important;
+        }
+
         </style>
         """,
         unsafe_allow_html=True,
