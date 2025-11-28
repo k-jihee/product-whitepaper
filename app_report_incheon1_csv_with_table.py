@@ -85,7 +85,7 @@ def show_intro_page():
         </style>
     """, unsafe_allow_html=True)
 
-    col1, col2, col3 = st.columns([1, 8, 1])
+    col1, col2, col3 = st.columns([2, 10, 2])
 
     with col2:
         # ✅ 인트로 메인 이미지
@@ -110,7 +110,7 @@ def show_intro_page():
         st.write("")
 
         # 중앙 버튼
-        b_col1, b_col2, b_col3 = st.columns([1, 1, 1])
+        b_col1, b_col2, b_col3 = st.columns([2, 2, 2])
         with b_col2:
             if st.button("🚀 시스템 접속 (Enter)", use_container_width=True):
                 st.session_state["intro_done"] = True
