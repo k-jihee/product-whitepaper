@@ -472,41 +472,48 @@ def product_card(row):
     st.components.v1.html(html_template, height=2200, scrolling=True)
 
 def page_product():
-
-    # 🔥 (1) 여기 CSS 붙여넣기
+    # 🔹 제품백서 화면: 중앙 내용 영역만 흰색 박스로 만들기
     st.markdown("""
         <style>
-        .product-white-bg {
-            background: #ffffff !important;
-            padding: 2rem 2.5rem;
-            border-radius: 14px;
-            box-shadow: 0 4px 16px rgba(0,0,0,0.08);
-            margin-top: 20px;
-            margin-bottom: 40px;
+        /* 헤더는 투명, 그림자 제거 (위쪽 흰 띠 방지) */
+        header[data-testid="stHeader"] {
+            display: block !important;
+            background: transparent !important;
+            box-shadow: none !important;
         }
-        .product-white-bg h1, .product-white-bg h2, .product-white-bg h3,
-        .product-white-bg h4, .product-white-bg p, .product-white-bg label,
-        .product-white-bg span {
-            color: #000 !important;
+        header[data-testid="stHeader"] + div {
+            padding-top: 0 !important;
         }
-        .product-white-bg input, 
-        .product-white-bg textarea,
-        .product-white-bg select,
-        .product-white-bg .stTextInput > div > div > input {
+
+        /* 메인 컨테이너(빨간색으로 표시한 영역)를 흰색 박스로 */
+        main .block-container {
+            background-color: #ffffff !important;   /* 완전 흰색 */
+            border-radius: 16px;
+            padding: 1.5rem 2rem 2.5rem 2rem !important;
+            margin-top: 1.5rem !important;
+            max-width: 100% !important;
+        }
+
+        /* 이 안에 있는 텍스트는 검정색으로 보이게 */
+        main .block-container h1,
+        main .block-container h2,
+        main .block-container h3,
+        main .block-container h4,
+        main .block-container p,
+        main .block-container label,
+        main .block-container span {
+            color: #000000 !important;
+        }
+
+        /* 입력창/텍스트박스도 흰 배경 + 검정 글씨 */
+        main .block-container input,
+        main .block-container textarea,
+        main .block-container select {
             background-color: #ffffff !important;
-            color: #000 !important;
-        }
-        .product-white-bg .stExpander, 
-        .product-white-bg .stExpander > div {
-            background: #ffffff !important;
-            color: #000 !important;
+            color: #000000 !important;
         }
         </style>
     """, unsafe_allow_html=True)
-
-    # 🔥 (2) 흰색 박스 시작
-    st.markdown('<div class="product-white-bg">', unsafe_allow_html=True)
-    
     st.title("📘 제품백서")
     df = load_product_df()
     with st.expander("📋 인천 1공장 전제품 목록", expanded=False):
