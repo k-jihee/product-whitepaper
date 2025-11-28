@@ -72,7 +72,6 @@ set_background("binary.PNG")   # 또는 "배경.PNG"
 if "intro_done" not in st.session_state:
     st.session_state["intro_done"] = False
 
-
 def show_intro_page():
     st.markdown("""
         <style>
@@ -88,13 +87,13 @@ def show_intro_page():
             /* 컨테이너 조정 */
             .block-container {
                 padding-top: 0rem;
-                max-width: 1100px;   /* 🔥 컨테이너 자체도 좀 더 크게 */
+                max-width: 1100px;
             }
 
-            /* 🔥 intro 이미지 크게 보이게 */
-            .intro-img {
+            /* 🔥 intro 이미지 크게 보이게 (st.image 래핑용) */
+            .intro-wrap img {
                 width: 100%;
-                max-width: 900px;  /* 최대 크기 ↑ (원하면 1000px, 1200px도 가능) */
+                max-width: 900px;  /* 더 키우려면 1100px, 1200px 등으로 변경 */
                 margin-left: auto;
                 margin-right: auto;
                 display: block;
@@ -104,10 +103,10 @@ def show_intro_page():
 
     col1, col2, col3 = st.columns([1, 8, 1])
     with col2:
-        st.markdown(
-            '<img src="intro_image.png" class="intro-img">',
-            unsafe_allow_html=True
-        )
+        # ✅ st.image 사용 + div로 감싸서 CSS 적용
+        st.markdown('<div class="intro-wrap">', unsafe_allow_html=True)
+        st.image("intro_image.png", use_container_width=True)
+        st.markdown('</div>', unsafe_allow_html=True)
 
         st.markdown("---")
 
@@ -128,7 +127,6 @@ def show_intro_page():
             if st.button("🚀 시스템 접속 (Enter)", use_container_width=True):
                 st.session_state["intro_done"] = True
                 st.rerun()
-
 
 
 # 2. 로그인 성공 후, 인트로를 아직 안 봤다면 인트로 페이지 표시 후 중단
