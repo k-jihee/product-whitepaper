@@ -1089,32 +1089,6 @@ def page_home():
             color: #111111 !important;
         }
 
-       /* Sidebar toggle (왼쪽) 배경 + 아이콘 */
-        [data-testid="collapsedControl"] {
-            background-color: rgba(0,0,0,0.6) !important;
-            border-radius: 999px !important;
-        }
-        [data-testid="collapsedControl"] svg {
-            fill: #ffffff !important;
-            stroke: #ffffff !important;
-            color: #ffffff !important;
-        }
-
-        /* Header toggle (오른쪽 상단) */
-        header [data-testid="stToolbar"] svg {
-            fill: #ffffff !important;
-            stroke: #ffffff !important;
-            color: #ffffff !important;
-        }
-
-        /* Hover 유지 */
-        [data-testid="collapsedControl"] svg:hover,
-        header [data-testid="stToolbar"] svg:hover {
-            fill: #ffffff !important;
-            stroke: #ffffff !important;
-            color: #ffffff !important;
-        }
-
         /* 🔥 사이드바 접기/펼치기 화살표 버튼 스타일 */
         [data-testid="collapsedControl"] {
             background-color: rgba(0,0,0,0.7) !important;  /* 검은 원 배경 */
@@ -1124,6 +1098,23 @@ def page_home():
             color: #ffffff !important;   /* 화살표는 흰색 */
             fill: #ffffff !important;
             stroke: #ffffff !important;
+        }
+
+        /* 🔥 오른쪽 상단 메뉴 아이콘도 흰색 */
+        header [data-testid="stToolbar"] svg,
+        header [data-testid="stMainMenu"] svg {
+            fill: #ffffff !important;
+            stroke: #ffffff !important;
+            color: #ffffff !important;
+        }
+
+        /* Hover 때도 유지 */
+        [data-testid="collapsedControl"] svg:hover,
+        header [data-testid="stToolbar"] svg:hover,
+        header [data-testid="stMainMenu"] svg:hover {
+            fill: #ffffff !important;
+            stroke: #ffffff !important;
+            color: #ffffff !important;
         }
 
         /* 🔍 상단 '질문하기' 가짜 입력창 버튼 */
