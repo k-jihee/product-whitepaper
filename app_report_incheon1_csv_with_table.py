@@ -107,7 +107,7 @@ def show_intro_page():
 
             /* 버튼 스타일 */
             .stButton > button {
-                background-color: #ffffff;
+                background-color: #ffffff !important;
                 color: #333 !important;
                 border-radius: 999px;
                 padding: 0.8rem 1.5rem;
@@ -119,11 +119,7 @@ def show_intro_page():
                 margin-top: 60px;
             }
 
-            /* 버튼 텍스트 색상 진하게 */
-            .enter-button {
-                color: #333 !important;
-                font-weight: 600;
-            }         
+ 
         </style>
     """, unsafe_allow_html=True)
 
