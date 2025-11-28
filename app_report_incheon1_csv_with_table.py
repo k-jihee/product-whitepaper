@@ -73,33 +73,49 @@ if "intro_done" not in st.session_state:
     st.session_state["intro_done"] = False
 
 def show_intro_page():
+    # 인트로 화면에서는 사이드바 숨기기 + 여백 조정
     st.markdown("""
         <style>
             [data-testid="stSidebar"] {display: none;} /* 사이드바 숨김 */
-            .block-container {padding-top: 2rem;}      /* 상단 여백 조정 */
+            .block-container {
+                padding-top: 3rem;
+                max-width: 900px;
+            }
         </style>
     """, unsafe_allow_html=True)
 
-    col1, col2, col3 = st.columns([1, 8, 1]) 
-    
+    col1, col2, col3 = st.columns([1, 8, 1])
+
     with col2:
-        # ✅ 인트로 비디오
-        st.video("intro_video.mp4")  # 파일명/경로 실제와 맞게 수정
+        # ✅ 인트로 메인 이미지 (정적 이미지 / 로봇 일러스트 등)
+        #   ▶ intro_image.png 파일을 앱 폴더에 넣어두면 됩니다.
+        st.image("intro_image.png", use_container_width=True)
+
+        st.markdown("---")
+
+        # 타이틀 + 한 줄 설명
+        st.markdown(
+            """
+            <h2 style="text-align:center; margin-bottom:0.3rem;">
+                인천 1공장 AI 에이전트 포털
+            </h2>
+            <p style="text-align:center; color:#dddddd; font-size:0.95rem;">
+                제품 백서, 서류 요청, VOC 기록을 한 곳에서 관리하는 내부 포털입니다.
+            </p>
+            """,
+            unsafe_allow_html=True,
+        )
 
         st.write("")
         st.write("")
 
+        # 중앙 버튼
         b_col1, b_col2, b_col3 = st.columns([1, 1, 1])
         with b_col2:
             if st.button("🚀 시스템 접속 (Enter)", use_container_width=True):
                 st.session_state["intro_done"] = True
                 st.rerun()
 
-
-# 2. 로그인 성공 후, 인트로를 아직 안 봤다면 인트로 페이지 표시 후 중단
-if st.session_state.authenticated and not st.session_state["intro_done"]:
-    show_intro_page()
-    st.stop()  # 여기서 코드 실행을 멈춰서 아래의 사이드바/대시보드가 보이지 않게 함
 # ============================
 # 공용 유틸
 # ============================
