@@ -872,7 +872,9 @@ def page_voc():
 # ============================
 def page_home():
 
-    # 🔥 챗봇 페이지에서 전체 레이아웃을 숨겼던 CSS 초기화 (타이틀이 다시 보이도록)
+def page_home():
+
+    # 🔥 챗봇 페이지에서 숨겼던 레이아웃 복원 + 헤더/버튼 스타일 조정
     st.markdown("""
         <style>
         html, body,
@@ -883,16 +885,58 @@ def page_home():
             overflow: auto !important;
             height: auto !important;
         }
+
+        /* 🔶 상단 흰색 헤더 배경 제거 */
+        header[data-testid="stHeader"] {
+            display: block !important;
+            background: transparent !important;
+            box-shadow: none !important;
+        }
+
+        /* 헤더 바로 아래 생기는 흰 여백 제거 */
+        header[data-testid="stHeader"] + div {
+            padding-top: 0 !important;
+        }
+
+        /* 메인 컨테이너 여백/폭 조정 */
         main .block-container {
-            padding: 1rem 2rem !important;
+            padding: 1rem 2rem 2rem 2rem !important;
             margin: auto !important;
             max-width: 100% !important;
         }
-        header[data-testid="stHeader"] {
-            display: block !important;
+
+        /* 🔶 모든 버튼 공통: 흰 배경 + 진한 글씨 */
+        .stButton > button {
+            background-color: #ffffff !important;
+            color: #111111 !important;
+            font-weight: 600 !important;
+            border-radius: 999px !important;
+        }
+        .stButton > button * {
+            color: #111111 !important;
+        }
+
+        /* 🔶 홈 화면 위쪽 '질문하기' 가짜 입력창 버튼 */
+        .fake-input-btn .stButton > button {
+            width: 100% !important;
+            border-radius: 10px !important;
+            border: 1px solid #ff4b4b !important;
+            background: #f5f6fa !important;
+            text-align: left !important;
+            padding: 12px 16px !important;
+            font-size: 14px !important;
+            height: 46px !important;
+        }
+        .fake-input-btn .stButton > button,
+        .fake-input-btn .stButton > button * {
+            color: #555555 !important;
+        }
+        .fake-input-btn .stButton > button:hover {
+            background: #eceff4 !important;
         }
         </style>
     """, unsafe_allow_html=True)
+
     
     # 🔎 질문하기 창(클릭 → 챗봇 이동)
     st.markdown("""
