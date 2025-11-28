@@ -49,9 +49,9 @@ def tweak_sidebar_arrow():
         """
         <style>
         /* ===========================
-           사이드바 펼쳐진 상태 (왼쪽 안에 있는 버튼)
+           1) 사이드바가 펼쳐져 있을 때
+           왼쪽 안쪽의 접기 버튼 (←)
            =========================== */
-        [data-testid="stSidebarCollapseButton"] svg,
         [data-testid="stSidebarCollapseButton"] span,
         [data-testid="stSidebarCollapseButton"] span * {
             color: #ffffff !important;
@@ -59,26 +59,34 @@ def tweak_sidebar_arrow():
             stroke: #ffffff !important;
         }
 
+        /* 버튼 배경도 살짝 어둡게 (선택사항) */
+        [data-testid="stSidebarCollapseButton"] > button {
+            background-color: rgba(0, 0, 0, 0.6) !important;
+            border-radius: 999px !important;
+            border: 1px solid #ffffff80 !important;
+        }
+        [data-testid="stSidebarCollapseButton"] > button:hover {
+            background-color: rgba(255, 255, 255, 0.15) !important;
+        }
+
         /* ===========================
-           사이드바가 완전히 접힌 상태에서
-           화면에 떠 있는 둥근 버튼
-           (data-testid 값은 방금 devtools로 확인한 걸 사용)
+           2) 사이드바가 완전히 접혔을 때
+           화면 왼쪽 위에 떠 있는 펼치기 버튼 (→)
+           (방금 캡처에서 본 test-id: stExpandSidebarButton)
            =========================== */
-        [data-testid="collapsedControl"] svg,
-        [data-testid="collapsedControl"] span,
-        [data-testid="collapsedControl"] span * {
+        [data-testid="stExpandSidebarButton"] span,
+        [data-testid="stExpandSidebarButton"] span * {
             color: #ffffff !important;
             fill: #ffffff !important;
             stroke: #ffffff !important;
         }
 
-        /* 접힌 상태 둥근 버튼 배경/테두리도 같이 변경 (선택 사항) */
-        [data-testid="collapsedControl"] > button {
+        [data-testid="stExpandSidebarButton"] > button {
             background-color: rgba(0, 0, 0, 0.6) !important;
             border-radius: 999px !important;
             border: 1px solid #ffffff80 !important;
         }
-        [data-testid="collapsedControl"] > button:hover {
+        [data-testid="stExpandSidebarButton"] > button:hover {
             background-color: rgba(255, 255, 255, 0.15) !important;
         }
         </style>
