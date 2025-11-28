@@ -87,22 +87,22 @@ def show_intro_page():
             /* 컨테이너 조정 */
             .block-container {
                 padding-top: 0rem;
-                max-width: 1500px;
+                max-width: 1200px;
             }
 
             /* 🔹 인트로 이미지 크기 & 정렬 */
             .intro-wrap img {
                 width: 100%;             /* 기존 120% → 135% 로 확대 */
-                max-width: 1500px;       /* 최대치도 같이 키움 */
+                max-width: 1200px;       /* 최대치도 같이 키움 */
                 margin-left: auto;
                 margin-right: auto;
                 display: block;
-                margin-top: 550px;  
+                margin-top: 250px;  
             }
 
             /* 🔹 텍스트/버튼 영역: 이미지 바로 아래에 위치하게 */
             .intro-section {
-                margin-top: 50px;        
+                margin-top: 10px;        
             }
 
             /* 버튼 스타일 */
