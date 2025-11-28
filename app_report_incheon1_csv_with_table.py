@@ -1177,26 +1177,21 @@ def page_home():
     cols = st.columns(len(cards))
     for col, c in zip(cols, cards):
         with col:
-            # ✅ border=True 로 Streamlit 컨테이너 생성
-            with st.container(border=True):
-                # 👇 이 마커가 들어간 컨테이너만 CSS가 잡아서 흰색 두꺼운 테두리로 바꿉니다
-                st.markdown("<span class='home-card-marker'></span>", unsafe_allow_html=True)
-
-                st.markdown(
-                    f"<p style='font-weight:700; margin-bottom:4px; color:#ffffff;'>"
-                    f"{c['emoji']} {c['title']}</p>",
-                    unsafe_allow_html=True
-                )
-                st.markdown(
-                    f"<p style='font-size:0.9rem; color:#f0f0f0;'>{c['desc']}</p>",
-                    unsafe_allow_html=True
-                )
-                st.write("")  # 여백
-
-                if st.button("바로가기", key=f"go_{c['goto']}"):
-                    st.session_state["page"] = c["goto"]
-                    st.rerun()
-
+            # (굳이 st.container()도 안 써도 됨)
+            st.markdown(
+                f"<p style='font-weight:700; margin-bottom:4px; color:#ffffff;'>"
+                f"{c['emoji']} {c['title']}</p>",
+                unsafe_allow_html=True
+            )
+            st.markdown(
+                f"<p style='font-size:0.9rem; color:#f0f0f0;'>{c['desc']}</p>",
+                unsafe_allow_html=True
+            )
+            st.write("")  # 여백
+            
+            if st.button("바로가기", key=f"go_{c['goto']}"):
+                st.session_state["page"] = c["goto"]
+                st.rerun()
 
 
 # ============================
