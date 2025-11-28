@@ -87,7 +87,7 @@ def show_intro_page():
             /* 컨테이너 조정 */
             .block-container {
                 padding-top: 0rem;
-                max-width: 1100px;
+                max-width: 1500px;
             }
 
             /* 🔹 인트로 이미지 크기 & 정렬 */
