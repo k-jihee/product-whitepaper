@@ -1050,7 +1050,7 @@ def page_voc():
 # ============================
 
 def page_home():
-    # 🔥 챗봇 페이지에서 숨겼던 레이아웃 복원 + 헤더/버튼 스타일 조정
+    # 🔥 레이아웃 & 버튼 스타일
     st.markdown("""
         <style>
         html, body,
@@ -1062,26 +1062,25 @@ def page_home():
             height: auto !important;
         }
 
-        /* 🔶 상단 흰색 헤더 배경 제거 */
+        /* 상단 기본 헤더 투명하게 */
         header[data-testid="stHeader"] {
             display: block !important;
             background: transparent !important;
             box-shadow: none !important;
         }
 
-        /* 헤더 바로 아래 생기는 흰 여백 제거 */
         header[data-testid="stHeader"] + div {
             padding-top: 0 !important;
         }
 
-        /* 메인 컨테이너 여백/폭 조정 */
+        /* 메인 컨테이너 기본 패딩 */
         main .block-container {
             padding: 1rem 2rem 2rem 2rem !important;
             margin: auto !important;
             max-width: 100% !important;
         }
 
-        /* 🔶 모든 버튼 공통: 흰 배경 + 진한 글씨 */
+        /* 모든 버튼: 흰 배경 + 진한 글씨 */
         .stButton > button {
             background-color: #ffffff !important;
             color: #111111 !important;
@@ -1092,7 +1091,7 @@ def page_home():
             color: #111111 !important;
         }
 
-        /* 🔶 홈 화면 위쪽 '질문하기' 가짜 입력창 버튼 */
+        /* 위쪽 질문하기 가짜 입력창 버튼 */
         .fake-input-btn .stButton > button {
             width: 100% !important;
             border-radius: 10px !important;
@@ -1111,8 +1110,9 @@ def page_home():
             background: #eceff4 !important;
         }
 
-        /* ✅ 우리가 직접 만든 카드 박스에 흰색 두꺼운 테두리 적용 */
-        .home-card-box {
+        /* ✅ 홈 카드 컨테이너(= st.container) 중에서
+           .home-card-marker 를 자식으로 가진 것만 골라서 테두리 스타일 변경 */
+        [data-testid="stVerticalBlock"] > [data-testid="stContainer"]:has(.home-card-marker) {
             border-width: 3px !important;
             border-style: solid !important;
             border-color: #ffffff !important;
@@ -1120,10 +1120,14 @@ def page_home():
             padding: 18px 18px 14px 18px !important;
             background: rgba(0,0,0,0.35) !important;
         }
+
+        /* 마커 자체는 화면에 안 보이게 */
+        .home-card-marker {
+            display: none;
+        }
         </style>
     """, unsafe_allow_html=True)
 
-    
     # 🔎 질문하기 창(클릭 → 챗봇 이동)
     st.markdown("""
         <style>
@@ -1154,7 +1158,6 @@ def page_home():
         st.session_state["page"] = "인천 1공장 AI 챗봇"
         st.rerun()
 
-
     # 카드 데이터
     cards = [
         {"emoji": "🤖", "title": "인천 1공장 AI 챗봇", "desc": "질문하면 바로 챗봇으로 이동합니다.", "goto": "인천 1공장 AI 챗봇"},
@@ -1166,11 +1169,11 @@ def page_home():
     cols = st.columns(len(cards))
     for col, c in zip(cols, cards):
         with col:
-            with st.container():
-                # ✅ div “여는 태그”만 먼저 찍기
-                st.markdown("<div class='home-card-box'>", unsafe_allow_html=True)
+            # ✅ border=True 로 Streamlit 컨테이너 생성
+            with st.container(border=True):
+                # 👇 이 마커가 들어간 컨테이너만 CSS가 잡아서 흰색 두꺼운 테두리로 바꿉니다
+                st.markdown("<span class='home-card-marker'></span>", unsafe_allow_html=True)
 
-                # 👉 이 안에 들어가는 것들이 전부 테두리 안으로 들어감
                 st.markdown(
                     f"<p style='font-weight:700; margin-bottom:4px; color:#ffffff;'>"
                     f"{c['emoji']} {c['title']}</p>",
@@ -1186,8 +1189,6 @@ def page_home():
                     st.session_state["page"] = c["goto"]
                     st.rerun()
 
-                # ✅ 마지막에 div “닫는 태그”
-                st.markdown("</div>", unsafe_allow_html=True)
 
 
 # ============================
