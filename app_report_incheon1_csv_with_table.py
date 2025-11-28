@@ -716,63 +716,34 @@ def page_voc():
 # ============================
 # 페이지: 홈 (대시보드)
 # ============================
-def page_home():
-    # 스타일
+    # 질문하기 창처럼 보이는 전체폭 버튼 → 클릭 시 챗봇 페이지로 이동
     st.markdown("""
         <style>
-        .home-title {
-            text-align: center;
-            margin-bottom: 5px;
+        .fake-input-btn button {
+            width: 100% !important;
+            border-radius: 10px !important;
+            border: 1px solid #ff4b4b !important;
+            background: #f5f6fa !important;
+            color: #888 !important;
+            text-align: left !important;
+            padding: 10px 16px !important;
+            font-size: 14px !important;
         }
-        .home-sub {
-            text-align: center;
-            color: #666666;
-            margin-bottom: 25px;
-            font-size: 14px;
-        }
-        .home-card-title {
-            font-size: 18px;
-            font-weight: 600;
-            text-align: center;
-            margin-bottom: 8px;
-        }
-        .home-card-desc {
-            font-size: 13px;
-            color: #666666;
-            text-align: center;
-            min-height: 40px;
+        .fake-input-btn button:hover {
+            background: #eceff4 !important;
         }
         </style>
     """, unsafe_allow_html=True)
 
-    # 상단 타이틀
-    st.markdown("<h1 class='home-title'>🏭 인천1공장 AI 에이전트 🏭 </h1>", unsafe_allow_html=True)
-    st.markdown("<p class='home-sub'>주요 기능을 한 곳에서 빠르게 이동하세요.</p>", unsafe_allow_html=True)
+    with st.container():
+        st.markdown("<div class='fake-input-btn'>", unsafe_allow_html=True)
+        clicked = st.button("인천 1공장 AI 챗봇에게 질문하기...", use_container_width=True)
+        st.markdown("</div>", unsafe_allow_html=True)
 
-    # 검색창처럼 보이는 클릭 영역 → 클릭만 해도 챗봇 페이지로 이동
-    search_html = """
-    <style>
-    .chat-search-box {
-        width: 100%;
-        padding: 10px 16px;
-        border-radius: 10px;
-        border: 1px solid #ff4b4b;
-        background: #f5f6fa;
-        color: #888;
-        box-sizing: border-box;
-        cursor: pointer;
-        font-size: 14px;
-    }
-    .chat-search-box:hover {
-        background: #eceff4;
-    }
-    </style>
-    <div class="chat-search-box"
-         onclick="window.location.search='?page=인천 1공장 AI 챗봇';">
-        인천 1공장 AI 챗봇에게 질문하기...
-    </div>
-    """
-    st.markdown(search_html, unsafe_allow_html=True)
+    if clicked:
+        st.session_state["page"] = "인천 1공장 AI 챗봇"
+        st.rerun()
+
 
 
     # 카드 데이터
