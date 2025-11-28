@@ -1157,29 +1157,26 @@ def page_home():
             background: #eceff4 !important;
         }
 
-        /* 개별 홈 카드 박스만 스타일 적용 */
-        [data-testid="stVerticalBlock"]:has(.home-card-marker) {
-            /* 테두리 더 굵게 + 완전 흰색 */
-            border: 3px solid #ffffff !important;
-            border-radius: 22px !important;
-
-            /* 안쪽 여백 넉넉하게 */
-            padding: 22px 20px 18px 20px !important;
-
-            /* 박스 안 배경 더 진하게 */
-            background: rgba(0, 0, 0, 0.65) !important;
-
-            /* 약간의 흰색 글로우 효과 */
-            box-shadow: 0 0 18px rgba(255, 255, 255, 0.35) !important;
-        }
-
-        /* 마커 자체는 화면에 안 보이게 */
-        .home-card-marker {
-            display: none;
-        }
         </style>
     """, unsafe_allow_html=True)
 
+/* ---------- 홈 카드 영역 전용 스타일 ---------- */
+
+.home-card {
+    border: 3px solid #ffffff;            /* 흰색 테두리 */
+    border-radius: 18px;                  /* 모서리 둥글게 */
+    padding: 20px 18px 16px 18px;         /* 안쪽 여백 */
+    background: rgba(0, 0, 0, 0.75);      /* 카드 배경 */
+    box-shadow: 0 0 14px rgba(255, 255, 255, 0.35);  /* 흰색 빛 번짐 */
+    margin-bottom: 20px;                  /* 아래 간격 */
+}
+
+.home-card h4,
+.home-card p {
+    color: #ffffff;
+}
+
+    
     # 🔎 질문하기 창(클릭 → 챗봇 이동)
     st.markdown("""
         <style>
@@ -1218,29 +1215,49 @@ def page_home():
         {"emoji": "📣", "title": "VOC 로그", "desc": "VOC 및 이상 발생 내역을 기록합니다.", "goto": "VOC 기록(이상발생해석)"},
     ]
 
-    cols = st.columns(len(cards))
-    for col, c in zip(cols, cards):
-        with col:
-            # ✅ border=True 로 Streamlit 컨테이너 생성
-            with st.container(border=True):
-                # 👇 이 마커가 들어간 컨테이너만 CSS가 잡아서 흰색 두꺼운 테두리로 바꿉니다
-                st.markdown("<span class='home-card-marker'></span>", unsafe_allow_html=True)
+cols = st.columns(len(cards))
 
-                st.markdown(
-                    f"<p style='font-weight:700; margin-bottom:4px; color:#ffffff;'>"
-                    f"{c['emoji']} {c['title']}</p>",
-                    unsafe_allow_html=True
-                )
-                st.markdown(
-                    f"<p style='font-size:0.9rem; color:#f0f0f0;'>{c['desc']}</p>",
-                    unsafe_allow_html=True
-                )
-                st.write("")  # 여백
+for col, c in zip(cols, cards):
+    with col:
+        # 바깥은 테두리 없는 일반 컨테이너
+        with st.container():
+            
+            # ----------------------------
+            #     카드 시작 (white border)
+            # ----------------------------
+            st.markdown("<div class='home-card'>", unsafe_allow_html=True)
 
-                if st.button("바로가기", key=f"go_{c['goto']}"):
-                    st.session_state["page"] = c["goto"]
-                    st.rerun()
+            # 제목
+            st.markdown(
+                f"""
+                <h4 style="margin-bottom: 4px;">
+                    {c['emoji']} {c['title']}
+                </h4>
+                """,
+                unsafe_allow_html=True
+            )
 
+            # 설명
+            st.markdown(
+                f"""
+                <p style="font-size: 0.9rem; color: #f0f0f0;">
+                    {c['desc']}
+                </p>
+                """,
+                unsafe_allow_html=True
+            )
+
+            st.write("")  # 여백
+
+            # 버튼
+            if st.button("바로가기", key=f"go_{c['goto']}"):
+                st.session_state["page"] = c["goto"]
+                st.rerun()
+
+            # ----------------------------
+            #     카드 종료
+            # ----------------------------
+            st.markdown("</div>", unsafe_allow_html=True)
 
 
 # ============================
