@@ -48,55 +48,44 @@ def tweak_sidebar_arrow():
     st.markdown(
         """
         <style>
-
         /* ===========================
-           🎯 사이드바 접힘/펼침 상태 상관없이
-              모든 화살표 아이콘을 흰색으로 강제
+           사이드바 펼쳐진 상태 (왼쪽 안에 있는 버튼)
            =========================== */
-
-        /* 기본 버튼 wrapper */
-        [data-testid="stSidebarCollapseButton"] * {
+        [data-testid="stSidebarCollapseButton"] svg,
+        [data-testid="stSidebarCollapseButton"] span,
+        [data-testid="stSidebarCollapseButton"] span * {
             color: #ffffff !important;
             fill: #ffffff !important;
             stroke: #ffffff !important;
         }
 
-        /* Material 아이콘 (펼침 상태: left) */
-        [data-testid="stSidebarCollapseButton"] span[data-testid="stIconMaterial"] {
-            color: #ffffff !important;
-        }
-
-        /* Material 아이콘 내부 text (예: keyboard_double_arrow_left/right) */
-        [data-testid="stSidebarCollapseButton"] span[data-testid="stIconMaterial"] * {
-            color: #ffffff !important;
-        }
-
-        /* 접힘 상태 아이콘 (right) 대응 — Streamlit은 내부적으로 span을 또 생성함 */
-        [data-testid="stSidebarCollapseButton"] span {
-            color: #ffffff !important;
-        }
-        [data-testid="stSidebarCollapseButton"] span * {
-            color: #ffffff !important;
-        }
-
-
         /* ===========================
-           버튼 배경 및 hover
+           사이드바가 완전히 접힌 상태에서
+           화면에 떠 있는 둥근 버튼
+           (data-testid 값은 방금 devtools로 확인한 걸 사용)
            =========================== */
-        [data-testid="stSidebarCollapseButton"] button {
-            background: rgba(0,0,0,0.6) !important;
+        [data-testid="collapsedControl"] svg,
+        [data-testid="collapsedControl"] span,
+        [data-testid="collapsedControl"] span * {
+            color: #ffffff !important;
+            fill: #ffffff !important;
+            stroke: #ffffff !important;
+        }
+
+        /* 접힌 상태 둥근 버튼 배경/테두리도 같이 변경 (선택 사항) */
+        [data-testid="collapsedControl"] > button {
+            background-color: rgba(0, 0, 0, 0.6) !important;
             border-radius: 999px !important;
             border: 1px solid #ffffff80 !important;
         }
-
-        [data-testid="stSidebarCollapseButton"] button:hover {
-            background: rgba(255,255,255,0.15) !important;
+        [data-testid="collapsedControl"] > button:hover {
+            background-color: rgba(255, 255, 255, 0.15) !important;
         }
-
         </style>
         """,
         unsafe_allow_html=True,
     )
+
 
 st.set_page_config(
     page_title="인천1공장 AI 에이전트",
