@@ -1111,15 +1111,15 @@ def page_home():
             background: #eceff4 !important;
         }
 
-        /* ✅ Home 카드 컨테이너: 안에 home-card-marker 를 가진 것만 흰색 두꺼운 테두리 */
-        [data-testid="stMain"] div[data-testid="stContainer"]:has(.home-card-marker) {
-            border: 2px solid #ffffff !important;         /* 흰색 2px */
-            border-radius: 18px !important;               /* 둥근 모서리 */
-            background: rgba(0,0,0,0.35) !important;      /* 살짝 어두운 배경 */
-            padding: 18px 18px 14px 18px !important;      /* 안쪽 여백 */
+        /* ✅ 우리가 직접 만든 카드 박스에 흰색 두꺼운 테두리 적용 */
+        .home-card-box {
+            border-width: 3px !important;
+            border-style: solid !important;
+            border-color: #ffffff !important;
+            border-radius: 18px !important;
+            padding: 18px 18px 14px 18px !important;
+            background: rgba(0,0,0,0.35) !important;
         }
-
-
         </style>
     """, unsafe_allow_html=True)
 
@@ -1166,8 +1166,10 @@ def page_home():
     cols = st.columns(len(cards))
     for col, c in zip(cols, cards):
         with col:
-            # ✅ 여기 다시 border=True 사용
-            with st.container(border=True):
+            with st.container():  # border=True 안 씀
+                # ✅ 여기서부터 우리가 직접 카드 박스를 만듦
+                st.markdown("<div class='home-card-box'>", unsafe_allow_html=True)
+
                 st.markdown(
                     f"<p style='font-weight:700; margin-bottom:4px; color:#ffffff;'>"
                     f"{c['emoji']} {c['title']}</p>",
@@ -1177,10 +1179,14 @@ def page_home():
                     f"<p style='font-size:0.9rem; color:#f0f0f0;'>{c['desc']}</p>",
                     unsafe_allow_html=True
                 )
-                st.write("")  # 여백
+                st.write("")
+
                 if st.button("바로가기", key=f"go_{c['goto']}"):
                     st.session_state["page"] = c["goto"]
                     st.rerun()
+
+                # ✅ div 닫기
+                st.markdown("</div>", unsafe_allow_html=True)
 
 
 # ============================
