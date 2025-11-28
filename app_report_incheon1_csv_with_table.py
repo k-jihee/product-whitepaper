@@ -760,7 +760,7 @@ def page_home():
         </style>
     """, unsafe_allow_html=True)
 
-    st.markdown("<h1 class='home-title'>🏭 인천1공장 AI 에이전트에 오신걸 환영합니다. 🏭</h1>", unsafe_allow_html=True)
+    st.markdown("<h1 class='home-title'>🏭 인천1공장 AI 에이전트 🏭</h1>", unsafe_allow_html=True)
     st.markdown("<p class='home-sub'>주요 기능을 한 곳에서 빠르게 이동하세요.</p>", unsafe_allow_html=True)
     st.markdown("<div class='fake-input-btn'>", unsafe_allow_html=True)
     clicked = st.button("인천 1공장 AI 챗봇에게 질문하기...", use_container_width=True, key="fake_search")
