@@ -92,16 +92,17 @@ def show_intro_page():
 
             /* 🔹 인트로 이미지 크기 & 정렬 */
             .intro-wrap img {
-                width: 200%;             /* 기존 120% → 135% 로 확대 */
+                width: 300%;             /* 기존 120% → 135% 로 확대 */
                 max-width: 1200px;       /* 최대치도 같이 키움 */
                 margin-left: auto;
                 margin-right: auto;
+                margin-top: -20px;  
                 display: block;
             }
 
             /* 🔹 텍스트/버튼 영역: 이미지 바로 아래에 위치하게 */
             .intro-section {
-                margin-top: -80px;        /* 기존 -80px → 20px (위로 안 끌어올림) */
+                margin-top: -80px;        
             }
 
             /* 버튼 스타일 */
