@@ -97,7 +97,7 @@ def show_intro_page():
 
             /* 🔹 인트로 이미지 크기 & 정렬 */
             .intro-wrap img {
-                width: 300%;             /* 기존 120% → 135% 로 확대 */
+                width: 1000%;             /* 기존 120% → 135% 로 확대 */
                 max-width: 1000px;       /* 최대치도 같이 키움 */
                 margin-left: auto;
                 margin-right: auto;
