@@ -645,8 +645,6 @@ def page_voc():
         with c2:
             source = st.selectbox("유형", ["고객 VOC", "내부 이상", "민원", "기타"])
         with c3:
-            # Fixing the severity slider based on user's input "LowCritical"
-            # It seems like a typo, assuming "Low", "Medium", "High", "Critical" is intended based on original code.
             severity = st.select_slider("심각도", ["Low","Medium","High","Critical"], value="Medium")
 
         # 제품선택 로직을 서류 요청 페이지에서 가져옴
@@ -714,7 +712,75 @@ def page_voc():
             st.write("심각도별 건수")
             st.bar_chart(df["severity"].value_counts())
 
-{"emoji": "🤖", "title": "AI 에이전트", "desc": "질문하면 바로 챗봇으로 이동합니다.", "goto": "AI 에이전트"},
+
+# ============================
+# 페이지: 홈 (대시보드)
+# ============================
+def page_home():
+    # 스타일
+    st.markdown("""
+        <style>
+        .home-title {
+            text-align: center;
+            margin-bottom: 5px;
+        }
+        .home-sub {
+            text-align: center;
+            color: #666666;
+            margin-bottom: 25px;
+            font-size: 14px;
+        }
+        .home-card-title {
+            font-size: 18px;
+            font-weight: 600;
+            text-align: center;
+            margin-bottom: 8px;
+        }
+        .home-card-desc {
+            font-size: 13px;
+            color: #666666;
+            text-align: center;
+            min-height: 40px;
+        }
+        </style>
+    """, unsafe_allow_html=True)
+
+    # 상단 타이틀
+    st.markdown("<h1 class='home-title'>🏭 인천1공장 AI 포털</h1>", unsafe_allow_html=True)
+    st.markdown("<p class='home-sub'>주요 기능을 한 곳에서 빠르게 이동하세요.</p>", unsafe_allow_html=True)
+
+    # 검색창 → AI 에이전트로 이동
+    query = st.text_input("", "", placeholder="AI 에이전트에게 질문하기...")
+    if query:
+        st.session_state["page"] = "AI 에이전트"
+        st.rerun()
+
+    # 카드 데이터
+    cards = [
+        {"emoji": "📘", "title": "제품 백서", "desc": "제품 정보, 규격, COA를 확인합니다.", "goto": "제품백서"},
+        {"emoji": "🤖", "title": "AI 에이전트", "desc": "질문하면 바로 챗봇으로 이동합니다.", "goto": "AI 에이전트"},
+        {"emoji": "🗂️", "title": "서류 요청", "desc": "HACCP, ISO, 규격서 등을 요청합니다.", "goto": "서류 요청(사용자)"},
+        {"emoji": "📣", "title": "VOC 로그", "desc": "VOC 및 이상 발생 내역을 기록합니다.", "goto": "VOC 기록(이상발생해석)"},
+    ]
+
+    # 🔹 가로 4칸 카드 (st.columns 사용)
+    cols = st.columns(len(cards))
+    for col, c in zip(cols, cards):
+        with col:
+            with st.container(border=True):
+                st.markdown(
+                    f"<div class='home-card-title'>{c['emoji']} {c['title']}</div>",
+                    unsafe_allow_html=True
+                )
+                st.markdown(
+                    f"<div class='home-card-desc'>{c['desc']}</div>",
+                    unsafe_allow_html=True
+                )
+                st.write("")  # 여백
+                if st.button("바로가기", key=f"go_{c['goto']}"):
+                    st.session_state["page"] = c["goto"]
+                    st.rerun()
+
 
 # ============================
 # 사이드바 네비게이션
@@ -736,6 +802,7 @@ with st.sidebar:
 
     st.session_state["page"] = page
     st.markdown("---")
+    st.caption("© Samyang Incheon 1 Plant • Internal Use Only")
 
 
 # ============================
@@ -753,5 +820,3 @@ elif page == "서류 승인(관리자)":
     page_docs_admin()
 else:
     page_voc()
-
-
