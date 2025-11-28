@@ -1127,7 +1127,7 @@ def page_home():
             max-width: 100% !important;
         }
 
-        /* 기본 버튼: 흰 배경 + 진한 글씨 */
+        /* 모든 버튼: 흰 배경 + 진한 글씨 */
         .stButton > button {
             background-color: #ffffff !important;
             color: #111111 !important;
@@ -1157,26 +1157,19 @@ def page_home():
             background: #eceff4 !important;
         }
 
-        /* ---------- 홈 카드 컨테이너(= st.container) 전용 스타일 ---------- */
-        /* 안에 .home-card-marker 가 들어있는 st.container만 잡아서 스타일 적용 */
-        [data-testid="stContainer"]:has(.home-card-marker) {
-            border: 3px solid #ffffff !important;            /* 흰색 테두리 */
-            border-radius: 18px !important;                  /* 모서리 둥글게 */
-            padding: 20px 18px 16px 18px !important;         /* 안쪽 여백 */
-            background: rgba(0, 0, 0, 0.75) !important;      /* 카드 배경 */
-            box-shadow: 0 0 14px rgba(255, 255, 255, 0.25) !important;  /* 은은한 빛 */
-            margin-bottom: 20px !important;                  /* 아래 간격 */
+        /* ---------- 홈 카드 영역 전용 스타일 ---------- */
+        .home-card {
+            border: 3px solid #ffffff;                 /* ✅ 흰색 테두리 */
+            border-radius: 18px;
+            padding: 20px 18px 16px 18px;
+            background: rgba(0, 0, 0, 0.75);
+            box-shadow: 0 0 14px rgba(255, 255, 255, 0.35);
+            margin-bottom: 20px;
         }
 
-        /* 카드 안 텍스트 색상 */
-        [data-testid="stContainer"]:has(.home-card-marker) h4,
-        [data-testid="stContainer"]:has(.home-card-marker) p {
-            color: #ffffff !important;
-        }
-
-        /* 마커 자체는 화면에 보이지 않게 숨김 */
-        .home-card-marker {
-            display: none;
+        .home-card h4,
+        .home-card p {
+            color: #ffffff;
         }
         </style>
     """, unsafe_allow_html=True)
@@ -1223,37 +1216,34 @@ def page_home():
 
     for col, c in zip(cols, cards):
         with col:
-            with st.container():
-                st.markdown("<span class='home-card-marker'></span>", unsafe_allow_html=True)
+            # ✅ 여기서 직접 .home-card div를 만들어서 테두리 적용
+            st.markdown("<div class='home-card'>", unsafe_allow_html=True)
 
-                # 제목
-                st.markdown(
-                    f"""
-                    <h4 style="margin-bottom: 4px;">
-                        {c['emoji']} {c['title']}
-                    </h4>
-                    """,
-                    unsafe_allow_html=True
-                )
+            st.markdown(
+                f"""
+                <h4 style="margin-bottom: 4px;">
+                    {c['emoji']} {c['title']}
+                </h4>
+                """,
+                unsafe_allow_html=True
+            )
 
-                # 설명
-                st.markdown(
-                    f"""
-                    <p style="font-size: 0.9rem; color: #f0f0f0;">
-                        {c['desc']}
-                    </p>
-                    """,
-                    unsafe_allow_html=True
-                )
+            st.markdown(
+                f"""
+                <p style="font-size: 0.9rem; color: #f0f0f0;">
+                    {c['desc']}
+                </p>
+                """,
+                unsafe_allow_html=True
+            )
 
-                st.write("")  # 여백
+            st.write("")  # 여백
 
-                # 버튼 (Streamlit 버튼 그대로 사용)
-                if st.button("바로가기", key=f"go_{c['goto']}"):
-                    st.session_state["page"] = c["goto"]
-                    st.rerun()
+            if st.button("바로가기", key=f"go_{c['goto']}"):
+                st.session_state["page"] = c["goto"]
+                st.rerun()
 
-
+            st.markdown("</div>", unsafe_allow_html=True)
 
 # ============================
 # 사이드바 네비게이션
