@@ -472,10 +472,42 @@ def product_card(row):
     st.components.v1.html(html_template, height=2200, scrolling=True)
 
 def page_product():
+    # ✅ 상단 흰색 헤더/여백 제거 (Home 과 동일한 효과)
+    st.markdown("""
+        <style>
+        html, body,
+        [data-testid="stAppViewContainer"],
+        [data-testid="stMain"],
+        [data-testid="stVerticalBlock"] {
+            overflow: auto !important;
+            height: auto !important;
+        }
+
+        header[data-testid="stHeader"] {
+            display: block !important;
+            background: transparent !important;   /* 흰색 배경 제거 */
+            box-shadow: none !important;          /* 그림자 제거 */
+        }
+
+        /* 헤더 아래 쓸데없는 위쪽 패딩 제거 */
+        header[data-testid="stHeader"] + div {
+            padding-top: 0 !important;
+        }
+
+        /* 메인 컨테이너 여백/폭 조정 */
+        main .block-container {
+            padding: 1rem 2rem 2rem 2rem !important;
+            margin: auto !important;
+            max-width: 100% !important;
+        }
+        </style>
+    """, unsafe_allow_html=True)
+    
     st.title("📘 제품백서")
     df = load_product_df()
     with st.expander("📋 인천 1공장 전제품 목록", expanded=False):
         st.dataframe(df[["계층구조_2레벨","계층구조_3레벨","제품코드","제품명"]].dropna().reset_index(drop=True), use_container_width=True)
+  
     st.markdown("---")
     st.markdown('<h4>🔍 <b>제품코드 또는 제품명을 입력하세요</b></h4>', unsafe_allow_html=True)
     col1, col2 = st.columns(2)
