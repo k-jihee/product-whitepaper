@@ -1158,7 +1158,7 @@ def page_home():
         }
 
         /* 개별 홈 카드 박스만 스타일 적용 */
-        [data-testid="stElementContainer"]:has(.home-card-marker) {
+        [data-testid="stVerticalBlock"]:has(.home-card-marker) {
             /* 테두리 더 굵게 + 완전 흰색 */
             border: 3px solid #ffffff !important;
             border-radius: 22px !important;
