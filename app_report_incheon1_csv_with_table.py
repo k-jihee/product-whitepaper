@@ -7,6 +7,45 @@ from datetime import datetime
 # ============================
 # 기본 설정 & 인증
 # ============================
+import base64
+
+def set_background(image_path: str):
+    """앱 전체 배경을 이미지로 설정"""
+    with open(image_path, "rb") as f:
+        data = f.read()
+    encoded = base64.b64encode(data).decode()
+
+    st.markdown(
+        f"""
+        <style>
+        /* 전체 앱 배경 */
+        [data-testid="stAppViewContainer"] {{
+            background-image: url("data:image/png;base64,{encoded}");
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+        }}
+
+        /* 메인 컨텐츠 박스 투명 + 여백 조정 */
+        main .block-container {{
+            background: transparent;
+        }}
+
+        /* 사이드바도 살짝 투명하게(원하면 색 바꿔도 됨) */
+        [data-testid="stSidebar"] {{
+            background: rgba(0, 0, 0, 0.55);
+            color: #ffffff;
+        }}
+
+        /* 기본 글자색 조금 밝게 */
+        body, [data-testid="stMarkdownContainer"], .stMarkdown p {{
+            color: #f5f5f5;
+        }}
+        </style>
+        """,
+        unsafe_allow_html=True,
+    )
+
 st.set_page_config(page_title="인천1공장 포털", layout="wide")
 
 PASSWORD = os.environ.get("INCHON1_PORTAL_PASSWORD", "samyang!11")
