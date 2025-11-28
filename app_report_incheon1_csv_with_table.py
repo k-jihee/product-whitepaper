@@ -96,7 +96,7 @@ def show_intro_page():
                 max-width: 1200px;       /* 최대치도 같이 키움 */
                 margin-left: auto;
                 margin-right: auto;
-                margin-top: -20px;  
+                margin-top: 20px;  
                 display: block;
             }
 
