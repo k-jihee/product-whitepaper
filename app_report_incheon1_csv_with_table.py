@@ -1079,22 +1079,17 @@ def page_home():
             max-width: 100% !important;
         }
 
-        /* 기본 버튼 스타일 (카드 모양 네모) */
-        .stButton > button {
+        /* 홈 카드 안의 '바로가기' 버튼만 스타일 적용 */
+        .home-card-box .stButton > button {
             background-color: #ffffff !important;
             color: #111111 !important;
             font-weight: 600 !important;
-            border-radius: 16px !important;
-            padding: 14px 18px !important;
-            text-align: left !important;
-            white-space: pre-line !important;   /* 줄바꿈(\n) 반영 */
-            height: 80px !important;            /* 네모 높이 */
-            box-shadow: 0 4px 14px rgba(0,0,0,0.30) !important;
-            border: 1px solid rgba(255,255,255,0.95) !important;
+            border-radius: 999px !important;
         }
-        .stButton > button * {
+        .home-card-box .stButton > button * {
             color: #111111 !important;
         }
+
 
         /* 🔥 사이드바 접기/펼치기 화살표 버튼 (왼쪽 위 동그라미) */
         [data-testid="stSidebarCollapseButton"],
