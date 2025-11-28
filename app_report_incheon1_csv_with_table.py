@@ -472,47 +472,38 @@ def product_card(row):
     st.components.v1.html(html_template, height=2200, scrolling=True)
 
 def page_product():
-    
-    # 🔥 제품백서 화면 밝은 배경 레이어 추가
+
+    # ✅ 상단 흰색 헤더/여백 제거 (Home 과 동일한 효과)
     st.markdown("""
         <style>
-        /* 화면 전체를 밝게 하는 반투명 화이트 오버레이 */
-        .light-overlay {
-            background: rgba(255, 255, 255, 0.78);   /* 밝은 배경 */
-            backdrop-filter: blur(3px);
-            padding: 20px 30px;
-            border-radius: 12px;
-            margin-top: 20px;
+        html, body,
+        [data-testid="stAppViewContainer"],
+        [data-testid="stMain"],
+        [data-testid="stVerticalBlock"] {
+            overflow: auto !important;
+            height: auto !important;
         }
 
-        /* 입력창 / 텍스트의 가독성을 위한 스타일 */
-        .light-overlay input, 
-        .light-overlay textarea, 
-        .light-overlay .stTextInput, 
-        .light-overlay .stSelectbox, 
-        .light-overlay .stMultiselect {
-            background-color: #ffffff !important;
-            color: #000 !important;
+        header[data-testid="stHeader"] {
+            display: block !important;
+            background: transparent !important;   /* 흰색 배경 제거 */
+            box-shadow: none !important;          /* 그림자 제거 */
         }
 
-        /* 제목 글씨 어둡게 */
-        .light-overlay h1, 
-        .light-overlay h2, 
-        .light-overlay h3, 
-        .light-overlay h4, 
-        .light-overlay p, 
-        .light-overlay label {
-            color: #000 !important;
+        /* 헤더 아래 쓸데없는 위쪽 패딩 제거 */
+        header[data-testid="stHeader"] + div {
+            padding-top: 0 !important;
         }
 
-        /* expander 내부도 흰색 배경 */
-        .stExpander, .stExpander > div {
-            background: rgba(255,255,255,0.9) !important;
-            color: #000 !important;
+        /* 메인 컨테이너 여백/폭 조정 */
+        main .block-container {
+            padding: 1rem 2rem 2rem 2rem !important;
+            margin: auto !important;
+            max-width: 100% !important;
         }
-
         </style>
     """, unsafe_allow_html=True)
+
     
     st.title("📘 제품백서")
     df = load_product_df()
