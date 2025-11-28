@@ -69,8 +69,7 @@ set_background("binary.PNG")   # 또는 "배경.PNG"
 # ============================
 
 # 1. 인트로 시청 여부를 저장할 세션 변수 초기화 
-if "intro_done" not in 
-    st.session_state: 
+if "intro_done" not in st.session_state:
     st.session_state["intro_done"] = False
 
 def show_intro_page():
