@@ -1134,8 +1134,6 @@ def page_home():
             padding: 12px 16px !important;
             font-size: 14px !important;
             height: 46px !important;
-            box-shadow: none !important;
-            white-space: nowrap !important;
         }
         .fake-input-btn .stButton > button,
         .fake-input-btn .stButton > button * {
