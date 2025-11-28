@@ -1111,12 +1111,12 @@ def page_home():
             background: #eceff4 !important;
         }
 
-        /* ✅ 홈 카드용: 컨테이너에 흰색 두꺼운 테두리 */
-        div[data-testid="stVerticalBlock"]:has(> .home-card-marker) {
-            border: 2px solid rgba(255,255,255,1.0) !important;
+        /* ✅ 홈 화면 메인 영역 카드 컨테이너 테두리를 흰색·두껍게 */
+        [data-testid="stMain"] div[data-testid="stContainer"] {
+            border: 2px solid rgba(255,255,255,0.95) !important;  /* 흰색 & 두께 2px */
             border-radius: 16px !important;
-            padding: 18px 18px 14px 18px !important;
-            background: rgba(0,0,0,0.35) !important;
+            padding: 16px 18px 14px 18px !important;              /* 안쪽 여백 */
+            background: rgba(0,0,0,0.35) !important;              /* 어두운 반투명 배경 */
         }
 
         </style>
