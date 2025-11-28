@@ -746,14 +746,34 @@ def page_home():
     """, unsafe_allow_html=True)
 
     # 상단 타이틀
-    st.markdown("<h1 class='home-title'>🏭 인천1공장 AI 에이전트에 오신걸 환영합니다. 🏭 </h1>", unsafe_allow_html=True)
+    st.markdown("<h1 class='home-title'>🏭 인천1공장 AI 에이전트 🏭 </h1>", unsafe_allow_html=True)
     st.markdown("<p class='home-sub'>주요 기능을 한 곳에서 빠르게 이동하세요.</p>", unsafe_allow_html=True)
 
-    # 검색창 → 인천 1공장 AI 챗봇으로 이동
-    query = st.text_input("", "", placeholder="인천 1공장 AI 챗봇에게 질문하기...")
-    if query:
-        st.session_state["page"] = "인천 1공장 AI 챗봇"
-        st.rerun()
+    # 검색창처럼 보이는 클릭 영역 → 클릭만 해도 챗봇 페이지로 이동
+    search_html = """
+    <style>
+    .chat-search-box {
+        width: 100%;
+        padding: 10px 16px;
+        border-radius: 10px;
+        border: 1px solid #ff4b4b;
+        background: #f5f6fa;
+        color: #888;
+        box-sizing: border-box;
+        cursor: pointer;
+        font-size: 14px;
+    }
+    .chat-search-box:hover {
+        background: #eceff4;
+    }
+    </style>
+    <div class="chat-search-box"
+         onclick="window.location.search='?page=인천 1공장 AI 챗봇';">
+        인천 1공장 AI 챗봇에게 질문하기...
+    </div>
+    """
+    st.markdown(search_html, unsafe_allow_html=True)
+
 
     # 카드 데이터
     cards = [
