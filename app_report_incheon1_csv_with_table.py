@@ -1092,6 +1092,23 @@ def page_home():
             color: #111111 !important;
         }
 
+        /* 🔶 홈 카드 박스: 흰색 테두리 */
+        .home-card-box {
+            border: 1px solid rgba(255,255,255,0.9);
+            border-radius: 16px;
+            padding: 18px 18px 14px 18px;
+            background: rgba(0,0,0,0.35);
+        }
+        .home-card-title {
+            font-weight: 700;
+            margin-bottom: 4px;
+            color: #ffffff;
+        }
+        .home-card-desc {
+            font-size: 0.9rem;
+            color: #f0f0f0;
+        }
+
         /* 🔶 홈 화면 위쪽 '질문하기' 가짜 입력창 버튼 */
         .fake-input-btn .stButton > button {
             width: 100% !important;
