@@ -87,7 +87,7 @@ def show_intro_page():
             /* 컨테이너 조정 */
             .block-container {
                 padding-top: 0rem;
-                max-width: 1200px;
+                max-width: 1000px;
             }
 
             /* 🔹 인트로 이미지 크기 & 정렬 */
@@ -119,13 +119,21 @@ def show_intro_page():
                 margin-top: -100px;
             }
 
- 
+            .custom-hr {
+                width: 40%;
+                height: 2px;
+                background-color: #ffffff55;
+                margin: 40px auto;
+                border-radius: 3px;
+            }
+
+             
         </style>
     """, unsafe_allow_html=True)
 
     col1, col2, col3 = st.columns([1, 8, 1])
     with col2:
-        st.markdown('<div class="intro-wrap">', unsafe_allow_html=True)
+        st.markdown('<div class="custom-hr"></div>', unsafe_allow_html=True)
         st.image("intro_image.png", use_container_width=True)
         st.markdown('</div>', unsafe_allow_html=True)
 
