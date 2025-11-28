@@ -97,7 +97,7 @@ def show_intro_page():
                 margin-left: auto;
                 margin-right: auto;
                 display: block;
-                margin-top: 250px;  
+                margin-top: 550px;  
             }
 
             /* 🔹 텍스트/버튼 영역: 이미지 바로 아래에 위치하게 */
