@@ -48,17 +48,41 @@ def tweak_sidebar_arrow():
     st.markdown(
         """
         <style>
-        /* 🎯 사이드바 화살표 버튼 아이콘을 완전 흰색으로 강제 */
-        [data-testid="stSidebarCollapseButton"] svg,
-        [data-testid="stSidebarCollapseButton"] svg *,
-        [data-testid="stSidebarCollapseButton"] span,
-        [data-testid="stSidebarCollapseButton"] span * {
+
+        /* ===========================
+           🎯 사이드바 접힘/펼침 상태 상관없이
+              모든 화살표 아이콘을 흰색으로 강제
+           =========================== */
+
+        /* 기본 버튼 wrapper */
+        [data-testid="stSidebarCollapseButton"] * {
             color: #ffffff !important;
             fill: #ffffff !important;
             stroke: #ffffff !important;
         }
 
-        /* 버튼 전체 기본색도 흰색 계열로 고정 */
+        /* Material 아이콘 (펼침 상태: left) */
+        [data-testid="stSidebarCollapseButton"] span[data-testid="stIconMaterial"] {
+            color: #ffffff !important;
+        }
+
+        /* Material 아이콘 내부 text (예: keyboard_double_arrow_left/right) */
+        [data-testid="stSidebarCollapseButton"] span[data-testid="stIconMaterial"] * {
+            color: #ffffff !important;
+        }
+
+        /* 접힘 상태 아이콘 (right) 대응 — Streamlit은 내부적으로 span을 또 생성함 */
+        [data-testid="stSidebarCollapseButton"] span {
+            color: #ffffff !important;
+        }
+        [data-testid="stSidebarCollapseButton"] span * {
+            color: #ffffff !important;
+        }
+
+
+        /* ===========================
+           버튼 배경 및 hover
+           =========================== */
         [data-testid="stSidebarCollapseButton"] button {
             background: rgba(0,0,0,0.6) !important;
             border-radius: 999px !important;
@@ -68,6 +92,7 @@ def tweak_sidebar_arrow():
         [data-testid="stSidebarCollapseButton"] button:hover {
             background: rgba(255,255,255,0.15) !important;
         }
+
         </style>
         """,
         unsafe_allow_html=True,
