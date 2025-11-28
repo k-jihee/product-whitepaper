@@ -48,26 +48,38 @@ def tweak_sidebar_arrow():
     st.markdown(
         """
         <style>
-        /* 사이드바 접기/펼치기 컨트롤 안에 있는 모든 요소 색을 강제 흰색으로 */
-        [data-testid="collapsedControl"] * {
+        /* 1) 사이드바 토글 버튼 아이콘(펼치기/접기) SVG 전부 흰색으로 */
+        [data-testid="collapsedControl"] svg,
+        [data-testid="collapsedControl"] svg *,
+        [data-testid="stSidebarCollapseButton"] svg,
+        [data-testid="stSidebarCollapseButton"] svg * {
             color: #ffffff !important;
             fill: #ffffff !important;
             stroke: #ffffff !important;
         }
 
-        /* 동그라미 버튼 배경/테두리도 같이 조정 (원하면 빼도 됨) */
-        [data-testid="collapsedControl"] > button {
+        /* 2) 버튼 자체 색상도 흰색 기준으로 정리 */
+        [data-testid="collapsedControl"],
+        [data-testid="stSidebarCollapseButton"] {
+            color: #ffffff !important;
+        }
+
+        [data-testid="collapsedControl"] button,
+        [data-testid="stSidebarCollapseButton"] button {
             background-color: rgba(0, 0, 0, 0.6) !important;
             border-radius: 999px !important;
             border: 1px solid #ffffff80 !important;
         }
-        [data-testid="collapsedControl"] > button:hover {
+
+        [data-testid="collapsedControl"] button:hover,
+        [data-testid="stSidebarCollapseButton"] button:hover {
             background-color: rgba(255, 255, 255, 0.15) !important;
         }
         </style>
         """,
         unsafe_allow_html=True,
     )
+
 
 st.set_page_config(
     page_title="인천1공장 AI 에이전트",
