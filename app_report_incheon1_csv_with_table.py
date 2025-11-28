@@ -473,37 +473,39 @@ def product_card(row):
 
 def page_product():
 
-    # ✅ 상단 흰색 헤더/여백 제거 (Home 과 동일한 효과)
+    # 🔥 (1) 여기 CSS 붙여넣기
     st.markdown("""
         <style>
-        html, body,
-        [data-testid="stAppViewContainer"],
-        [data-testid="stMain"],
-        [data-testid="stVerticalBlock"] {
-            overflow: auto !important;
-            height: auto !important;
+        .product-white-bg {
+            background: #ffffff !important;
+            padding: 2rem 2.5rem;
+            border-radius: 14px;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+            margin-top: 20px;
+            margin-bottom: 40px;
         }
-
-        header[data-testid="stHeader"] {
-            display: block !important;
-            background: transparent !important;   /* 흰색 배경 제거 */
-            box-shadow: none !important;          /* 그림자 제거 */
+        .product-white-bg h1, .product-white-bg h2, .product-white-bg h3,
+        .product-white-bg h4, .product-white-bg p, .product-white-bg label,
+        .product-white-bg span {
+            color: #000 !important;
         }
-
-        /* 헤더 아래 쓸데없는 위쪽 패딩 제거 */
-        header[data-testid="stHeader"] + div {
-            padding-top: 0 !important;
+        .product-white-bg input, 
+        .product-white-bg textarea,
+        .product-white-bg select,
+        .product-white-bg .stTextInput > div > div > input {
+            background-color: #ffffff !important;
+            color: #000 !important;
         }
-
-        /* 메인 컨테이너 여백/폭 조정 */
-        main .block-container {
-            padding: 1rem 2rem 2rem 2rem !important;
-            margin: auto !important;
-            max-width: 100% !important;
+        .product-white-bg .stExpander, 
+        .product-white-bg .stExpander > div {
+            background: #ffffff !important;
+            color: #000 !important;
         }
         </style>
     """, unsafe_allow_html=True)
 
+    # 🔥 (2) 흰색 박스 시작
+    st.markdown('<div class="product-white-bg">', unsafe_allow_html=True)
     
     st.title("📘 제품백서")
     df = load_product_df()
