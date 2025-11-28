@@ -44,7 +44,7 @@ def set_background(image_path: str):
         unsafe_allow_html=True,
     )
 
-st.set_page_config(page_title="인천1공장 포털", layout="wide")
+st.set_page_config(page_title="인천1공장 AI 에이전트", layout="wide")
 
 PASSWORD = os.environ.get("INCHON1_PORTAL_PASSWORD", "samyang!11")
 
