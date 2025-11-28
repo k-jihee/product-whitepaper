@@ -68,44 +68,33 @@ set_background("binary.PNG")   # 또는 "배경.PNG"
 # [추가] 인트로 화면 로직
 # ============================
 
-# 1. 인트로 시청 여부를 저장할 세션 변수 초기화
-if "intro_done" not in st.session_state:
-    st.session_state["intro_done"] = False
-
 def show_intro_page():
-    # 인트로 화면에서는 사이드바를 숨기고, 배경색이나 여백을 조정하는 CSS 적용
+    # 1) 사이드바 숨김
     st.markdown("""
         <style>
-            [data-testid="stSidebar"] {display: none;} /* 사이드바 숨김 */
-            .block-container {padding-top: 2rem;}      /* 상단 여백 조정 */
+            [data-testid="stSidebar"] {display: none;}
         </style>
     """, unsafe_allow_html=True)
 
-    # 화면 구성을 위해 컬럼 사용 (중앙 정렬 효과)
-    col1, col2, col3 = st.columns([1, 10, 1]) 
-    
-    with col2:
-        # 업로드해주신 로봇 이미지 표시 (파일명이 정확해야 합니다)
-        # 이미지 파일이 코드와 같은 폴더에 있어야 합니다.
-        st.vedio("ntro_video.mp4", format="video/mp4", autoplay=True, muted=True)
-        
-        # 간격 추가
-        st.write("") 
-        st.write("")
+    col1, col2, col3 = st.columns([1, 10, 1])
 
-        # 접속 버튼 (화면 중앙 느낌을 주기 위해 컬럼 내부 사용)
+    with col2:
+        # [수정된 부분] 사진(st.image) 대신 동영상(st.video)을 넣습니다.
+        # autoplay=True: 자동으로 재생 시작
+        # muted=True: 소리 끄기 (브라우저 정책상 소리를 꺼야 자동재생이 잘 됩니다)
+        # loop=True: (선택사항) 계속 반복 재생하고 싶으면 True로 설정
+        
+        # 파일명을 'intro_video.mp4'로 바꿨다고 가정합니다.
+        st.video("intro_video.mp4", format="video/mp4", autoplay=True, muted=True)
+
+        st.write("") 
+        
+        # 접속 버튼
         b_col1, b_col2, b_col3 = st.columns([2, 3, 2])
         with b_col2:
-            # 버튼을 누르면 인트로 종료 상태로 변경하고 리런
-            if st.button("🚀 시스템 접속 (Enter)", use_container_width=True):
+            if st.button("🚀 시스템 접속하기", use_container_width=True):
                 st.session_state["intro_done"] = True
                 st.rerun()
-
-# 2. 로그인 성공 후, 인트로를 아직 안 봤다면 인트로 페이지 표시 후 중단
-if st.session_state.authenticated and not st.session_state["intro_done"]:
-    show_intro_page()
-    st.stop()  # 여기서 코드 실행을 멈춰서 아래의 사이드바/대시보드가 보이지 않게 함
-
 
 # ============================
 # 공용 유틸
