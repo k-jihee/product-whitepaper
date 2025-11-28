@@ -1110,15 +1110,23 @@ def page_home():
             background: #eceff4 !important;
         }
 
-        /* ✅ 홈 카드 컨테이너(= st.container) 중에서
-           .home-card-marker 를 자식으로 가진 것만 골라서 테두리 스타일 변경 */
-        [data-testid="stVerticalBlock"] > [data-testid="stContainer"]:has(.home-card-marker) {
-            border-width: 3px !important;
-            border-style: solid !important;
-            border-color: #ffffff !important;
-            border-radius: 18px !important;
-            padding: 18px 18px 14px 18px !important;
-            background: rgba(0,0,0,0.35) !important;
+        /* ✅ 홈 카드 컨테이너(= st.container) — 카드 전체가 눈에 잘 띄게 강화 */
+        [data-testid="stContainer"]:has(.home-card-marker) {
+            /* 테두리 더 굵게 + 완전 흰색 */
+            border: 4px solid #ffffff !important;
+            border-radius: 22px !important;
+
+            /* 안쪽 여백 넉넉하게 */
+            padding: 22px 20px 18px 20px !important;
+
+            /* 박스 안 배경 더 진하게 */
+            background: rgba(0, 0, 0, 0.65) !important;
+
+            /* 약간의 흰색 글로우 효과 */
+            box-shadow: 0 0 18px rgba(255, 255, 255, 0.35) !important;
+
+            /* 위 요소들과 조금 띄우기 (겹쳐 보이지 않게) */
+            margin-top: 10px !important;
         }
 
         /* 마커 자체는 화면에 안 보이게 */
