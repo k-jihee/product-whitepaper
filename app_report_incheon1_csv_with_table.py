@@ -1172,23 +1172,29 @@ def page_home():
         {"emoji": "📣", "title": "VOC 로그", "desc": "VOC 및 이상 발생 내역을 기록합니다.", "goto": "VOC 기록(이상발생해석)"},
     ]
 
-    # 🔹 가로 4칸 카드 (st.columns 사용)
     cols = st.columns(len(cards))
     for col, c in zip(cols, cards):
         with col:
-            with st.container(border=True):
-                st.markdown(
-                    f"<div class='home-card-title'>{c['emoji']} {c['title']}</div>",
-                    unsafe_allow_html=True
-                )
-                st.markdown(
-                    f"<div class='home-card-desc'>{c['desc']}</div>",
-                    unsafe_allow_html=True
-                )
-                st.write("")  # 여백
-                if st.button("바로가기", key=f"go_{c['goto']}"):
-                    st.session_state["page"] = c["goto"]
-                    st.rerun()
+            # 🔹 카드 전체를 흰색 테두리 박스로 감싸기
+            st.markdown("<div class='home-card-box'>", unsafe_allow_html=True)
+
+            st.markdown(
+                f"<div class='home-card-title'>{c['emoji']} {c['title']}</div>",
+                unsafe_allow_html=True
+            )
+            st.markdown(
+                f"<div class='home-card-desc'>{c['desc']}</div>",
+                unsafe_allow_html=True
+            )
+
+            st.write("")  # 여백
+
+            if st.button("바로가기", key=f"go_{c['goto']}"):
+                st.session_state["page"] = c["goto"]
+                st.rerun()
+
+            st.markdown("</div>", unsafe_allow_html=True)
+
 
 
 # ============================
