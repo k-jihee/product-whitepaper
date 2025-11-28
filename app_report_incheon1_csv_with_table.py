@@ -1128,11 +1128,10 @@ def page_home():
             background: #eceff4 !important;
         }
 
-        /* ✅ Home에서 border=True 걸린 컨테이너 테두리를 흰색으로 강제 */
-        div[data-testid="stVerticalBlock"] div[style*="border: 1px solid"] {
-            border: 1px solid rgba(255,255,255,0.95) !important;
-            border-radius: 18px !important;
-            background: rgba(0,0,0,0.35) !important;
+        /* 🔥 Home 카드 테두리를 강제로 흰색 + 두껍게 변경 */
+        div[style*="border: 1px solid"] {
+            border: 2px solid rgba(255,255,255,1.0) !important;
+            border-radius: 14px !important;
         }
 
 
