@@ -87,7 +87,7 @@ def show_intro_page():
     with col2:
         # 업로드해주신 로봇 이미지 표시 (파일명이 정확해야 합니다)
         # 이미지 파일이 코드와 같은 폴더에 있어야 합니다.
-        st.image("image_6bfd09.jpg", use_container_width=True)
+        st.vedio("intro_vedio.jpg", use_container_width=True)
         
         # 간격 추가
         st.write("") 
