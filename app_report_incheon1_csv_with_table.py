@@ -74,23 +74,40 @@ if "intro_done" not in st.session_state:
 
 
 def show_intro_page():
-    # 인트로 화면에서는 사이드바를 숨기고, 여백/폭을 조정
     st.markdown("""
         <style>
-            [data-testid="stSidebar"] {display: none;}  /* 사이드바 숨김 */
+            /* 헤더/사이드바 숨김 */
+            [data-testid="stSidebar"] {display: none;}
+            header[data-testid="stHeader"] {display: none;}
+
+            /* 배경색 통일 */
+            html, body, [data-testid="stAppViewContainer"] {
+                background-color: #001b3a;
+            }
+
+            /* 컨테이너 조정 */
             .block-container {
-                padding-top: 3rem;
-                max-width: 900px;
+                padding-top: 0rem;
+                max-width: 1100px;   /* 🔥 컨테이너 자체도 좀 더 크게 */
+            }
+
+            /* 🔥 intro 이미지 크게 보이게 */
+            .intro-img {
+                width: 100%;
+                max-width: 900px;  /* 최대 크기 ↑ (원하면 1000px, 1200px도 가능) */
+                margin-left: auto;
+                margin-right: auto;
+                display: block;
             }
         </style>
     """, unsafe_allow_html=True)
 
-    col1, col2, col3 = st.columns([2, 10, 2])
-
+    col1, col2, col3 = st.columns([1, 8, 1])
     with col2:
-        # ✅ 인트로 메인 이미지
-        #    intro_image.png 파일을 이 스크립트와 같은 폴더에 두세요.
-        st.image("intro_image.png", use_container_width=True)
+        st.markdown(
+            '<img src="intro_image.png" class="intro-img">',
+            unsafe_allow_html=True
+        )
 
         st.markdown("---")
 
@@ -106,15 +123,12 @@ def show_intro_page():
             unsafe_allow_html=True,
         )
 
-        st.write("")
-        st.write("")
-
-        # 중앙 버튼
-        b_col1, b_col2, b_col3 = st.columns([2, 2, 2])
+        b_col1, b_col2, b_col3 = st.columns([1, 1, 1])
         with b_col2:
             if st.button("🚀 시스템 접속 (Enter)", use_container_width=True):
                 st.session_state["intro_done"] = True
                 st.rerun()
+
 
 
 # 2. 로그인 성공 후, 인트로를 아직 안 봤다면 인트로 페이지 표시 후 중단
