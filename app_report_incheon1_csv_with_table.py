@@ -8,8 +8,14 @@ from datetime import datetime
 # 기본 설정 & 인증
 # ============================
 import base64
+import os   # 이미 상단에 있으니 중복만 아니면 됨
 
 def set_background(image_path: str):
+    # 파일이 없으면 경고만 띄우고 넘어가기
+    if not os.path.exists(image_path):
+        st.warning(f"배경 이미지 파일을 찾을 수 없습니다: {os.path.abspath(image_path)}")
+        return
+
     with open(image_path, "rb") as f:
         data = f.read()
     encoded = base64.b64encode(data).decode()
@@ -56,7 +62,7 @@ if not st.session_state.authenticated:
     st.stop()
 
 # ✅ 여기 추가
-set_background("binary.png")
+set_background("binary.PNG")   # 또는 "배경.PNG"
 
 
 # ============================
