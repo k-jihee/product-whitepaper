@@ -93,7 +93,7 @@ def show_intro_page():
             /* 🔥 intro 이미지 크게 보이게 (st.image 래핑용) */
             .intro-wrap img {
                 width: 100%;
-                max-width: 1500px;  /* 더 키우려면 1100px, 1200px 등으로 변경 */
+                max-width: 2200px;  /* 더 키우려면 1100px, 1200px 등으로 변경 */
                 margin-left: auto;
                 margin-right: auto;
                 display: block;
