@@ -48,25 +48,28 @@ def tweak_sidebar_arrow():
     st.markdown(
         """
         <style>
-        /* 화살표 아이콘 색상을 제어하는 Streamlit 변수 변경 */
+        /* 사이드바 접기/펼치기 전체 컨트롤 */
         [data-testid="collapsedControl"] {
-            /* 아이콘 색상을 직접 지정 */
-            color: #FFFFFF !important; 
-            /* 내부 아이콘의 fill 속성을 직접 지정 (일부 버전에서 필요) */
-            fill: #FFFFFF !important; 
+            color: #ffffff !important;          /* 텍스트/아이콘 기본색 */
         }
 
-        /* Streamlit v1.18+ 에서 아이콘 색상을 제어하는 CSS 변수 오버라이드 */
-        /* 이 방법이 최신 버전에서 가장 효과적일 수 있습니다. */
-        [data-testid="stSidebarContent"] > div:first-child > section {
-            --text-color: #FFFFFF !important; /* 사이드바 내부 텍스트 및 아이콘 색상에 영향을 줌 */
-        }
-        
-        /* 이전 선택자 유지 */
-        [data-testid="collapsedControl"] svg {
-            fill: #FFFFFF !important;
+        /* 실제 동그라미 버튼 */
+        [data-testid="collapsedControl"] > button {
+            color: #ffffff !important;          /* 아이콘 색을 currentColor로 쓰는 경우 대비 */
+            background-color: rgba(0, 0, 0, 0.6) !important;
+            border: 1px solid #ffffff80 !important;
         }
 
+        [data-testid="collapsedControl"] > button:hover {
+            background-color: rgba(255, 255, 255, 0.12) !important;
+        }
+
+        /* 아이콘 SVG에 직접 색 덮어쓰기 */
+        [data-testid="collapsedControl"] svg,
+        [data-testid="collapsedControl"] svg path {
+            fill: #ffffff !important;
+            stroke: #ffffff !important;
+        }
         </style>
         """,
         unsafe_allow_html=True,
