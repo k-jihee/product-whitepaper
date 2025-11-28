@@ -73,7 +73,6 @@ if "intro_done" not in st.session_state:
     st.session_state["intro_done"] = False
 
 def show_intro_page():
-    # 인트로 화면에서는 사이드바를 숨기고, 배경색이나 여백을 조정하는 CSS 적용
     st.markdown("""
         <style>
             [data-testid="stSidebar"] {display: none;} /* 사이드바 숨김 */
@@ -81,25 +80,21 @@ def show_intro_page():
         </style>
     """, unsafe_allow_html=True)
 
-    # 화면 구성을 위해 컬럼 사용 (중앙 정렬 효과)
     col1, col2, col3 = st.columns([1, 8, 1]) 
     
     with col2:
-        # 업로드해주신 로봇 이미지 표시 (파일명이 정확해야 합니다)
-        # 이미지 파일이 코드와 같은 폴더에 있어야 합니다.
-        st.vedio("intro_vedio.jpg", use_container_width=True)
-        
-        # 간격 추가
-        st.write("") 
+        # ✅ 인트로 비디오
+        st.video("intro_video.mp4")  # 파일명/경로 실제와 맞게 수정
+
+        st.write("")
         st.write("")
 
-        # 접속 버튼 (화면 중앙 느낌을 주기 위해 컬럼 내부 사용)
         b_col1, b_col2, b_col3 = st.columns([1, 1, 1])
         with b_col2:
-            # 버튼을 누르면 인트로 종료 상태로 변경하고 리런
             if st.button("🚀 시스템 접속 (Enter)", use_container_width=True):
                 st.session_state["intro_done"] = True
                 st.rerun()
+
 
 # 2. 로그인 성공 후, 인트로를 아직 안 봤다면 인트로 페이지 표시 후 중단
 if st.session_state.authenticated and not st.session_state["intro_done"]:
