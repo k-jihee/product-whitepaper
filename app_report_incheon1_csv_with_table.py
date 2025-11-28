@@ -116,7 +116,7 @@ def show_intro_page():
 
             /* 상단 로봇 이미지 아래로 이동 (필요시 여백 조정) */
             .hero-image {
-                margin-top: -50px;
+                margin-top: -100px;
             }
 
  
