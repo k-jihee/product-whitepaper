@@ -10,7 +10,6 @@ from datetime import datetime
 import base64
 
 def set_background(image_path: str):
-    """앱 전체 배경을 이미지로 설정"""
     with open(image_path, "rb") as f:
         data = f.read()
     encoded = base64.b64encode(data).decode()
@@ -18,26 +17,19 @@ def set_background(image_path: str):
     st.markdown(
         f"""
         <style>
-        /* 전체 앱 배경 */
         [data-testid="stAppViewContainer"] {{
             background-image: url("data:image/png;base64,{encoded}");
             background-size: cover;
             background-position: center;
             background-repeat: no-repeat;
         }}
-
-        /* 메인 컨텐츠 박스 투명 + 여백 조정 */
         main .block-container {{
             background: transparent;
         }}
-
-        /* 사이드바도 살짝 투명하게(원하면 색 바꿔도 됨) */
         [data-testid="stSidebar"] {{
             background: rgba(0, 0, 0, 0.55);
             color: #ffffff;
         }}
-
-        /* 기본 글자색 조금 밝게 */
         body, [data-testid="stMarkdownContainer"], .stMarkdown p {{
             color: #f5f5f5;
         }}
@@ -62,8 +54,10 @@ if not st.session_state.authenticated:
     elif password:
         st.error("❌ 비밀번호가 틀렸습니다.")
     st.stop()
-    
+
+# ✅ 여기 추가
 set_background("bg_binary.png")
+
 
 # ============================
 # 공용 유틸
