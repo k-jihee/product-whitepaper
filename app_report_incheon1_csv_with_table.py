@@ -591,6 +591,13 @@ def page_product():
             max-width: 100% !important;
         }
 
+        /* 🔹 Expander 헤더를 흰색으로 */
+        div[data-testid="stExpander"] > details > summary {
+            background-color: #ffffff !important;
+            color: #000000 !important;
+            border-radius: 8px;
+        }
+
         /* 안쪽 텍스트 색상 */
         main .block-container h1,
         main .block-container h2,
