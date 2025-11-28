@@ -68,10 +68,6 @@ set_background("binary.PNG")   # 또는 "배경.PNG"
 # [추가] 인트로 화면 로직
 # ============================
 
-# 1. 인트로 시청 여부를 저장할 세션 변수 초기화
-if "intro_done" not in st.session_state:
-    st.session_state["intro_done"] = False
-
 def show_intro_page():
     st.markdown("""
         <style>
@@ -90,20 +86,25 @@ def show_intro_page():
                 max-width: 1100px;
             }
 
-            /* 🔥 intro 이미지 크게 보이게 (st.image 래핑용) */
+            /* intro 이미지 크기 */
             .intro-wrap img {
                 width: 100%;
-                max-width: 2200px;  /* 더 키우려면 1100px, 1200px 등으로 변경 */
+                max-width: 900px;
                 margin-left: auto;
                 margin-right: auto;
                 display: block;
             }
 
-            /* ✅ 인트로 페이지 '시스템 접속' 버튼 스타일 */
+            /* ⬆️ 여기 추가: 텍스트·버튼을 위로 올리는 영역 */
+            .intro-section {
+                margin-top: -80px;   /* 원하는 만큼 숫자 조절 가능 */
+            }
+
+            /* 버튼 글자색 */
             .stButton > button {
-                background-color: #ffffff;      /* 버튼 배경 흰색 */
-                color: #222222 !important;      /* 글자 진한 회색(잘 보이게) */
-                border-radius: 999px;           /* 둥근 버튼 (선택사항) */
+                background-color: #ffffff;
+                color: #222222 !important;
+                border-radius: 999px;
                 padding: 0.8rem 1.5rem;
                 font-weight: 600;
             }
@@ -112,30 +113,18 @@ def show_intro_page():
 
     col1, col2, col3 = st.columns([1, 8, 1])
     with col2:
-        # ✅ st.image 사용 + div로 감싸서 CSS 적용
         st.markdown('<div class="intro-wrap">', unsafe_allow_html=True)
         st.image("intro_image.png", use_container_width=True)
         st.markdown('</div>', unsafe_allow_html=True)
 
         st.markdown("---")
 
+        # ⬇️ 텍스트 + 버튼을 intro-section 클래스로 묶어 위로 올림
+        st.markdown('<div class="intro-section">', unsafe_allow_html=True)
+
         st.markdown(
             """
             <h2 style="text-align:center; margin-bottom:0.3rem;">
-                인천 1공장 AI 에이전트 포털
-            </h2>
-            <p style="text-align:center; color:#dddddd; font-size:0.95rem;">
-                제품 백서, 서류 요청, VOC 기록을 한 곳에서 관리하는 내부 포털입니다.
-            </p>
-            """,
-            unsafe_allow_html=True,
-        )
-
-        b_col1, b_col2, b_col3 = st.columns([1, 1, 1])
-        with b_col2:
-            if st.button("🚀 시스템 접속 (Enter)", use_container_width=True):
-                st.session_state["intro_done"] = True
-                st.rerun()
 
 
 # 2. 로그인 성공 후, 인트로를 아직 안 봤다면 인트로 페이지 표시 후 중단
