@@ -105,18 +105,27 @@ def show_intro_page():
                 margin-top: 20px;        
             }
 
-            /* 버튼 스타일 */
+            /* ✅ 버튼 글씨 강제 색상 지정 */
             .stButton > button {
                 background-color: #ffffff !important;
-                color: #333 !important;
+                color: #111 !important;
                 border-radius: 999px;
                 padding: 0.8rem 1.5rem;
                 font-weight: 600;
             }
 
+            /* ✅ 버튼 안에 들어가는 모든 텍스트도 같이 변경 */
+            .stButton > button * {
+                color: #111 !important;
+            }
+
+            .stButton > button:hover {
+                filter: brightness(0.95);
+            }
+
             /* 상단 로봇 이미지 아래로 이동 (필요시 여백 조정) */
             .hero-image {
-                margin-top: -100px;
+                margin-top: -200px;
             }
 
             .custom-hr {
