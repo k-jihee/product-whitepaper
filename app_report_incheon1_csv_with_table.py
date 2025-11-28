@@ -1092,23 +1092,6 @@ def page_home():
             color: #111111 !important;
         }
 
-        /* 🔶 홈 카드 박스: 흰색 테두리 */
-        .home-card-box {
-            border: 1px solid rgba(255,255,255,0.9);
-            border-radius: 16px;
-            padding: 18px 18px 14px 18px;
-            background: rgba(0,0,0,0.35);
-        }
-        .home-card-title {
-            font-weight: 700;
-            margin-bottom: 4px;
-            color: #ffffff;
-        }
-        .home-card-desc {
-            font-size: 0.9rem;
-            color: #f0f0f0;
-        }
-
         /* 🔶 홈 화면 위쪽 '질문하기' 가짜 입력창 버튼 */
         .fake-input-btn .stButton > button {
             width: 100% !important;
@@ -1128,12 +1111,13 @@ def page_home():
             background: #eceff4 !important;
         }
 
-        /* 🔥 Home 카드 테두리를 강제로 흰색 + 두껍게 변경 */
-        div[style*="border: 1px solid"] {
+        /* ✅ 홈 카드용: 컨테이너에 흰색 두꺼운 테두리 */
+        div[data-testid="stVerticalBlock"]:has(> .home-card-marker) {
             border: 2px solid rgba(255,255,255,1.0) !important;
-            border-radius: 14px !important;
+            border-radius: 16px !important;
+            padding: 18px 18px 14px 18px !important;
+            background: rgba(0,0,0,0.35) !important;
         }
-
 
         </style>
     """, unsafe_allow_html=True)
@@ -1178,12 +1162,14 @@ def page_home():
         {"emoji": "📣", "title": "VOC 로그", "desc": "VOC 및 이상 발생 내역을 기록합니다.", "goto": "VOC 기록(이상발생해석)"},
     ]
 
-    # 🔹 가로 4칸 카드 (st.columns 사용)
     cols = st.columns(len(cards))
     for col, c in zip(cols, cards):
         with col:
-            # ✅ Streamlit 기본 container(border=True) 사용
-            with st.container(border=True):
+            # border=True 빼고, 대신 안쪽에 마커를 하나 심어줌
+            with st.container():
+                # 👇 이 한 줄이 CSS에서 잡을 “마커”
+                st.markdown("<div class='home-card-marker'></div>", unsafe_allow_html=True)
+
                 st.markdown(
                     f"<p style='font-weight:700; margin-bottom:4px; color:#ffffff;'>"
                     f"{c['emoji']} {c['title']}</p>",
@@ -1197,7 +1183,6 @@ def page_home():
                 if st.button("바로가기", key=f"go_{c['goto']}"):
                     st.session_state["page"] = c["goto"]
                     st.rerun()
-
 
 
 
