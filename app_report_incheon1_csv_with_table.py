@@ -48,27 +48,21 @@ def tweak_sidebar_arrow():
     st.markdown(
         """
         <style>
-        /* 사이드바 접기/펼치기 전체 컨트롤 */
-        [data-testid="collapsedControl"] {
-            color: #ffffff !important;          /* 텍스트/아이콘 기본색 */
-        }
-
-        /* 실제 동그라미 버튼 */
-        [data-testid="collapsedControl"] > button {
-            color: #ffffff !important;          /* 아이콘 색을 currentColor로 쓰는 경우 대비 */
-            background-color: rgba(0, 0, 0, 0.6) !important;
-            border: 1px solid #ffffff80 !important;
-        }
-
-        [data-testid="collapsedControl"] > button:hover {
-            background-color: rgba(255, 255, 255, 0.12) !important;
-        }
-
-        /* 아이콘 SVG에 직접 색 덮어쓰기 */
-        [data-testid="collapsedControl"] svg,
-        [data-testid="collapsedControl"] svg path {
+        /* 사이드바 접기/펼치기 컨트롤 안에 있는 모든 요소 색을 강제 흰색으로 */
+        [data-testid="collapsedControl"] * {
+            color: #ffffff !important;
             fill: #ffffff !important;
             stroke: #ffffff !important;
+        }
+
+        /* 동그라미 버튼 배경/테두리도 같이 조정 (원하면 빼도 됨) */
+        [data-testid="collapsedControl"] > button {
+            background-color: rgba(0, 0, 0, 0.6) !important;
+            border-radius: 999px !important;
+            border: 1px solid #ffffff80 !important;
+        }
+        [data-testid="collapsedControl"] > button:hover {
+            background-color: rgba(255, 255, 255, 0.15) !important;
         }
         </style>
         """,
@@ -80,8 +74,6 @@ st.set_page_config(
     layout="wide",
     initial_sidebar_state="collapsed"   # ✅ 사이드바 기본 접힘
 )
-
-tweak_sidebar_arrow()
 
 PASSWORD = os.environ.get("INCHON1_PORTAL_PASSWORD", "samyang!11")
 
@@ -1269,3 +1261,6 @@ elif page == "서류 승인(관리자)":
     page_docs_admin()
 else:
     page_voc()
+
+tweak_sidebar_arrow()   # 사이드바 화살표 색상 최종 덮어쓰기
+
