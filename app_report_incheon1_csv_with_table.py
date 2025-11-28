@@ -62,6 +62,8 @@ if not st.session_state.authenticated:
     elif password:
         st.error("❌ 비밀번호가 틀렸습니다.")
     st.stop()
+    
+set_background("bg_binary.png")
 
 # ============================
 # 공용 유틸
