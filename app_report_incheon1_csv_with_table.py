@@ -133,7 +133,7 @@ def show_intro_page():
 
     col1, col2, col3 = st.columns([1, 8, 1])
     with col2:
-        st.markdown('<div class="custom-hr"></div>', unsafe_allow_html=True)
+        st.markdown('<div class="intro-wrap">', unsafe_allow_html=True)
         st.image("intro_image.png", use_container_width=True)
         st.markdown('</div>', unsafe_allow_html=True)
 
