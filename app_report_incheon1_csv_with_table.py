@@ -1158,7 +1158,7 @@ def page_home():
         }
 
         /* ✅ 홈 카드 컨테이너(= st.container) — 카드 전체가 눈에 잘 띄게 강화 */
-        [data-testid="stContainer"]:has(.home-card-marker) {
+        [data-testid="stVerticalBlock"]:has(.home-card-marker) {
             /* 테두리 더 굵게 + 완전 흰색 */
             border: 4px solid #ffffff !important;
             border-radius: 22px !important;
