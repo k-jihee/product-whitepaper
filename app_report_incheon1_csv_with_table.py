@@ -1499,9 +1499,6 @@ with st.sidebar:
         "Home",
         "인천 1공장 AI 챗봇",
         "제품백서",
-        "서류 요청(사용자)",
-        "서류 승인(관리자)",
-        "VOC 기록(이상발생해석)",
         "공정 일일 작업기록",
     ]
 
@@ -1529,12 +1526,6 @@ elif page == "인천 1공장 AI 챗봇":
     page_chatbot()
 elif page == "제품백서":
     page_product()
-elif page == "서류 요청(사용자)":
-    page_docs_request_user()
-elif page == "서류 승인(관리자)":
-    page_docs_admin()
-elif page == "VOC 기록(이상발생해석)":
-    page_voc()
 elif page == "공정 일일 작업기록":
     page_ops_log()
 
