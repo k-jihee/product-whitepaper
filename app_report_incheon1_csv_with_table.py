@@ -1180,19 +1180,21 @@ def page_ops_log():
 
         st.markdown("### 2️⃣ 생산량")
 
-        c10, c11, c12 = st.columns(3)
-        with c10:
+        col1, col2, col3, col4 = st.columns(4)
+
+        with col1:
             food_prod = st.number_input("식품용 생산량(톤)", min_value=0.0, step=0.1)
-        with c11:
+
+        with col2:
             ind_prod = st.number_input("산업용 생산량(톤)", min_value=0.0, step=0.1)
-        with c12:
+
+        with col3:
             level_1000 = st.number_input("1000m³ 레벨", min_value=0.0, step=0.1)
 
-        c13, c14 = st.columns(2)
-        with c13:
+        with col4:
             level_700 = st.number_input("700m³ 레벨", min_value=0.0, step=0.1)
-        with c14:
-            st.write("`일 생산량(톤)`, `누계`는 저장 후 자동 계산됩니다.")
+
+        st.caption("➕ `일 생산량(톤)`과 `누계`는 저장 후 자동 계산됩니다.")
 
         
         st.markdown("### 3️⃣ 제품코드 선택 (201 / 301 / 701 / 801 / 250)")
