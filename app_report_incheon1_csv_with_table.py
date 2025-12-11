@@ -1268,18 +1268,53 @@ def page_ops_log():
         with c14:
             st.write("`일 생산량(톤)`, `누계`는 저장 후 자동 계산됩니다.")
 
-        st.markdown("### 3️⃣ 제품코드 선택 (201 / 301 / 701 / 801 / 250)")
+        # 3️⃣ 건조기 선택 및 제품코드 입력
+        st.markdown("### 3️⃣ 건조기 선택 (201 / 301 / 701 / 801 / 250)")
 
-        def _prod_select(label, key):
+        # 공통 제품코드 선택 함수
+        def _prod_select(label: str, key: str):
             if prod_opts:
                 return st.selectbox(label, [""] + prod_opts, key=key)
-            return st.text_input(label + " (제품데이터 미로딩 시 직접입력)", key=key)
+            return st.text_input(label + " (제품 데이터 미로딩 시 직접 입력)", key=key)
 
-        prod_201 = _prod_select("201 제품코드", "prod_201")
-        prod_301 = _prod_select("301 제품코드", "prod_301")
-        prod_701 = _prod_select("701 제품코드", "prod_701")
-        prod_801 = _prod_select("801 제품코드", "prod_801")
-        prod_250 = _prod_select("250 제품코드", "prod_250")
+        # 오늘 가동한 건조기 선택
+        건조기_목록 = ["201 건조기", "301 건조기", "701 건조기", "801 건조기", "250 건조기"]
+        선택_건조기 = st.multiselect(
+            "가동한 건조기를 선택하세요.",
+            options=건조기_목록,
+            help="해당 일자에 실제로 가동한 건조기만 선택하면, 아래에 해당 건조기의 제품코드 입력 칸이 나타납니다."
+        )
+
+        # 건조기별 제품코드 저장용 딕셔너리 (기본값은 빈 문자열)
+        dryer_prod_map = {
+            "201": "",
+            "301": "",
+            "701": "",
+            "801": "",
+            "250": "",
+        }
+
+        # 선택된 건조기에 대해서만 제품코드 입력 칸 생성 (2열 배치)
+        col_left, col_right = st.columns(2)
+
+        for idx, dryer_label in enumerate(선택_건조기):
+            # "201 건조기" → "201"
+            dryer_num = dryer_label.split()[0].strip()
+            
+            target_col = col_left if idx % 2 == 0 else col_right
+            with target_col:
+                dryer_prod_map[dryer_num] = _prod_select(
+                    f"{dryer_num} 건조기 제품코드",
+                    key=f"prod_{dryer_num}"
+                )
+
+        # 나중에 CSV 저장에서 사용할 개별 변수로 풀기
+        prod_201 = dryer_prod_map["201"]
+        prod_301 = dryer_prod_map["301"]
+        prod_701 = dryer_prod_map["701"]
+        prod_801 = dryer_prod_map["801"]
+        prod_250 = dryer_prod_map["250"]
+
 
         st.markdown("### 4️⃣ 양성 / D/D")
 
