@@ -1268,39 +1268,39 @@ def page_ops_log():
         with c14:
             st.write("`일 생산량(톤)`, `누계`는 저장 후 자동 계산됩니다.")
 
-    # 3️⃣ 건조기 및 제품코드 선택
-    st.markdown("### 3️⃣ 건조기 및 제품코드 선택")
+        # 3️⃣ 건조기 및 제품코드 선택
+        st.markdown("### 3️⃣ 건조기 및 제품코드 선택")
 
-    # 공통 제품코드 선택 함수
-    def _prod_select(label: str, key: str):
-        if prod_opts:
-            return st.selectbox(label, [""] + prod_opts, key=key)
-        return st.text_input(label + " (제품 데이터 미로딩 시 직접 입력)", key=key)
+        # 공통 제품코드 선택 함수
+        def _prod_select(label: str, key: str):
+            if prod_opts:
+                return st.selectbox(label, [""] + prod_opts, key=key)
+            return st.text_input(label + " (제품 데이터 미로딩 시 직접 입력)", key=key)
 
-    # 1) 건조기 선택
-    dryer_numbers = ["201", "301", "701", "801", "250"]
-    dryer_selected = st.selectbox(
-        "건조기 번호를 선택하세요.",
-        ["선택하세요"] + dryer_numbers,
-        index=0,
-        help="201 / 301 / 701 / 801 / 250 중에서 오늘 사용한 건조기를 선택합니다."
-    )
-
-    # 2) 선택된 건조기에 대해 제품코드 선택
-    selected_dryer_product = ""
-    if dryer_selected != "선택하세요":
-        selected_dryer_product = _prod_select(
-            "선택한 건조기의 제품코드를 선택하세요.",
-            key="prod_selected_dryer"
+        # 1) 건조기 선택
+        dryer_numbers = ["201", "301", "701", "801", "250"]
+        dryer_selected = st.selectbox(
+            "건조기 번호를 선택하세요.",
+            ["선택하세요"] + dryer_numbers,
+            index=0,
+            help="201 / 301 / 701 / 801 / 250 중에서 오늘 사용한 건조기를 선택합니다."
         )
 
-    # 3) CSV 저장용 변수 매핑
-    #    선택한 건조기에 해당하는 칸에만 값이 들어가고, 나머지는 빈 값으로 저장
-    prod_201 = selected_dryer_product if dryer_selected == "201" else ""
-    prod_301 = selected_dryer_product if dryer_selected == "301" else ""
-    prod_701 = selected_dryer_product if dryer_selected == "701" else ""
-    prod_801 = selected_dryer_product if dryer_selected == "801" else ""
-    prod_250 = selected_dryer_product if dryer_selected == "250" else ""
+        # 2) 선택된 건조기에 대해 제품코드 선택
+        selected_dryer_product = ""
+        if dryer_selected != "선택하세요":
+            selected_dryer_product = _prod_select(
+                "선택한 건조기의 제품코드를 선택하세요.",
+                key="prod_selected_dryer"
+            )
+
+        # 3) CSV 저장용 변수 매핑
+        #    선택한 건조기에 해당하는 칸에만 값이 들어가고, 나머지는 빈 값으로 저장
+        prod_201 = selected_dryer_product if dryer_selected == "201" else ""
+        prod_301 = selected_dryer_product if dryer_selected == "301" else ""
+        prod_701 = selected_dryer_product if dryer_selected == "701" else ""
+        prod_801 = selected_dryer_product if dryer_selected == "801" else ""
+        prod_250 = selected_dryer_product if dryer_selected == "250" else ""
 
 
 
