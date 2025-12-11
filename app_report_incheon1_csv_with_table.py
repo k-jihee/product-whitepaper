@@ -1460,11 +1460,26 @@ def page_home():
 
     # 카드 데이터
     cards = [
-        {"emoji": "🤖", "title": "인천 1공장 AI 챗봇", "desc": "질문하면 바로 챗봇으로 이동합니다.", "goto": "인천 1공장 AI 챗봇"},
-        {"emoji": "📘", "title": "제품 백서", "desc": "제품 정보, 규격, COA를 확인합니다.", "goto": "제품백서"},
-        {"emoji": "🗂️", "title": "서류 요청", "desc": "HACCP, ISO, 규격서 등을 요청합니다.", "goto": "서류 요청(사용자)"},
-        {"emoji": "📣", "title": "VOC 로그", "desc": "VOC 및 이상 발생 내역을 기록합니다.", "goto": "VOC 기록(이상발생해석)"},
+        {
+            "emoji": "🤖",
+            "title": "인천 1공장 AI 챗봇",
+            "desc": "질문하면 바로 챗봇으로 이동합니다.",
+            "goto": "인천 1공장 AI 챗봇",
+        },
+        {
+            "emoji": "📘",
+            "title": "제품 백서",
+            "desc": "제품 정보, 규격, COA를 확인합니다.",
+            "goto": "제품백서",
+        },
+        {
+            "emoji": "⚙️",
+            "title": "공정 일일 작업기록",
+            "desc": "일일 생산/공정 데이터를 입력·조회합니다.",
+            "goto": "공정 일일 작업기록",
+        },
     ]
+
 
     cols = st.columns(len(cards))
 
