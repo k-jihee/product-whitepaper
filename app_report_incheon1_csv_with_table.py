@@ -209,7 +209,7 @@ def show_intro_page():
                 인천 1공장 AI 에이전트
             </h2>
             <p style="text-align:center; color:#dddddd; font-size:0.95rem;">
-                제품 백서, 서류 요청, VOC 기록을 한 곳에서 관리하는 내부 포털입니다.
+                인천 1공장 AI 챗봇, 제품 백서, 작업사항을 한 곳에서 관리하는 내부 포털입니다.
             </p>
             """,
             unsafe_allow_html=True,
@@ -1096,8 +1096,25 @@ def page_voc():
 # 페이지: 공정 일일 작업기록
 # ============================
 def page_ops_log():
+    # 🔵 상단 흰색 헤더 제거 + 여백 제거 (Home/제품백서 방식과 동일)
+    st.markdown("""
+        <style>
+        /* 상단 기본 헤더 투명 처리 */
+        header[data-testid="stHeader"] {
+            display: block !important;
+            background: transparent !important;
+            box-shadow: none !important;
+        }
+        /* 헤더 아래 쓸데없는 위쪽 여백 제거 */
+        header[data-testid="stHeader"] + div {
+            padding-top: 0 !important;
+        }
+        </style>
+    """, unsafe_allow_html=True)
+
     st.title("⚙️ 공정 일일 작업기록")
     st.caption("인천1공장 일일 공정 운영 내용을 입력/저장하는 화면입니다.")
+
 
     # 제품코드 선택 옵션 준비 (기존 product_data 활용)
     try:
