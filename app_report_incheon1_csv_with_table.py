@@ -3,6 +3,8 @@ import pandas as pd
 import re
 import os
 from datetime import datetime
+import smtplib
+from email.message import EmailMessage
 
 # ============================
 # 기본 설정 & 인증
@@ -240,6 +242,78 @@ DATA_DIR = "data"
 UPLOAD_DIR = os.path.join(DATA_DIR, "uploads")
 ensure_dir(DATA_DIR)
 ensure_dir(UPLOAD_DIR)
+
+# ============================
+# 공정 일일 작업기록 메일 발송 함수
+# ============================
+def send_ops_email(rec: dict):
+    """
+    공정 일일 작업기록 저장 시 자동 이메일 발송
+    """
+    SMTP_HOST = os.environ.get("SMTP_HOST", "")
+    SMTP_PORT = int(os.environ.get("SMTP_PORT", "587"))
+    SMTP_USER = os.environ.get("SMTP_USER", "")
+    SMTP_PASS = os.environ.get("SMTP_PASS", "")
+
+    if not (SMTP_HOST and SMTP_USER and SMTP_PASS):
+        st.warning("⚠️ SMTP 설정이 없어 메일이 발송되지 않았습니다.")
+        return
+
+    # 이메일 내용 작성
+    body = "\n".join([
+        "[인천1공장 공정 일일 작업기록 저장 알림]",
+        "",
+        f"입력시각: {rec.get('입력시각')}",
+        f"날짜: {rec.get('날짜')}",
+        "",
+        "--- 전분 공정 ---",
+        f"파쇄 RPM: {rec.get('파쇄 RPM')}",
+        f"파쇄량(톤/일): {rec.get('파쇄량(톤/일)')}",
+        f"수전분 재공(m3): {rec.get('수전분 재공(m3)')}",
+        f"공침지조(기): {rec.get('공침지조(기)')}",
+        f"LSW재공(m3): {rec.get('LSW재공(m3)')}",
+        f"CSL드레인 COD: {rec.get('CSL드레인 COD')}",
+        f"공당화(m3): {rec.get('공당화(m3)')}",
+        f"액화 RPM: {rec.get('액화 RPM')}",
+        f"폐수 처리량(m3): {rec.get('폐수 처리량(m3)')}",
+        "",
+        "--- 생산량 ---",
+        f"식품용 생산량: {rec.get('식품용 생산량(톤)')}",
+        f"산업용 생산량: {rec.get('산업용 생산량(톤)')}",
+        f"1000m3 레벨: {rec.get('1000m3 레벨')}",
+        f"700m3 레벨: {rec.get('700m3 레벨')}",
+        "",
+        "--- 제품코드 ---",
+        f"201: {rec.get('201')}",
+        f"301: {rec.get('301')}",
+        f"701: {rec.get('701')}",
+        f"801: {rec.get('801')}",
+        f"250: {rec.get('250')}",
+        "",
+        "--- 양성 / D-D ---",
+        f"양성 Pre-mixing: {rec.get('양성_Pre')}",
+        f"양성 Final-mixing: {rec.get('양성_Final')}",
+        f"D/D: {rec.get('D/D')}",
+        "",
+        "--- 특이사항 ---",
+        f"설비 보수 & 공사 사항:\n{rec.get('설비 보수 & 공사 사항')}",
+        f"작업 특기 사항:\n{rec.get('작업 특기 사항')}",
+    ])
+
+    msg = EmailMessage()
+    msg["Subject"] = f"[인천1공장] 공정 일일 작업기록 저장 알림 ({rec.get('날짜')})"
+    msg["From"] = SMTP_USER
+    msg["To"] = "jihee.kim@samyang.com"
+    msg.set_content(body)
+
+    try:
+        with smtplib.SMTP(SMTP_HOST, SMTP_PORT) as server:
+            server.starttls()
+            server.login(SMTP_USER, SMTP_PASS)
+            server.send_message(msg)
+        st.success("📧 이메일 발송 완료!")
+    except Exception as e:
+        st.error(f"메일 발송 오류: {e}")
 
 def clean_int(value):
     try:
@@ -1270,6 +1344,7 @@ def page_ops_log():
                     csv_path, mode="w", header=True, index=False, encoding="utf-8-sig"
                 )
 
+            send_ops_email(rec)
             st.success("✅ 작업기록이 저장되었습니다.")
 
     # ---------- 저장된 작업기록 조회 + 누계 자동계산 ----------
