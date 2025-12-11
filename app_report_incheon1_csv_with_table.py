@@ -1196,16 +1196,32 @@ def page_ops_log():
 
         st.markdown("### 3️⃣ 제품코드 선택 (201 / 301 / 701 / 801 / 250)")
 
+        st.markdown("### 3️⃣ 제품코드 선택 (201 / 301 / 701 / 801 / 250)")
+
+        # 공통 제품코드 선택 함수
         def _prod_select(label, key):
             if prod_opts:
                 return st.selectbox(label, [""] + prod_opts, key=key)
             return st.text_input(label + " (제품데이터 미로딩 시 직접입력)", key=key)
 
-        prod_201 = _prod_select("201 제품코드", "prod_201")
-        prod_301 = _prod_select("301 제품코드", "prod_301")
-        prod_701 = _prod_select("701 제품코드", "prod_701")
-        prod_801 = _prod_select("801 제품코드", "prod_801")
-        prod_250 = _prod_select("250 제품코드", "prod_250")
+        # 🔹 가로 5칸 배치 (201 / 301 / 701 / 801 / 250)
+        col_201, col_301, col_701, col_801, col_250 = st.columns(5)
+
+        with col_201:
+            prod_201 = _prod_select("201 제품코드", "prod_201")
+
+        with col_301:
+            prod_301 = _prod_select("301 제품코드", "prod_301")
+
+        with col_701:
+            prod_701 = _prod_select("701 제품코드", "prod_701")
+
+        with col_801:
+            prod_801 = _prod_select("801 제품코드", "prod_801")
+
+        with col_250:
+            prod_250 = _prod_select("250 제품코드", "prod_250")
+
 
         st.markdown("### 4️⃣ 양성 / D/D")
 
