@@ -1244,16 +1244,22 @@ def page_ops_log():
                 help="여러 건일 경우 줄바꿈으로 구분해서 입력"
             )
 
-        # 🔹 저장 버튼 오른쪽 정렬 + 글씨를 확실히 검정으로
+        # 🔹 저장 버튼 오른쪽 정렬 + 글씨를 확실히 검정색으로
         st.markdown("""
             <style>
-            /* 폼 안에 있는 stButton 전체를 검정 글씨로 통일 */
-            form div.stButton > button * {
-                color: #000000 !important;
+            /* 공정 일일 작업기록 화면의 폼 제출 버튼(target: stFormSubmitButton) */
+            [data-testid="stFormSubmitButton"] > button {
+                color: #000000 !important;          /* 버튼 텍스트 */
                 font-weight: 600 !important;
+                background-color: #ffffff !important;  /* 필요하면 배경도 하얀색 */
+            }
+            /* 버튼 안쪽 아이콘/텍스트까지 모두 검정으로 */
+            [data-testid="stFormSubmitButton"] > button * {
+                color: #000000 !important;
             }
             </style>
         """, unsafe_allow_html=True)
+
 
 
         btn_col1, btn_col2 = st.columns([7, 1])
