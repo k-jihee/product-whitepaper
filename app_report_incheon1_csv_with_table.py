@@ -1182,7 +1182,7 @@ def page_ops_log():
         with c7:
             csl_cod = st.number_input("CSL드레인 COD", min_value=0.0, step=1.0)
 
-        c8 c9, c10= st.columns(3)
+        c8, c9, c10= st.columns(3)
         with c8:
             gongdanghwa = st.number_input("공당화(m³)", min_value=0.0, step=0.1)
         with c9:
