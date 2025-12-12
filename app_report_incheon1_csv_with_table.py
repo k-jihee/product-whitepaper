@@ -1151,8 +1151,10 @@ def page_ops_log():
         with col_date:
             date = st.date_input("날짜 (yyyy-mm-dd 형식)")
 
+
         st.markdown("### 1️⃣ 전분 공정")
 
+        # 🔹 1행: 파쇄 RPM / 파쇄량 / 파쇄량 누계(읽기 전용 안내)
         c1, c2, c3 = st.columns(3)
         with c1:
             crush_rpm = st.text_area(
@@ -1162,22 +1164,30 @@ def page_ops_log():
         with c2:
             crush_ton_day = st.number_input("파쇄량(톤/일)", min_value=0.0, step=0.1)
         with c3:
-            slurry_wip = st.number_input("수전분 재공(m³)", min_value=0.0, step=0.1)
+            st.text_input(
+                "파쇄량 누계(톤)",
+                value="저장 후 자동 계산됩니다.",
+                disabled=True,
+                help="입력할 필요 없습니다. 아래 표에서 자동 누계가 계산됩니다."
+            )
 
-        c4, c5, c6 = st.columns(3)
+        # 🔹 2행: 공침지조 / 수전분 재공 / LSW재공 / CSL드레인 COD
+        c4, c5, c6, c7 = st.columns(4)
         with c4:
             co_precipitation = st.number_input("공침지조(기)", min_value=0.0, step=1.0)
         with c5:
-            lsw_wip = st.number_input("LSW재공(m³)", min_value=0.0, step=0.1)
+            slurry_wip = st.number_input("수전분 재공(m³)", min_value=0.0, step=0.1)
         with c6:
+            lsw_wip = st.number_input("LSW재공(m³)", min_value=0.0, step=0.1)
+        with c7:
             csl_cod = st.number_input("CSL드레인 COD", min_value=0.0, step=1.0)
 
-        c7, c8, c9 = st.columns(3)
-        with c7:
-            gongdanghwa = st.number_input("공당화(m³)", min_value=0.0, step=0.1)
+        c8 c9, c10= st.columns(3)
         with c8:
-            liquefaction_rpm = st.number_input("액화 RPM", min_value=0.0, step=1.0)
+            gongdanghwa = st.number_input("공당화(m³)", min_value=0.0, step=0.1)
         with c9:
+            liquefaction_rpm = st.number_input("액화 RPM", min_value=0.0, step=1.0)
+        with c10:
             waste_water = st.number_input("폐수 처리량(m³)", min_value=0.0, step=0.1)
 
         st.markdown("### 2️⃣ 생산량")
