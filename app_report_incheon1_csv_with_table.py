@@ -1190,9 +1190,10 @@ def page_ops_log():
         with c10:
             waste_water = st.number_input("폐수 처리량(m³)", min_value=0.0, step=0.1)
 
-                # === 2️⃣ 생산량 + 3️⃣ 제품코드 선택 (좌우 배치) ===
+                 # === 2️⃣ 생산량 + 3️⃣ 제품코드 선택 (좌우 배치) ===
         left_col, right_col = st.columns([1, 1.2])
 
+        # 🔹 왼쪽 : 2️⃣ 생산량
         with left_col:
             st.markdown("### 2️⃣ 생산량")
             food_prod = st.number_input("식품용 생산량(톤)", min_value=0.0, step=0.1)
@@ -1201,8 +1202,10 @@ def page_ops_log():
             level_700 = st.number_input("700m³ 레벨", min_value=0.0, step=0.1)
             st.caption("➕ `일 생산량(톤)`과 `누계`는 저장 후 자동 계산됩니다.")
 
+        # 🔹 오른쪽 : 3️⃣ 제품코드 선택
         with right_col:
             st.markdown("### 3️⃣ 제품코드 선택 (201 / 301 / 701 / 801 / 250)")
+
             def _prod_select(label, key):
                 if prod_opts:
                     return st.selectbox(label, [""] + prod_opts, key=key)
@@ -1214,25 +1217,32 @@ def page_ops_log():
             prod_801 = _prod_select("801 제품코드", "prod_801")
             prod_250 = _prod_select("250 제품코드", "prod_250")
 
-        st.markdown("### 4️⃣ 양성 / D/D")
-        c15, c16 = st.columns(2)
-        with c15:
-            yang_pre = _prod_select("양성 (Pre-mixing 제품코드)", "yang_pre")
-        with c16:
-            yang_final = _prod_select("양성 (Final-mixing 제품코드)", "yang_final")
-        dd_prod = _prod_select("D/D 제품코드", "dd_prod")
+        # === 4️⃣ 양성 / D·D  +  5️⃣ 특이사항 (2번/3번처럼 좌우 배치) ===
+        col_4, col_5 = st.columns([1, 1.2])
 
+        # 🔹 왼쪽 : 4️⃣ 양성 / D·D
+        with col_4:
+            st.markdown("### 4️⃣ 양성 / D/D")
+            c15, c16 = st.columns(2)
+            with c15:
+                yang_pre = _prod_select("양성 (Pre-mixing 제품코드)", "yang_pre")
+            with c16:
+                yang_final = _prod_select("양성 (Final-mixing 제품코드)", "yang_final")
 
-        st.markdown("### 5️⃣ 특이사항")
+            # D/D는 한 줄 전체 사용
+            dd_prod = _prod_select("D/D 제품코드", "dd_prod")
 
-        maintenance = st.text_area(
-            "설비 보수 & 공사 사항",
-            help="여러 건일 경우 줄바꿈으로 구분해서 입력"
-        )
-        special_note = st.text_area(
-            "작업 특기 사항",
-            help="여러 건일 경우 줄바꿈으로 구분해서 입력"
-        )
+        # 🔹 오른쪽 : 5️⃣ 특이사항
+        with col_5:
+            st.markdown("### 5️⃣ 특이사항")
+            maintenance = st.text_area(
+                "설비 보수 & 공사 사항",
+                help="여러 건일 경우 줄바꿈으로 구분해서 입력"
+            )
+            special_note = st.text_area(
+                "작업 특기 사항",
+                help="여러 건일 경우 줄바꿈으로 구분해서 입력"
+            )
 
         submitted = st.form_submit_button("💾 작업기록 저장")
 
