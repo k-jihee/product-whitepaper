@@ -124,38 +124,6 @@ set_background("binary.PNG")   # 또는 "배경.PNG"
 if "intro_done" not in st.session_state:
     st.session_state["intro_done"] = False
 
-# ✅ 모든 버튼 글씨를 검정(#000)으로 강제 설정
-st.markdown("""
-<style>
-    /* 기본 버튼 */
-    .stButton > button {
-        color: #000 !important;
-        font-weight: 600 !important;
-    }
-    .stButton > button * {
-        color: #000 !important;
-    }
-
-    /* 폼 내부 버튼 (작업기록 저장 등) */
-    form .stButton > button {
-        color: #000 !important;
-        font-weight: 600 !important;
-    }
-
-    /* 사이드바 버튼 */
-    [data-testid="stSidebar"] .stButton > button {
-        color: #000 !important;
-        font-weight: 600 !important;
-    }
-
-    /* 컨테이너(홈 카드) 안 버튼 */
-    [data-testid="stContainer"] .stButton > button {
-        color: #000 !important;
-    }
-</style>
-""", unsafe_allow_html=True)
-
-
 def show_intro_page():
     st.markdown("""
         <style>
