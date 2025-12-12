@@ -1147,7 +1147,7 @@ def page_ops_log():
         st.subheader("📥 작업 내용 입력")
 
         # 1행 : 날짜
-        col_date, col_empty1, col_empty2 = st.columns([1, 3, 3])
+        col_date, col_empty1, col_empty2 = st.columns([1, 1, 1])
         with col_date:
             date = st.date_input("날짜 (yyyy-mm-dd 형식)")
 
