@@ -1247,8 +1247,8 @@ def page_ops_log():
         # 🔹 저장 버튼 오른쪽 정렬 + 글씨 검정색
         st.markdown("""
             <style>
-            div.stButton>button {
-                color: black !important;
+            form div.stButton button {
+                color: #000 !important;
                 font-weight: 600 !important;
             }
             </style>
