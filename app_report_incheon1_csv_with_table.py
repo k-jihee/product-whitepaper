@@ -1190,7 +1190,7 @@ def page_ops_log():
         with c10:
             waste_water = st.number_input("폐수 처리량(m³)", min_value=0.0, step=0.1)
 
-                # === 2️⃣ 생산량 + 3️⃣ 제품코드 + 4️⃣ 양성/D·D (3컬럼 배치) ===
+        # === 2️⃣ 생산량 + 3️⃣ 제품코드 + 4️⃣ 양성/D·D (3컬럼 배치) ===
 
         # 공통 제품코드 선택 함수 (2,3,4 모두에서 사용)
         def _prod_select(label, key):
@@ -1212,7 +1212,22 @@ def page_ops_log():
             st.caption("➕ `일 생산량(톤)`과 `누계`는 저장 후 자동 계산됩니다.")
 
         # 🔹 가운데: 3️⃣ 제품코드 선택 (세로로 5칸)
-        with c
+        with col_code:
+            st.markdown("### 3️⃣ 제품코드 선택 (201 / 301 / 701 / 801 / 250)")
+
+            prod_201 = _prod_select("201 제품코드", "prod_201")
+            prod_301 = _prod_select("301 제품코드", "prod_301")
+            prod_701 = _prod_select("701 제품코드", "prod_701")
+            prod_801 = _prod_select("801 제품코드", "prod_801")
+            prod_250 = _prod_select("250 제품코드", "prod_250")
+
+        # 🔹 오른쪽: 4️⃣ 양성 / D/D (세로 카드)
+        with col_yang:
+            st.markdown("### 4️⃣ 양성 / D/D")
+
+            yang_pre = _prod_select("양성 (Pre-mixing 제품코드)", "yang_pre")
+            yang_final = _prod_select("양성 (Final-mixing 제품코드)", "yang_final")
+            dd_prod = _prod_select("D/D 제품코드", "dd_prod")
 
 
         st.markdown("### 5️⃣ 특이사항")
