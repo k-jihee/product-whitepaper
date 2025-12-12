@@ -1244,15 +1244,18 @@ def page_ops_log():
                 help="여러 건일 경우 줄바꿈으로 구분해서 입력"
             )
 
-        # 🔹 저장 버튼 오른쪽 정렬 + 글씨 검정색
+        # 🔹 저장 버튼 오른쪽 정렬 + 글씨를 확실히 검정으로
         st.markdown("""
             <style>
-            form div.stButton button {
-                color: #000 !important;
+            /* 폼 안에 있는 stButton 전체를 검정 글씨로 통일 */
+            form div.stButton > button,
+            form div.stButton > button * {
+                color: #000000 !important;
                 font-weight: 600 !important;
             }
             </style>
         """, unsafe_allow_html=True)
+
 
         btn_col1, btn_col2 = st.columns([7, 1])
         with btn_col2:
