@@ -1244,7 +1244,20 @@ def page_ops_log():
                 help="여러 건일 경우 줄바꿈으로 구분해서 입력"
             )
 
-        submitted = st.form_submit_button("💾 작업기록 저장")
+        # 🔹 저장 버튼 오른쪽 정렬 + 글씨 검정색
+        st.markdown("""
+            <style>
+            div.stButton>button {
+                color: black !important;
+                font-weight: 600 !important;
+            }
+            </style>
+        """, unsafe_allow_html=True)
+
+        btn_col1, btn_col2 = st.columns([7, 1])
+        with btn_col2:
+            submitted = st.form_submit_button("💾 작업기록 저장")
+
 
         if submitted:
             rec = {
