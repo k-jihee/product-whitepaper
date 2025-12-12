@@ -1248,7 +1248,6 @@ def page_ops_log():
         st.markdown("""
             <style>
             /* 폼 안에 있는 stButton 전체를 검정 글씨로 통일 */
-            form div.stButton > button,
             form div.stButton > button * {
                 color: #000000 !important;
                 font-weight: 600 !important;
