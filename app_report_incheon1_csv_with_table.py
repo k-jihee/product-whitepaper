@@ -1191,7 +1191,7 @@ def page_ops_log():
             waste_water = st.number_input("폐수 처리량(m³)", min_value=0.0, step=0.1)
 
                  # === 2️⃣ 생산량 + 3️⃣ 제품코드 선택 (좌우 배치) ===
-        left_col, right_col = st.columns([1, 1.2])
+        left_col, right_col = st.columns([1, 1])
 
         # 🔹 왼쪽 : 2️⃣ 생산량
         with left_col:
@@ -1200,7 +1200,17 @@ def page_ops_log():
             ind_prod = st.number_input("산업용 생산량(톤)", min_value=0.0, step=0.1)
             level_1000 = st.number_input("1000m³ 레벨", min_value=0.0, step=0.1)
             level_700 = st.number_input("700m³ 레벨", min_value=0.0, step=0.1)
-            st.caption("➕ `일 생산량(톤)`과 `누계`는 저장 후 자동 계산됩니다.")
+
+            # 🔹 700m³ 레벨 아래에 '일 생산량(톤) 합계' 자동 계산 표시
+            daily_total = food_prod + ind_prod
+            st.text_input(
+                "일 생산량(톤) 합계",
+                value=f"{daily_total:.2f}",
+                disabled=True,
+                help="식품용 + 산업용 생산량의 합계가 자동 계산되어 표시됩니다."
+            )
+
+            st.caption("➕ `일 생산량(톤)`과 `누계`는 저장 후 아래 표에서 다시 자동 계산됩니다.")
 
         # 🔹 오른쪽 : 3️⃣ 제품코드 선택
         with right_col:
