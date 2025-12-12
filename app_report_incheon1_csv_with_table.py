@@ -1190,11 +1190,18 @@ def page_ops_log():
         with c10:
             waste_water = st.number_input("폐수 처리량(m³)", min_value=0.0, step=0.1)
 
-                # === 2️⃣ 생산량 + 3️⃣ 제품코드 선택 (좌우 배치) ===
-        left_col, right_col = st.columns([1, 1.2])  # 비율은 취향대로 조정 가능
+                # === 2️⃣ 생산량 + 3️⃣ 제품코드 + 4️⃣ 양성/D·D (3컬럼 배치) ===
 
-        # 🔹 왼쪽: 생산량 (세로로 4칸)
-        with left_col:
+        # 공통 제품코드 선택 함수 (2,3,4 모두에서 사용)
+        def _prod_select(label, key):
+            if prod_opts:
+                return st.selectbox(label, [""] + prod_opts, key=key)
+            return st.text_input(label + " (제품데이터 미로딩 시 직접입력)", key=key)
+
+        col_prod, col_code, col_yang = st.columns([1, 1.2, 1.2])
+
+        # 🔹 왼쪽: 2️⃣ 생산량 (세로로 4칸)
+        with col_prod:
             st.markdown("### 2️⃣ 생산량")
 
             food_prod = st.number_input("식품용 생산량(톤)", min_value=0.0, step=0.1)
@@ -1204,32 +1211,9 @@ def page_ops_log():
 
             st.caption("➕ `일 생산량(톤)`과 `누계`는 저장 후 자동 계산됩니다.")
 
-        # 🔹 오른쪽: 제품코드 선택 (세로로 5칸)
-        with right_col:
-            st.markdown("### 3️⃣ 제품코드 선택 (201 / 301 / 701 / 801 / 250)")
+        # 🔹 가운데: 3️⃣ 제품코드 선택 (세로로 5칸)
+        with c
 
-            # 공통 제품코드 선택 함수
-            def _prod_select(label, key):
-                if prod_opts:
-                    return st.selectbox(label, [""] + prod_opts, key=key)
-                return st.text_input(label + " (제품데이터 미로딩 시 직접입력)", key=key)
-
-            prod_201 = _prod_select("201 제품코드", "prod_201")
-            prod_301 = _prod_select("301 제품코드", "prod_301")
-            prod_701 = _prod_select("701 제품코드", "prod_701")
-            prod_801 = _prod_select("801 제품코드", "prod_801")
-            prod_250 = _prod_select("250 제품코드", "prod_250")
-
-
-        st.markdown("### 4️⃣ 양성 / D/D")
-
-        c15, c16 = st.columns(2)
-        with c15:
-            yang_pre = _prod_select("양성 (Pre-mixing 제품코드)", "yang_pre")
-        with c16:
-            yang_final = _prod_select("양성 (Final-mixing 제품코드)", "yang_final")
-
-        dd_prod = _prod_select("D/D 제품코드", "dd_prod")
 
         st.markdown("### 5️⃣ 특이사항")
 
