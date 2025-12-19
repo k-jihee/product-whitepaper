@@ -236,6 +236,11 @@ if st.session_state.authenticated and not st.session_state["intro_done"]:
 def ensure_dir(path: str):
     os.makedirs(path, exist_ok=True)
 
+def go_home_button(label="⬅️ 홈으로"):
+    if st.button(label):
+        st.session_state["page"] = "Home"
+        st.rerun()
+
 DATA_DIR = "data"
 UPLOAD_DIR = os.path.join(DATA_DIR, "uploads")
 ensure_dir(DATA_DIR)
@@ -389,6 +394,8 @@ def load_product_df():
 # 페이지: AI 챗봇(플레이스홀더)
 # ============================
 def page_chatbot():
+    go_home_button("⬅️ 홈으로")   # ✅ 이 줄 추가 (iframe보다 위!)
+    
     # 0) 이 페이지에서는 헤더/사이드바/메인 컨테이너 스크롤 전부 숨기기
     st.markdown(
         """
@@ -616,6 +623,8 @@ def product_card(row):
 # 페이지: 제품백서
 # ============================
 def page_product():
+    go_home_button()   # ✅ 이 줄 추가 (페이지 최상단)
+    
     # 🔹 제품백서 페이지용 레이아웃/색상
     st.markdown("""
         <style>
@@ -1096,6 +1105,8 @@ def page_voc():
 # 페이지: 공정 일일 작업기록
 # ============================
 def page_ops_log():
+    go_home_button()   # ✅ 이 줄 추가
+    
     # 🔵 상단 흰색 헤더 제거 + 여백 제거 (Home/제품백서 방식과 동일)
     st.markdown("""
         <style>
