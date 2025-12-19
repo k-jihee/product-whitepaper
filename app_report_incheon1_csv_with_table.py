@@ -237,7 +237,7 @@ def ensure_dir(path: str):
     os.makedirs(path, exist_ok=True)
 
 def go_home_button(label="⬅️ 홈으로"):
-    if st.button(label):
+    if st.button(label, type="primary"):
         st.session_state["page"] = "Home"
         st.rerun()
 
