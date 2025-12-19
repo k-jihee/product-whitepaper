@@ -389,13 +389,19 @@ def load_product_df():
 # 페이지: AI 챗봇(플레이스홀더)
 # ============================
 def page_chatbot():
-    # 0) 이 페이지에서는 헤더/사이드바/메인 컨테이너 스크롤 전부 숨기기
     st.markdown(
         """
         <style>
-        /* 상단 기본 헤더 숨기기 */
+        /* ✅ 헤더를 숨기지 말고 투명 처리 (화살표 버튼 살리기) */
         header[data-testid="stHeader"] {
-            display: none;
+            display: block !important;
+            background: transparent !important;
+            box-shadow: none !important;
+        }
+
+        /* (선택) 헤더 안의 불필요한 요소만 숨기고 싶으면 */
+        header[data-testid="stHeader"] [data-testid="stToolbar"] {
+            display: none !important;
         }
 
         /* 메인 컨테이너 여백 제거 */
@@ -405,7 +411,7 @@ def page_chatbot():
             max-width: 100%;
         }
 
-        /* 전체 앱 컨테이너와 메인 영역, 사이드바 스크롤 숨기기 */
+        /* 스크롤 숨김 */
         html, body,
         [data-testid="stAppViewContainer"],
         [data-testid="stMain"],
@@ -416,18 +422,13 @@ def page_chatbot():
             overflow: hidden !important;
         }
 
-                /* ===== 사이드바 화살표가 iframe 위에 보이게 ===== */
-        iframe {
-            z-index: 0 !important;
-        }
-
+        /* ✅ 버튼이 iframe 위로 오도록 */
         [data-testid="stExpandSidebarButton"],
         [data-testid="stSidebarCollapseButton"] {
             position: fixed !important;
             z-index: 100000 !important;
         }
-
-        [data-testid="stExpandSidebarButton"] {
+        [data-testid="stExpandSidebarButton"]{
             top: 0.75rem !important;
             left: 0.75rem !important;
         }
@@ -436,7 +437,6 @@ def page_chatbot():
         unsafe_allow_html=True,
     )
 
-    # 1) 화면 전체를 덮는 iframe (이 화면만 보이게)
     iframe_html = """
     <iframe
         src="https://samibot.samyang.com/chatbot/9e054af9-fdbe-4290-b914-7620c73a5e1d"
@@ -451,9 +451,8 @@ def page_chatbot():
         allow="clipboard-write; microphone; camera">
     </iframe>
     """
-
-    # 컴포넌트 자체는 화면에 잡히게 최소 높이만 줌
     st.components.v1.html(iframe_html, height=800, scrolling=False)
+
 
 
 # ============================
