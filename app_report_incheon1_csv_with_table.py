@@ -398,9 +398,8 @@ def load_product_df():
 # 페이지: AI 챗봇(플레이스홀더)
 # ============================
 def page_chatbot():
-    go_home_button("⬅️ 홈으로")   # ✅ 이 줄 추가 (iframe보다 위!)
-    
-    # 0) 이 페이지에서는 헤더/사이드바/메인 컨테이너 스크롤 전부 숨기기
+    go_home_button("⬅️ 홈으로")   # 오른쪽 상단 버튼(네가 만든 함수)
+
     st.markdown(
         """
         <style>
@@ -411,123 +410,62 @@ def page_chatbot():
 
         /* 메인 컨테이너 여백 제거 */
         main .block-container {
-            padding: 0;
-            margin: 0;
-            max-width: 100%;
+            padding: 0 !important;
+            margin: 0 !important;
+            max-width: 100% !important;
         }
 
-        /* 전체 앱 컨테이너와 메인 영역, 사이드바 스크롤 숨기기 */
+        /* 전체 앱 스크롤 잠그기(iframe 화면만 보이게) */
         html, body,
         [data-testid="stAppViewContainer"],
         [data-testid="stMain"],
-        [data-testid="stSidebar"],
         [data-testid="stVerticalBlock"] {
-            margin: 0;
-            height: 100%;
-            overflow: hidden !important;
-        }
-        
-        def page_chatbot():
-    go_home_button("⬅️ 홈으로")   # ✅ 이 줄 추가 (iframe보다 위!)
-    
-    # 0) 이 페이지에서는 헤더/사이드바/메인 컨테이너 스크롤 전부 숨기기
-    st.markdown(
-        """
-        <style>
-        /* 상단 기본 헤더 숨기기 */
-        header[data-testid="stHeader"] {
-            display: none;
-        }
-
-        /* 메인 컨테이너 여백 제거 */
-        main .block-container {
-            padding: 0;
-            margin: 0;
-            max-width: 100%;
-        }
-
-        /* 전체 앱 컨테이너와 메인 영역, 사이드바 스크롤 숨기기 */
-        html, body,
-        [data-testid="stAppViewContainer"],
-        [data-testid="stMain"],
-        [data-testid="stSidebar"],
-        [data-testid="stVerticalBlock"] {
-            margin: 0;
-            height: 100%;
+            margin: 0 !important;
+            height: 100% !important;
             overflow: hidden !important;
         }
 
-st.markdown(
-    """
-    <style>
-    /* 상단 기본 헤더 숨기기 */
-    header[data-testid="stHeader"] {
-        display: none;
-    }
+        /* ✅ 챗봇 화면에서도 사이드바 펼치기 화살표(→)가 보이도록 강제 */
+        [data-testid="stExpandSidebarButton"] {
+            display: block !important;
+            visibility: visible !important;
+            opacity: 1 !important;
+            position: fixed !important;
+            top: 14px !important;
+            left: 14px !important;
+            z-index: 99999 !important;
+            pointer-events: auto !important;
+        }
 
-    /* 메인 컨테이너 여백 제거 */
-    main .block-container {
-        padding: 0;
-        margin: 0;
-        max-width: 100%;
-    }
+        [data-testid="stExpandSidebarButton"] > button {
+            background-color: rgba(0, 0, 0, 0.6) !important;
+            border-radius: 999px !important;
+            border: 1px solid #ffffff80 !important;
+            box-shadow: 0 4px 14px rgba(0,0,0,0.35) !important;
+        }
 
-    /* 전체 앱 컨테이너와 메인 영역, 사이드바 스크롤 숨기기 */
-    html, body,
-    [data-testid="stAppViewContainer"],
-    [data-testid="stMain"],
-    [data-testid="stSidebar"],
-    [data-testid="stVerticalBlock"] {
-        margin: 0;
-        height: 100%;
-        overflow: hidden !important;
-    }
+        [data-testid="stExpandSidebarButton"] > button:hover {
+            background-color: rgba(255, 255, 255, 0.15) !important;
+        }
 
-    /* ================================
-       ★ 사이드바 펼치기 화살표(→) 강제 표시
-       제품백서 화면과 동일하게
-       ================================ */
-    [data-testid="stExpandSidebarButton"] {
-        display: block !important;
-        visibility: visible !important;
-        opacity: 1 !important;
-        position: fixed !important;
-        top: 14px !important;
-        left: 14px !important;
-        z-index: 99999 !important;
-        pointer-events: auto !important;
-    }
+        [data-testid="stExpandSidebarButton"] span,
+        [data-testid="stExpandSidebarButton"] span * {
+            color: #ffffff !important;
+            fill: #ffffff !important;
+            stroke: #ffffff !important;
+        }
+        </style>
+        """,
+        unsafe_allow_html=True,
+    )
 
-    [data-testid="stExpandSidebarButton"] > button {
-        background-color: rgba(0, 0, 0, 0.6) !important;
-        border-radius: 999px !important;
-        border: 1px solid #ffffff80 !important;
-        box-shadow: 0 4px 14px rgba(0,0,0,0.35) !important;
-    }
-
-    [data-testid="stExpandSidebarButton"] > button:hover {
-        background-color: rgba(255, 255, 255, 0.15) !important;
-    }
-
-    [data-testid="stExpandSidebarButton"] span,
-    [data-testid="stExpandSidebarButton"] span * {
-        color: #ffffff !important;
-        fill: #ffffff !important;
-        stroke: #ffffff !important;
-    }
-    </style>
-    """,
-    unsafe_allow_html=True,
-)
-
-        
-    # 1) 화면 전체를 덮는 iframe (이 화면만 보이게)
+    # 화면 전체를 덮는 iframe
     iframe_html = """
     <iframe
         src="https://samibot.samyang.com/chatbot/9e054af9-fdbe-4290-b914-7620c73a5e1d"
         style="
             position: fixed;
-            top: 60;
+            top: 60px;
             left: 0;
             width: 100vw;
             height: 80vh;
@@ -537,7 +475,6 @@ st.markdown(
     </iframe>
     """
 
-    # 컴포넌트 자체는 화면에 잡히게 최소 높이만 줌
     st.components.v1.html(iframe_html, height=800, scrolling=False)
 
 
