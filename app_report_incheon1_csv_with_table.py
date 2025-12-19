@@ -426,18 +426,108 @@ def page_chatbot():
             height: 100%;
             overflow: hidden !important;
         }
-        </style>
-        """,
-        unsafe_allow_html=True,
-    )
+        
+        def page_chatbot():
+    go_home_button("⬅️ 홈으로")   # ✅ 이 줄 추가 (iframe보다 위!)
+    
+    # 0) 이 페이지에서는 헤더/사이드바/메인 컨테이너 스크롤 전부 숨기기
+    st.markdown(
+        """
+        <style>
+        /* 상단 기본 헤더 숨기기 */
+        header[data-testid="stHeader"] {
+            display: none;
+        }
 
+        /* 메인 컨테이너 여백 제거 */
+        main .block-container {
+            padding: 0;
+            margin: 0;
+            max-width: 100%;
+        }
+
+        /* 전체 앱 컨테이너와 메인 영역, 사이드바 스크롤 숨기기 */
+        html, body,
+        [data-testid="stAppViewContainer"],
+        [data-testid="stMain"],
+        [data-testid="stSidebar"],
+        [data-testid="stVerticalBlock"] {
+            margin: 0;
+            height: 100%;
+            overflow: hidden !important;
+        }
+
+st.markdown(
+    """
+    <style>
+    /* 상단 기본 헤더 숨기기 */
+    header[data-testid="stHeader"] {
+        display: none;
+    }
+
+    /* 메인 컨테이너 여백 제거 */
+    main .block-container {
+        padding: 0;
+        margin: 0;
+        max-width: 100%;
+    }
+
+    /* 전체 앱 컨테이너와 메인 영역, 사이드바 스크롤 숨기기 */
+    html, body,
+    [data-testid="stAppViewContainer"],
+    [data-testid="stMain"],
+    [data-testid="stSidebar"],
+    [data-testid="stVerticalBlock"] {
+        margin: 0;
+        height: 100%;
+        overflow: hidden !important;
+    }
+
+    /* ================================
+       ★ 사이드바 펼치기 화살표(→) 강제 표시
+       제품백서 화면과 동일하게
+       ================================ */
+    [data-testid="stExpandSidebarButton"] {
+        display: block !important;
+        visibility: visible !important;
+        opacity: 1 !important;
+        position: fixed !important;
+        top: 14px !important;
+        left: 14px !important;
+        z-index: 99999 !important;
+        pointer-events: auto !important;
+    }
+
+    [data-testid="stExpandSidebarButton"] > button {
+        background-color: rgba(0, 0, 0, 0.6) !important;
+        border-radius: 999px !important;
+        border: 1px solid #ffffff80 !important;
+        box-shadow: 0 4px 14px rgba(0,0,0,0.35) !important;
+    }
+
+    [data-testid="stExpandSidebarButton"] > button:hover {
+        background-color: rgba(255, 255, 255, 0.15) !important;
+    }
+
+    [data-testid="stExpandSidebarButton"] span,
+    [data-testid="stExpandSidebarButton"] span * {
+        color: #ffffff !important;
+        fill: #ffffff !important;
+        stroke: #ffffff !important;
+    }
+    </style>
+    """,
+    unsafe_allow_html=True,
+)
+
+        
     # 1) 화면 전체를 덮는 iframe (이 화면만 보이게)
     iframe_html = """
     <iframe
         src="https://samibot.samyang.com/chatbot/9e054af9-fdbe-4290-b914-7620c73a5e1d"
         style="
             position: fixed;
-            top: 0;
+            top: 60;
             left: 0;
             width: 100vw;
             height: 80vh;
