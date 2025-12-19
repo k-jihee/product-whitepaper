@@ -237,9 +237,13 @@ def ensure_dir(path: str):
     os.makedirs(path, exist_ok=True)
 
 def go_home_button(label="⬅️ 홈으로"):
-    if st.button(label, type="primary"):
-        st.session_state["page"] = "Home"
-        st.rerun()
+    # ✅ 오른쪽 정렬용 컬럼(왼쪽 넓게, 오른쪽 버튼)
+    col_left, col_right = st.columns([8, 1])
+    with col_right:
+        if st.button(label, type="primary", use_container_width=True):
+            st.session_state["page"] = "Home"
+            st.rerun()
+
 
 DATA_DIR = "data"
 UPLOAD_DIR = os.path.join(DATA_DIR, "uploads")
