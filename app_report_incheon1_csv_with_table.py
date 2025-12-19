@@ -415,6 +415,22 @@ def page_chatbot():
             height: 100%;
             overflow: hidden !important;
         }
+
+                /* ===== 사이드바 화살표가 iframe 위에 보이게 ===== */
+        iframe {
+            z-index: 0 !important;
+        }
+
+        [data-testid="stExpandSidebarButton"],
+        [data-testid="stSidebarCollapseButton"] {
+            position: fixed !important;
+            z-index: 100000 !important;
+        }
+
+        [data-testid="stExpandSidebarButton"] {
+            top: 0.75rem !important;
+            left: 0.75rem !important;
+        }
         </style>
         """,
         unsafe_allow_html=True,
