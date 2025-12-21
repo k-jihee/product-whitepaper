@@ -1112,42 +1112,6 @@ def page_ops_log():
         </style>
     """, unsafe_allow_html=True)
 
-    st.markdown("""
-    <style>
-      .ops-card {
-        background: rgba(0,0,0,0.55);
-        border: 1px solid rgba(255,255,255,0.18);
-        border-radius: 18px;
-        padding: 18px 18px 8px 18px;
-        box-shadow: 0 0 14px rgba(0,0,0,0.25);
-        margin-bottom: 16px;
-      }
-
-      .ops-card label {
-        margin-bottom: 0.15rem !important;
-        font-weight: 600 !important;
-      }
-
-      .ops-card input, .ops-card textarea {
-        border-radius: 12px !important;
-      }
-
-      /* ✅ 전분공정의 textarea(파쇄RPM) 높이를 고정해서 줄 맞추기 */
-      .ops-card div[data-testid="stTextArea"] textarea {
-        height: 68px !important;
-        min-height: 68px !important;
-        padding-top: 8px !important;
-        padding-bottom: 8px !important;
-      }
-
-      .ops-card div[data-testid="stNumberInput"] input,
-      .ops-card div[data-testid="stTextInput"] input {
-        padding-top: 10px !important;
-        padding-bottom: 10px !important;
-      }
-    </style>
-    """, unsafe_allow_html=True)
-
     
     st.title("⚙️ 공정 일일 작업기록")
     st.caption("인천1공장 일일 공정 운영 내용을 입력/저장하는 화면입니다.")
