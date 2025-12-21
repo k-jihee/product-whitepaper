@@ -1112,7 +1112,29 @@ def page_ops_log():
         </style>
     """, unsafe_allow_html=True)
 
-    
+        # ✅ 전분공정: 파쇄RPM(text_area) 높이를 number_input 수준으로 강제 고정
+    st.markdown("""
+    <style>
+    /* page_ops_log 화면에서 나오는 모든 textarea 높이 고정(원하면 전분공정만 더 좁힐 수도 있음) */
+    div[data-testid="stTextArea"] textarea {
+        height: 48px !important;
+        min-height: 48px !important;
+        max-height: 48px !important;
+        resize: none !important;
+        padding-top: 8px !important;
+        padding-bottom: 8px !important;
+    }
+
+    /* number_input 입력창 높이도 동일하게 맞춤(선택이지만 추천) */
+    div[data-testid="stNumberInput"] input,
+    div[data-testid="stTextInput"] input {
+        height: 48px !important;
+        padding-top: 8px !important;
+        padding-bottom: 8px !important;
+    }
+    </style>
+    """, unsafe_allow_html=True)
+
     st.title("⚙️ 공정 일일 작업기록")
     st.caption("인천1공장 일일 공정 운영 내용을 입력/저장하는 화면입니다.")
 
@@ -1160,7 +1182,7 @@ def page_ops_log():
         with c1:
             crush_rpm = st.text_area(
                 "파쇄 RPM (시간대별로 여러 개 입력 가능)",
-                height=24,   # ⭐ 핵심 (number_input과 거의 동일)
+                height=48,   # ⭐ 핵심 (number_input과 거의 동일)
                 help="예: 08:00-1500, 10:00-1600 처럼 시간-회전수를 쉼표/줄바꿈으로 구분해서 입력"
             )
         with c2:
