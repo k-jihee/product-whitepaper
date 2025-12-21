@@ -1112,7 +1112,24 @@ def page_ops_log():
         </style>
     """, unsafe_allow_html=True)
 
-        # ✅ 전분공정: 파쇄RPM(text_area) 높이를 number_input 수준으로 강제 고정
+    st.markdown("""
+    <style>
+    /* ✅ '제품코드 선택 (201/...)' 제목 한 줄 고정 + 숫자만 작게 */
+    .ops-title {
+      display: flex;
+      align-items: baseline;
+      gap: 8px;
+      flex-wrap: nowrap;          /* 줄바꿈 방지 */
+    }
+    .ops-title .nums {
+    font-size: 0.75em;          /* 숫자 부분만 축소 */
+    white-space: nowrap;        /* 숫자 부분 절대 줄바꿈 금지 */
+    opacity: 0.95;
+    }
+    </style>
+    """, unsafe_allow_html=True)
+
+    # ✅ 전분공정: 파쇄RPM(text_area) 높이를 number_input 수준으로 강제 고정
     st.markdown("""
     <style>
     /* page_ops_log 화면에서 나오는 모든 textarea 높이 고정(원하면 전분공정만 더 좁힐 수도 있음) */
@@ -1239,6 +1256,13 @@ def page_ops_log():
         # 🔹 오른쪽 : 3️⃣ 제품코드 선택
         with right_col:
             st.markdown("### 3️⃣ 제품코드 선택 (201 / 301 / 701 / 801 / 250)")
+            st.markdown("""
+            <h3 class="ops-title">
+              <span>3️⃣ 제품코드 선택</span>
+              <span class="nums">(201 / 301 / 701 / 801 / 250)</span>
+            </h3>
+            """, unsafe_allow_html=True)
+
 
             def _prod_select(label, key):
                 if prod_opts:
