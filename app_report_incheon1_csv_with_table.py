@@ -1160,7 +1160,7 @@ def page_ops_log():
         with c1:
             crush_rpm = st.text_area(
                 "파쇄 RPM (시간대별로 여러 개 입력 가능)",
-                height=48,   # ⭐ 핵심 (number_input과 거의 동일)
+                height=24,   # ⭐ 핵심 (number_input과 거의 동일)
                 help="예: 08:00-1500, 10:00-1600 처럼 시간-회전수를 쉼표/줄바꿈으로 구분해서 입력"
             )
         with c2:
