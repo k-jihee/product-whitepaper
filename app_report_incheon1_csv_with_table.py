@@ -1255,7 +1255,6 @@ def page_ops_log():
 
         # 🔹 오른쪽 : 3️⃣ 제품코드 선택
         with right_col:
-            st.markdown("### 3️⃣ 제품코드 선택 (201 / 301 / 701 / 801 / 250)")
             st.markdown("""
             <h3 class="ops-title">
               <span>3️⃣ 제품코드 선택</span>
